@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="">
+
 <head>
   <meta charset="utf-8">
   <meta name="description" content="">
@@ -37,19 +38,22 @@
 </head>
 
 <body unresolved class="fullbleed layout vertical">
+  <nuxeo-connection url="/nuxeo"></nuxeo-connection>
   <span id="browser-sync-binding"></span>
-  <paper-scroll-header-panel class="flex">
+  <template is="dom-bind" id="app">
+
+    <paper-scroll-header-panel main id="headerPanelMain" condenses keep-condensed-header class="flex">
       <paper-toolbar>
         <div>Nuxeo TimeOff</div>
       </paper-toolbar>
+      <h2>Pending...</h2>
+      <timeoff-pending></timeoff-pending>
+
+      <paper-toast id="toast">
+        <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
+      </paper-toast>
+
     </paper-scroll-header-panel>
-
-  <template is="dom-bind" id="app">
-
-
-    <paper-toast id="toast">
-      <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
-    </paper-toast>
   </template>
 
   <!-- build:js scripts/app.js -->

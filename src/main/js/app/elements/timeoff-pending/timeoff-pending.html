@@ -1,0 +1,30 @@
+<dom-module id="timeoff-pending">
+
+  <link rel="import" type="css" href="timeoff-pending.css">
+
+  <template>
+    <nuxeo-operation auto
+      op="Document.Query"
+      params=""
+      on-response="{{data}}"
+      enrichers="documentURL, preview"></nuxeo-operation>
+    <iron-list items='[[data]]' as="item">
+      <template>
+        <div>
+          Name:
+          <span>[[item.name]]</span>
+        </div>
+      </template>
+    </iron-list>
+  </template>
+
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: "timeoff-pending",
+      properties: {},
+
+    })
+  }());
+</script>
