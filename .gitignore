@@ -1,0 +1,10 @@
+node_modules
+dist
+bower_components
+.tmp
+.publish/
+target
+.classpath
+.project
+.settings/
+bin/
