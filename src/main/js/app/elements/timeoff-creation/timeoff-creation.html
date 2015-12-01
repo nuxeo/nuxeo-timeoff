@@ -1,0 +1,39 @@
+<dom-module id="timeoff-creation">
+
+  <link rel="import" type="css" href="timeoff-creation.css">
+
+  <template>
+    <paper-button raised on-click="openDialog">plain dialog</paper-button>
+
+    <paper-dialog id="dialog" with-backdrop>
+      <h2>New timeoff request</h2>
+
+      <form is="iron-form" id="form">
+        <paper-dialog-scrollable>
+          <paper-input name="day-off" label="Congés payés" min="0" value="0" required></paper-input>
+          <paper-input name="rtt" label="RTT" min="0" value="0" required></paper-input>
+          <paper-textarea name="comment" label="Commentaire"></paper-textarea>
+        </paper-dialog-scrollable>
+        <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm on-click="createRequest">Accept</paper-button>
+        </div>
+      </form>
+    </paper-dialog>
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        is: "timeoff-creation",
+
+        openDialog: function() {
+          this.$.dialog.open();
+        },
+        createRequest: function() {
+
+        }
+      })
+    }());
+  </script>
+</dom-module>
