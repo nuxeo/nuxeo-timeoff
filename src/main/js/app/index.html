@@ -35,6 +35,7 @@
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles"></style>
 
+  <!-- Add momentjs -->
   <script src="bower_components/moment/min/moment-with-locales.min.js"></script>
 </head>
 
@@ -43,7 +44,6 @@
 <span id="browser-sync-binding"></span>
 <template is="dom-bind" id="app">
 
-<<<<<<< 42db851a7a15b389db7177c8181f06f3f91252b0
   <paper-scroll-header-panel main id="headerPanelMain" fixed class="flex">
     <paper-toolbar>
       <div>Nuxeo TimeOff</div>
@@ -51,14 +51,6 @@
 
     <div class="content">
       <timeoff-creation></timeoff-creation>
-=======
-    <paper-scroll-header-panel main id="headerPanelMain" condenses keep-condensed-header class="flex">
-      <paper-toolbar>
-        <div>Nuxeo TimeOff</div>
-      </paper-toolbar>
-      <timeoff-pending></timeoff-pending>
->>>>>>> NXP-18510: Extract timeoff entry component
-
       <timeoff-pending></timeoff-pending>
     </div>
   </paper-scroll-header-panel>

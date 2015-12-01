@@ -24,7 +24,7 @@
 <script>
   (function() {
     Polymer({
-      is: "timeoff-entry",
+      is: 'timeoff-entry',
       properties: {
         data: {
           type: Object,
@@ -33,12 +33,12 @@
       },
       readProperty: function(prop, format) {
         var val = this.data.properties['var_TimeOffRequestFlow:' + prop];
-        if (typeof format === "undefined") {
+        if (typeof format === 'undefined') {
           return val;
         } else {
-          return moment(val).format("ll"); // Localized readable format
+          return moment(val).format('ll'); // Localized readable format
         }
       }
-    })
+    });
   }());
 </script>
