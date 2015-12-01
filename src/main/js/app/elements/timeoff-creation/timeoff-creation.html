@@ -5,20 +5,27 @@
   <template>
     <paper-button raised on-click="openDialog">plain dialog</paper-button>
 
-    <paper-dialog id="dialog" with-backdrop>
-      <h2>New timeoff request</h2>
+    <paper-dialog id="dialog" class="paper-date-picker-dialog" with-backdrop>
+      <h2 class="header">New timeoff request</h2>
 
-      <form is="iron-form" id="form">
-        <paper-dialog-scrollable>
-          <paper-input name="day-off" label="Congés payés" min="0" value="0" required></paper-input>
-          <paper-input name="rtt" label="RTT" min="0" value="0" required></paper-input>
-          <paper-textarea name="comment" label="Commentaire"></paper-textarea>
-        </paper-dialog-scrollable>
-        <div class="buttons">
-          <paper-button dialog-dismiss>Cancel</paper-button>
-          <paper-button dialog-confirm on-click="createRequest">Accept</paper-button>
-        </div>
-      </form>
+      <paper-dialog-scrollable>
+        <form is="iron-form" id="form">
+          <label>Start date</label>
+          <paper-date-picker id="startDate" date="{{startDate}}"></paper-date-picker>
+          <label>End date</label>
+          <paper-date-picker id="endDate" date="{{endDate}}"></paper-date-picker>
+          <paper-input name="paid-holiday" label="Paid holiday" min="0" value="0" required prevent-invalid-input allowed-pattern="[0-9]"></paper-input>
+          <paper-input name="rtt" label="RTT" min="0" value="0" required prevent-invalid-input allowed-pattern="[0-9]"></paper-input>
+          <paper-input name="family" label="Family" min="0" value="0" required prevent-invalid-input allowed-pattern="[0-9]"></paper-input>
+          <paper-input name="unpaid" label="Unpaid holiday" min="0" value="0" required prevent-invalid-input allowed-pattern="[0-9]"></paper-input>
+          <paper-textarea name="comment" label="Comment"></paper-textarea>
+        </form>
+      </paper-dialog-scrollable>
+
+      <div class="buttons footer">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm on-click="createRequest">Accept</paper-button>
+      </div>
     </paper-dialog>
 
   </template>
