@@ -16,6 +16,7 @@
     "paper-dialog": "PolymerElements/paper-dialog#~1.0.3",
     "paper-input": "PolymerElements/paper-input#~1.1.1",
     "iron-form": "PolymerElements/iron-form#~1.0.13"
+    "moment": "momentjs#~2.10.6"
   },
   "devDependencies": {
     "web-component-tester": "*"

@@ -15,6 +15,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
 
+  // Sets Momentjs local
+  moment.locale(navigator.language || navigator.browserLanguage);
+
   // Sets app default base URL
   app.baseUrl = '/';
   if (window.location.port === '') { // if production

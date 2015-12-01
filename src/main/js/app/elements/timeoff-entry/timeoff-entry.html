@@ -1,0 +1,44 @@
+<dom-module id="timeoff-entry">
+  <!-- var_TimeOffRequestFlow:begin: "2015-11-30T15:59:42.04Z"
+  var_TimeOffRequestFlow:comment_hr: null
+  var_TimeOffRequestFlow:comment_manager: null
+  var_TimeOffRequestFlow:comment_requester: null
+  var_TimeOffRequestFlow:end: "2015-11-30T15:59:42.04Z"
+  var_TimeOffRequestFlow:manager: null
+  var_TimeOffRequestFlow:numberFamilyReason: null
+  var_TimeOffRequestFlow:numberRTT: null
+  var_TimeOffRequestFlow:numberUnpaid: null
+  var_TimeOffRequestFlow:numberVacation: "10" -->
+  <template>
+    <template is="dom-if" if="{{data}}">
+      <div class="timeoff">
+        <div class="beginTime">[[readProperty("begin", "ll")]] - [[readProperty("end", "ll")]]</div>
+        <div class="numberFamilyReason">[[readProperty("numberFamilyReason")]]</div>
+        <div class="numberRTT">[[readProperty("numberRTT")]]</div>
+        <div class="numberUnpaid">[[readProperty("numberUnpaid")]]</div>
+        <div class="numberVacation">[[readProperty("numberVacation")]]</div>
+      </div>
+    </template>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: "timeoff-entry",
+      properties: {
+        data: {
+          type: Object,
+          value: null
+        }
+      },
+      readProperty: function(prop, format) {
+        var val = this.data.properties['var_TimeOffRequestFlow:' + prop];
+        if (typeof format === "undefined") {
+          return val;
+        } else {
+          return moment(val).format("ll"); // Localized readable format
+        }
+      }
+    })
+  }());
+</script>

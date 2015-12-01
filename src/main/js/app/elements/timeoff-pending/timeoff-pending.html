@@ -16,8 +16,23 @@
                        response={{data}}
                        on-response="refreshList"></nuxeo-operation>
 
-      <template is="dom-if" if="{{data.entries.length === 0}}">
-        No response...
+    <template is="dom-if" if="{{data.entries.length === 0}}">
+      No response...
+    </template>
+
+    <iron-list items='[[data.entries]]' as="item" >
+      <!-- var_TimeOffRequestFlow:begin: "2015-11-30T15:59:42.04Z"
+      var_TimeOffRequestFlow:comment_hr: null
+      var_TimeOffRequestFlow:comment_manager: null
+      var_TimeOffRequestFlow:comment_requester: null
+      var_TimeOffRequestFlow:end: "2015-11-30T15:59:42.04Z"
+      var_TimeOffRequestFlow:manager: null
+      var_TimeOffRequestFlow:numberFamilyReason: null
+      var_TimeOffRequestFlow:numberRTT: null
+      var_TimeOffRequestFlow:numberUnpaid: null
+      var_TimeOffRequestFlow:numberVacation: "10" -->
+      <template>
+        <timeoff-entry data=[[item]]></timeoff-entry>
       </template>
 
       <iron-list items='[[data.entries]]' as="item">
@@ -47,10 +62,10 @@
         }
       },
       observers: [
-        'getTasks(params)'
+        "refreshTasks(params)"
       ],
-      getTasks: function() {
-        this.$.nxoPending.execute();
+      refreshTasks: function() {
+        this.$.nxo_pending.execute();
       },
       refreshList: function() {
         document.querySelector('iron-list').fire('iron-resize');
