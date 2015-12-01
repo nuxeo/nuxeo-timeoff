@@ -3,14 +3,14 @@
   <link rel="import" type="css" href="timeoff-pending.css">
 
   <template>
-    <paper-material elevation="2">
+    <paper-material class="block" elevation="2">
       <h2>Pending...</h2>
       <nuxeo-connection id="nxc" url="/nuxeo"></nuxeo-connection>
-      <nuxeo-operation id="nxo_login" auto
+      <nuxeo-operation id="nxoLogin" auto
                        op="login"
                        params=null
                        response={{login}}></nuxeo-operation>
-      <nuxeo-operation id="nxo_pending"
+      <nuxeo-operation id="nxoPending"
                        op="Document.Query"
                        params={{params}}
                        response={{data}}
@@ -35,7 +35,7 @@
 <script>
   (function() {
     Polymer({
-      is: "timeoff-pending",
+      is: 'timeoff-pending',
       properties: {
         login: {
           type: Object,
@@ -43,14 +43,14 @@
         },
         params: {
           type: Object,
-          computed: "computeQuery(login)"
+          computed: 'computeQuery(login)'
         }
       },
       observers: [
-        "getTasks(params)"
+        'getTasks(params)'
       ],
       getTasks: function() {
-        this.$.nxo_pending.execute();
+        this.$.nxoPending.execute();
       },
       refreshList: function() {
         document.querySelector('iron-list').fire('iron-resize');
@@ -59,8 +59,8 @@
         if (!login) {
           return;
         }
-        return {"query": 'select * from DocumentRoute where dc:title="TimeOffRequestFlow" and docri:initiator="' + login.username + '"'};
+        return {'query': 'select * from DocumentRoute where dc:title="TimeOffRequestFlow" and docri:initiator="' + login.username + '"'};
       }
-    })
+    });
   }());
 </script>
