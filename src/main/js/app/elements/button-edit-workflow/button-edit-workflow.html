@@ -1,0 +1,39 @@
+<dom-module id="button-edit-workflow">
+  <template>
+    <nuxeo-resource id="workflow" path="workflow/[[workflowId]]"
+      on-response="handleResponse" method="delete"></nuxeo-resource>
+    <paper-icon-button on-click="openForm" icon="create"></paper-icon-button>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'button-edit-workflow',
+      properties: {
+        workflow: {
+          type: Object,
+          value: null
+        }
+      },
+      openForm: function(e) {
+        var creationForm = app.$.creation;
+        creationForm.startDate = null;
+        creationForm.endDate = null;
+        creationForm.paidHoliday = 5;
+        creationForm.rtt = 5;
+        creationForm.family = 5;
+        creationForm.unpaidHoliday = 5;
+        creationForm.comment = 'my comment';
+        creationForm.openDialog();
+      },
+      edit: function() {
+        console.log("Timeoff request edited...");
+      },
+      handleResponse: function(data) {
+        app.$.toast.text = "Timeoff request edited.";
+        app.$.toast.open();
+        this.fire('edited');
+      }
+    });
+  }());
+</script>

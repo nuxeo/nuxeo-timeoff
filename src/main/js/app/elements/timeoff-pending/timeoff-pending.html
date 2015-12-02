@@ -16,6 +16,7 @@
       <template is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
         <div class="request">
           <timeoff-entry data=[[item]]></timeoff-entry>
+          <button-edit-workflow on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
           <button-delete-workflow on-deleted="refreshTasks" workflow-id="[[item.id]]"></button-delete-workflow>
         </div>
       </template>
@@ -37,7 +38,7 @@
         this.$.nxoPending.execute();
       },
       timeOffWkf: function(entry) {
-        return entry.name === "TimeOffRequestFlow";
+        return entry.workflowModelName === "TimeOffRequestFlow";
       }
     });
   }());
