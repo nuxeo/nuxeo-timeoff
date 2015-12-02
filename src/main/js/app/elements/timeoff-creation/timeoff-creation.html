@@ -79,7 +79,7 @@
         },
         createRequest: function() {
           this.$.nxr.post().then(function(response) {
-            app.$.toast.text = this.isEdit() ? 'Your request has been created.' : 'Your request has been edited.';
+            app.$.toast.text = this.isEdit() ? 'Your request has been edited.' : 'Your request has been created.';
             app.$.toast.show();
 
             this.reset();
