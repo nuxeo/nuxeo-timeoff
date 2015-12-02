@@ -5,29 +5,20 @@
   <template>
     <paper-material>
       <h2>Pending Request</h2>
-      <nuxeo-connection id="nxc" url="/nuxeo"></nuxeo-connection>
-      <nuxeo-operation id="nxoLogin" auto
-        op="login"
-        params=null
-        response={{login}}></nuxeo-operation>
-      <nuxeo-operation id="nxoPending"
-        op="Document.Query"
-        params={{params}}
-        response={{data}}
-        on-response="refreshList"></nuxeo-operation>
+      <nuxeo-resource id="nxoPending" auto
+        path="workflow"
+        response={{data}}></nuxeo-resource>
 
       <template is="dom-if" if="{{data.entries.length === 0}}">
         No response...
       </template>
 
-      <iron-list id="pendings" items='[[data.entries]]' as="item">
-        <template>
-          <div>
-            <timeoff-entry data=[[item]]></timeoff-entry>
-            <button-delete-workflow on-deleted="refreshTasks" workflow-id="[[item.uid]]"></button-delete-workflow>
-          </div>
-        </template>
-      </iron-list>
+      <template is="dom-repeat" items='[[data.entries]]' as="item">
+        <div class="request">
+          <timeoff-entry data=[[item]]></timeoff-entry>
+          <button-delete-workflow on-deleted="refreshTasks" workflow-id="[[item.id]]"></button-delete-workflow>
+        </div>
+      </template>
     </paper-material>
   </template>
 
@@ -40,29 +31,10 @@
         login: {
           type: Object,
           value: null
-        },
-        params: {
-          type: Object,
-          computed: 'computeQuery(login)'
         }
       },
-      observers: [
-        'refreshTasks(params)'
-      ],
       refreshTasks: function() {
         this.$.nxoPending.execute();
-      },
-      refreshList: function() {
-        document.querySelector('iron-list').fire('iron-resize');
-      },
-      computeQuery: function(login) {
-        if (!login) {
-          return;
-        }
-        return {
-          'query': 'select * from DocumentRoute where dc:title="TimeOffRequestFlow"' +
-          ' and docri:initiator="' + login.username + '" and ecm:currentLifeCycleState="running"'
-        };
       }
     });
   }());

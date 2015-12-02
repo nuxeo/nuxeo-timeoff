@@ -32,11 +32,22 @@
         }
       },
       readProperty: function(prop, format) {
-        var val = this.data.properties['var_TimeOffRequestFlow:' + prop];
+        var val;
+        switch (this.data['entity-type']) {
+          case "document":
+            val = this.data.properties['var_TimeOffRequestFlow:' + prop];
+            break;
+          case "workflow":
+            val = this.data.variables[prop];
+            break;
+          default:
+            console.log("[timeoff-entry] Unknown entity-type " + this.data['entity-type']);
+        }
+
         if (typeof format === 'undefined') {
           return val;
         } else {
-          return moment(val).format('ll'); // Localized readable format
+          return moment(val).format(format); // Localized readable format
         }
       }
     });
