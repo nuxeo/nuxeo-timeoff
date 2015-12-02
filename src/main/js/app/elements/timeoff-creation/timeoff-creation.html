@@ -6,9 +6,10 @@
   <template>
     <nuxeo-connection id="nx"></nuxeo-connection>
     <nuxeo-resource id="nxr" path="workflow" method="post" data="{{data}}"></nuxeo-resource>
+    <nuxeo-resource id="delete" path="workflow/[[workflowId]]" method="delete"></nuxeo-resource>
     <paper-button raised on-click="openDialog">plain dialog</paper-button>
 
-    <paper-dialog id="dialog" class="paper-date-picker-dialog" with-backdrop>
+    <paper-dialog id="dialog" class="paper-date-picker-dialog" with-backdrop on-iron-overlay-closed="overlayClosed">
       <h2 class="header">New timeoff request</h2>
 
       <paper-dialog-scrollable>
@@ -17,17 +18,21 @@
           <paper-date-picker id="startDate" date="{{data.variables.begin}}"></paper-date-picker>
           <label>End date</label>
           <paper-date-picker id="endDate" date="{{data.variables.end}}"></paper-date-picker>
-          <paper-input value="{{data.variables.numberVacation}}" label="Paid holiday" type="number" min="0" prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
-          <paper-input value="{{data.variables.numberRTT}}" label="RTT" type="number" min="0" prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
-          <paper-input value="{{data.variables.numberFamilyReason}}" label="Family" type="number" min="0" prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
-          <paper-input value="{{data.variables.numberUnpaid}}" label="Unpaid holiday" type="number" min="0" prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-input value="{{data.variables.numberVacation}}" label="Paid holiday" min="0" prevent-invalid-input
+            allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-input value="{{data.variables.numberRTT}}" label="RTT" min="0" prevent-invalid-input
+            allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-input value="{{data.variables.numberFamilyReason}}" label="Family" min="0" prevent-invalid-input
+            allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-input value="{{data.variables.numberUnpaid}}" label="Unpaid holiday" min="0" prevent-invalid-input
+            allowed-pattern="[0-9]" auto-validate></paper-input>
           <paper-textarea value="{{data.variables.comment_requester}}" label="Comment"></paper-textarea>
         </form>
       </paper-dialog-scrollable>
 
       <div class="buttons footer">
         <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm on-click="createRequest">Accept</paper-button>
+        <paper-button dialog-confirm>Accept</paper-button>
       </div>
     </paper-dialog>
 
@@ -37,10 +42,14 @@
       Polymer({
         is: 'timeoff-creation',
         properties: {
-          data: Object
+          data: Object,
+          workflowId: String
         },
 
         ready: function() {
+          this.reset();
+        },
+        reset: function() {
           this.data = {
             'variables': {
               'begin': moment().toDate(),
@@ -53,17 +62,36 @@
             },
             'workflowModelName': 'TimeOffRequestFlow'
           };
+          this.workflowId = null;
+        },
+        overlayClosed: function(e) {
+          if (e.detail.confirmed) {
+            this.isEdit() ? this.editRequest() : this.createRequest();
+          } else {
+            this.reset();
+          }
         },
         openDialog: function() {
           this.$.dialog.open();
         },
+        isEdit: function() {
+          return this.workflowId ? true : false;
+        },
         createRequest: function() {
           this.$.nxr.post().then(function(response) {
-            this.fire('create-request');
-
-            app.$.toast.text = 'Your request has been created.';
+            app.$.toast.text = this.isEdit() ? 'Your request has been created.' : 'Your request has been edited.';
             app.$.toast.show();
+
+            this.reset();
+            this.fire('create-request');
           }.bind(this));
+        },
+        editRequest: function() {
+          // Edit is delete then create.
+          var that = this;
+          this.$.delete.execute().then(function(response) {
+            that.createRequest();
+          });
         }
       });
     }());

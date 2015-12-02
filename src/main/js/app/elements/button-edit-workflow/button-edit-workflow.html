@@ -17,22 +17,18 @@
       },
       openForm: function(e) {
         var creationForm = app.$.creation;
-        creationForm.startDate = null;
-        creationForm.endDate = null;
-        creationForm.paidHoliday = 5;
-        creationForm.rtt = 5;
-        creationForm.family = 5;
-        creationForm.unpaidHoliday = 5;
-        creationForm.comment = 'my comment';
+        creationForm.workflowId = this.workflow.id;
+
+        var variables = this.workflow.variables;
+        // Fix date format
+        variables.begin = moment(variables.begin).toDate();
+        variables.end = moment(variables.end).toDate();
+        creationForm.data = {
+          variables: variables,
+          workflowModelName: 'TimeOffRequestFlow'
+        };
+
         creationForm.openDialog();
-      },
-      edit: function() {
-        console.log("Timeoff request edited...");
-      },
-      handleResponse: function(data) {
-        app.$.toast.text = "Timeoff request edited.";
-        app.$.toast.open();
-        this.fire('edited');
       }
     });
   }());
