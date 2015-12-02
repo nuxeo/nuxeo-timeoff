@@ -50,14 +50,19 @@
     </paper-toolbar>
 
     <div class="content">
-      <timeoff-creation></timeoff-creation>
-      <timeoff-pending></timeoff-pending>
+      <timeoff-creation id="creation"></timeoff-creation>
+      <timeoff-pending id="pending"></timeoff-pending>
     </div>
   </paper-scroll-header-panel>
 
   <paper-toast id="toast">
     <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
   </paper-toast>
+  <script>
+    document.querySelector('#creation').addEventListener('create-request', function() {
+      document.querySelector('#pending').refreshTasks();
+    });
+  </script>
 </template>
 
 <!-- build:js scripts/app.js -->

@@ -1,8 +1,10 @@
 <dom-module id="timeoff-creation">
 
   <link rel="import" type="css" href="timeoff-creation.css">
+  <script src="../../bower_components/es6-promise/promise.min.js"></script>
 
   <template>
+    <nuxeo-connection id="nx" connectionId="{{connectionId}}"></nuxeo-connection>
     <paper-button raised on-click="openDialog">plain dialog</paper-button>
 
     <paper-dialog id="dialog" class="paper-date-picker-dialog" with-backdrop>
@@ -14,11 +16,11 @@
           <paper-date-picker id="startDate" date="{{startDate}}"></paper-date-picker>
           <label>End date</label>
           <paper-date-picker id="endDate" date="{{endDate}}"></paper-date-picker>
-          <paper-input name="paid-holiday" label="Paid holiday" min="0" value="0" required prevent-invalid-input allowed-pattern="[0-9]"></paper-input>
-          <paper-input name="rtt" label="RTT" min="0" value="0" required prevent-invalid-input allowed-pattern="[0-9]"></paper-input>
-          <paper-input name="family" label="Family" min="0" value="0" required prevent-invalid-input allowed-pattern="[0-9]"></paper-input>
-          <paper-input name="unpaid" label="Unpaid holiday" min="0" value="0" required prevent-invalid-input allowed-pattern="[0-9]"></paper-input>
-          <paper-textarea name="comment" label="Comment"></paper-textarea>
+          <paper-input value="{{paidHoliday}}" label="Paid holiday" min="0" required prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-input value="{{rtt}}" label="RTT" min="0" required prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-input value="{{family}}" label="Family" min="0" required prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-input value="{{unpaidHoliday}}" label="Unpaid holiday" min="0" required prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-textarea value="{{comment}}" label="Comment"></paper-textarea>
         </form>
       </paper-dialog-scrollable>
 
@@ -33,12 +35,65 @@
     (function() {
       Polymer({
         is: 'timeoff-creation',
+        properties: {
+          /* The id of a nuxeo-connection to use. */
+          connectionId: {
+            type: String,
+            value: ''
+          },
+        },
 
+        ready: function() {
+          this.startDate = null;
+          this.endDate = null;
+          this.paidHoliday = 0;
+          this.rtt = 0;
+          this.family = 0;
+          this.unpaidHoliday = 0;
+          this.comment = '';
+        },
         openDialog: function() {
           this.$.dialog.open();
         },
         createRequest: function() {
+          var variables = {};
+          variables.begin = moment(this.startDate).format('YYYY-MM-DD') + 'T00:00:00.000Z';
+          variables.end = moment(this.endDate).format('YYYY-MM-DD') + 'T00:00:00.000Z';
+          variables.numberVacation = this.paidHoliday;
+          variables.numberRTT = this.rtt;
+          variables.numberFamilyReason = this.family;
+          variables.numberUnpaid = this.unpaidHoliday;
+          variables.comment_requester = this.comment;
 
+
+          var options = {};
+          options.data = {};
+          options.data.workflowModelName = 'TimeOffRequestFlow';
+          options.data.variables = variables;
+          return this.$.nx.connect()
+              .then(function() {
+                return new Promise(function(resolve, reject) {
+                  return this.$.nx.client
+                    .request('workflow')
+                    .post(options, function(error, data) {
+                      if (error) {
+                        this.fire('error', error);
+                        reject(Error(error));
+                        return;
+                      }
+
+                      this.fire('create-request', {
+                        response: data
+                      });
+                      this.response = data;
+                      resolve(this.response);
+
+
+                      app.$.toast.text = 'Your request has been created.';
+                      app.$.toast.show();
+                    }.bind(this));
+                }.bind(this)).then(this.ready.bind(this));
+              }.bind(this));
         }
       });
     }());
