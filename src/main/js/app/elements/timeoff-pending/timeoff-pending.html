@@ -13,7 +13,7 @@
         No response...
       </template>
 
-      <template is="dom-repeat" items='[[data.entries]]' as="item">
+      <template is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
         <div class="request">
           <timeoff-entry data=[[item]]></timeoff-entry>
           <button-delete-workflow on-deleted="refreshTasks" workflow-id="[[item.id]]"></button-delete-workflow>
@@ -35,6 +35,9 @@
       },
       refreshTasks: function() {
         this.$.nxoPending.execute();
+      },
+      timeOffWkf: function(entry) {
+        return entry.name === "TimeOffRequestFlow";
       }
     });
   }());
