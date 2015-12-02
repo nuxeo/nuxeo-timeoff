@@ -3,7 +3,7 @@
   <link rel="import" type="css" href="timeoff-pending.css">
 
   <template>
-    <paper-material class="block" elevation="2">
+    <paper-material>
       <h2>Pending Request</h2>
       <nuxeo-connection id="nxc" url="/nuxeo"></nuxeo-connection>
       <nuxeo-operation id="nxoLogin" auto
@@ -20,9 +20,12 @@
         No response...
       </template>
 
-      <iron-list items='[[data.entries]]' as="item">
+      <iron-list id="pendings" items='[[data.entries]]' as="item">
         <template>
-          <timeoff-entry data=[[item]]></timeoff-entry>
+          <div>
+            <timeoff-entry data=[[item]]></timeoff-entry>
+            <button-delete-workflow on-deleted="refreshTasks" workflow-id="[[item.uid]]"></button-delete-workflow>
+          </div>
         </template>
       </iron-list>
     </paper-material>
@@ -58,7 +61,7 @@
         }
         return {
           'query': 'select * from DocumentRoute where dc:title="TimeOffRequestFlow"' +
-          ' and docri:initiator="' + login.username + '"'
+          ' and docri:initiator="' + login.username + '" and ecm:currentLifeCycleState="running"'
         };
       }
     });
