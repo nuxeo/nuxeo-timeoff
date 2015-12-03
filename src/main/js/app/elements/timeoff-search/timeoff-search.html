@@ -1,0 +1,106 @@
+<dom-module id="timeoff-search">
+
+  <template>
+    <!--HRHolidayRequest-->
+    <paper-material>
+      <paper-header-panel class="flex">
+        <paper-toolbar>
+          <div>Incoming holidays</div>
+          <div>H:[[nb.holiday]], R:[[nb.rtt]], F:[[nb.family]], U:[[nb.unpaid]]</div>
+        </paper-toolbar>
+      </paper-header-panel>
+
+      <nuxeo-operation auto id="login" op="login" response="{{login}}"></nuxeo-operation>
+      <nuxeo-operation id="incoming" op="Document.Query" response="{{data}}"></nuxeo-operation>
+
+      <template is="dom-if" if="{{!hasResult}}">
+        <paper-card heading="No incoming holidays">
+          <div class="card-content">
+            No incoming holidays... :/
+          </div>
+        </paper-card>
+      </template>
+
+      <template is="dom-repeat" items='[[data.entries]]' as="item">
+        <div class="request">
+          <timeoff-entry data=[[item]]></timeoff-entry>
+        </div>
+      </template>
+    </paper-material>
+  </template>
+
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'timeoff-search',
+      properties: {
+        login: Object,
+        data: Object,
+        hasResult: {
+          type: Boolean,
+          value: false
+        },
+        filters: {
+          type: Object,
+          value: {}
+        },
+        nb: {
+          type: Object,
+          value: {}
+        }
+      },
+      observers: [
+        "refreshQuery(login, filters)",
+        "calculateHolidays(data)"
+      ],
+      refreshQuery: function() {
+        if (!this.login) {
+          return;
+        }
+
+        this.$.incoming.params = this.computeQuery();
+        this.$.incoming.execute();
+      },
+      computeQuery: function() {
+        var query = 'SELECT * FROM HRHolidayRequest ' +
+          'where ecm:path startswith "/default-domain/UserWorkspaces/' + this.login.username + '" ';
+        var filters = this.filters;
+        if (!filters.date) {
+          filters.date = {
+            begin: moment().toISOString(),
+            end: null
+          };
+        }
+        query += 'and (hrholidayrequest:beginning >= "' + filters.date.begin + '" ';
+        query += 'or hrholidayrequest:end >= "' + filters.date.begin + '")';
+        if (filters.date.end) {
+          query += 'and hrholidayrequest:beginning < "' + filters.date.end + '" ';
+        }
+
+        query += " order by hrholidayrequest:beginning";
+        return {query: query};
+      },
+      calculateHolidays: function() {
+        var nb = {
+          rtt: 0,
+          holiday: 0,
+          family: 0,
+          unpaid: 0
+        };
+
+        this.set("hasResult", this.data && this.data.entries && this.data.entries.length > 0);
+        if (this.hasResult) {
+          this.data.entries.forEach(function(entry) {
+            nb.family += parseInt(entry.properties['hrholidayrequest:numberFamilyCause']) || 0;
+            nb.rtt += parseInt(entry.properties['hrholidayrequest:numberRTT']) || 0;
+            nb.holiday += parseInt(entry.properties['hrholidayrequest:numberHoliday']) || 0;
+            nb.unpaid += parseInt(entry.properties['hrholidayrequest:numberUnpaid']) || 0;
+          });
+        }
+
+        this.set("nb", nb);
+      }
+    });
+  }());
+</script>
