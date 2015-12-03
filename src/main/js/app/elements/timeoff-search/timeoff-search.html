@@ -7,13 +7,26 @@
         <paper-toolbar>
           <div>Incoming holidays</div>
           <div>H:[[nb.holiday]], R:[[nb.rtt]], F:[[nb.family]], U:[[nb.unpaid]]</div>
+          <paper-icon-button suffix icon="menu" on-click="_toggleCollapse"></paper-icon-button>
         </paper-toolbar>
+        <iron-collapse id="filtersPanel">
+          <div>
+            <paper-input label="Begin date" readonly value$="[[filters.date.begin]]">
+              <paper-icon-button suffix icon="event" on-click="_openBeginDialog"></paper-icon-button>
+              <paper-icon-button suffix icon="clear" on-click="_clearBegin"></paper-icon-button>
+            </paper-input>
+            <paper-input label="End date" readonly value$="[[filters.date.end]]">
+              <paper-icon-button suffix icon="event" on-click="_openEndDialog"></paper-icon-button>
+              <paper-icon-button suffix icon="clear" on-click="_clearEnd"></paper-icon-button>
+            </paper-input>
+          </div>
+        </iron-collapse>
       </paper-header-panel>
 
       <nuxeo-operation auto id="login" op="login" response="{{login}}"></nuxeo-operation>
       <nuxeo-operation id="incoming" op="Document.Query" response="{{data}}"></nuxeo-operation>
 
-      <template is="dom-if" if="{{!hasResult}}">
+      <template is="dom-if" if="[[!hasResult]]">
         <paper-card heading="No incoming holidays">
           <div class="card-content">
             No incoming holidays... :/
@@ -26,6 +39,21 @@
           <timeoff-entry data=[[item]]></timeoff-entry>
         </div>
       </template>
+
+      <paper-dialog id="beginDatePicker" class="paper-date-picker-dialog" modal>
+        <paper-date-picker date="{{filters.date.begin}}"></paper-date-picker>
+        <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm>OK</paper-button>
+        </div>
+      </paper-dialog>
+      <paper-dialog id="endDatePicker" class="paper-date-picker-dialog" modal>
+        <paper-date-picker date="{{filters.date.end}}"></paper-date-picker>
+        <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm>OK</paper-button>
+        </div>
+      </paper-dialog>
     </paper-material>
   </template>
 
@@ -37,13 +65,17 @@
       properties: {
         login: Object,
         data: Object,
+        _oldFilters: Object,
         hasResult: {
           type: Boolean,
           value: false
         },
         filters: {
           type: Object,
-          value: {}
+          value: {
+            date: {}
+          },
+          notify: true
         },
         nb: {
           type: Object,
@@ -51,37 +83,66 @@
         }
       },
       observers: [
-        "refreshQuery(login, filters)",
-        "calculateHolidays(data)"
+        "_refreshQuery(login, filters.*)",
+        "_calculateHolidays(data)"
       ],
-      refreshQuery: function() {
+      _refreshQuery: function() {
         if (!this.login) {
           return;
         }
+        if (JSON.stringify(this.filters) === this._oldFilters) {
+          // Do not execute same query twice.
+          return;
+        }
 
-        this.$.incoming.params = this.computeQuery();
+        this.$.incoming.params = this._computeQuery();
         this.$.incoming.execute();
+
+        // Save current filters
+        this.set("_oldFilters", JSON.stringify(this.filters));
       },
-      computeQuery: function() {
+      _computeQuery: function() {
         var query = 'SELECT * FROM HRHolidayRequest ' +
           'where ecm:path startswith "/default-domain/UserWorkspaces/' + this.login.username + '" ';
         var filters = this.filters;
-        if (!filters.date) {
+        if (!filters.date || !(filters.date.begin || filters.date.end)) {
           filters.date = {
-            begin: moment().toISOString(),
+            begin: new Date().setHours(0, 0, 0),
             end: null
           };
         }
-        query += 'and (hrholidayrequest:beginning >= "' + filters.date.begin + '" ';
-        query += 'or hrholidayrequest:end >= "' + filters.date.begin + '")';
+        var begin = moment(filters.date.begin).toISOString();
+        query += 'and (hrholidayrequest:beginning >= "' + begin + '" ';
+        query += 'or hrholidayrequest:end >= "' + begin + '")';
         if (filters.date.end) {
-          query += 'and hrholidayrequest:beginning < "' + filters.date.end + '" ';
+          var end = moment(filters.date.end).toISOString();
+          query += 'and hrholidayrequest:beginning < "' + end + '" ';
         }
 
         query += " order by hrholidayrequest:beginning";
+        console.log(query);
         return {query: query};
       },
-      calculateHolidays: function() {
+      _openBeginDialog: function() {
+        this.$.beginDatePicker.open();
+      },
+      _openEndDialog: function() {
+        this.$.endDatePicker.open();
+      },
+      _clearEnd: function() {
+        this.filters.date.end = null;
+        this.set("filters", this.filters);
+        this.set("filters.date.end", null);
+      },
+      _clearBegin: function() {
+        this.filters.date.begin = null;
+        this.set("filters", this.filters);
+        this.set("filters.date.begin", null);
+      },
+      _toggleCollapse: function() {
+        this.$.filtersPanel.toggle();
+      },
+      _calculateHolidays: function() {
         var nb = {
           rtt: 0,
           holiday: 0,

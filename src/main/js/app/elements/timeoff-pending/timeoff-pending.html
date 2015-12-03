@@ -4,7 +4,12 @@
 
   <template>
     <paper-material>
-      <h2>Pending Request</h2>
+      <paper-header-panel class="flex">
+        <paper-toolbar>
+          <div>Pending Request</div>
+        </paper-toolbar>
+      </paper-header-panel>
+
       <nuxeo-resource id="nxoPending" auto
         path="workflow"
         response={{data}}></nuxeo-resource>
