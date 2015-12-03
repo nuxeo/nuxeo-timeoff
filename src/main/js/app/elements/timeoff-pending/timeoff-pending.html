@@ -4,7 +4,7 @@
 
   <template>
     <paper-material>
-      <paper-header-panel class="flex">
+      <paper-header-panel>
         <paper-toolbar>
           <div>Pending Request</div>
         </paper-toolbar>
@@ -19,10 +19,12 @@
       </template>
 
       <template is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
-        <div class="request">
-          <timeoff-entry data=[[item]]></timeoff-entry>
-          <button-edit-workflow on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
-          <button-delete-workflow on-deleted="refreshTasks" workflow-id="[[item.id]]"></button-delete-workflow>
+        <div class="request flex">
+          <timeoff-entry class="flex-centered" data=[[item]]></timeoff-entry>
+          <div class="flex-end-justified">
+            <button-edit-workflow class="button" on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
+            <button-delete-workflow class="button" on-deleted="refreshTasks" workflow-id="[[item.id]]"></button-delete-workflow>
+          </div>
         </div>
       </template>
     </paper-material>

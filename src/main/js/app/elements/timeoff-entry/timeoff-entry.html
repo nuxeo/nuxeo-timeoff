@@ -9,14 +9,16 @@
   var_TimeOffRequestFlow:numberRTT: null
   var_TimeOffRequestFlow:numberUnpaid: null
   var_TimeOffRequestFlow:numberVacation: "10" -->
+  <link rel="import" type="css" href="timeoff-entry.css">
+
   <template>
     <template is="dom-if" if="{{data}}">
-      <div class="timeoff">
+      <div class="timeoff flex-horizontal">
         <div class="beginTime">[[readProperty("begin", "ll")]] - [[readProperty("end", "ll")]]</div>
-        <div class="numberFamilyReason">[[readProperty("numberFamilyReason")]]</div>
-        <div class="numberRTT">[[readProperty("numberRTT")]]</div>
-        <div class="numberUnpaid">[[readProperty("numberUnpaid")]]</div>
-        <div class="numberVacation">[[readProperty("numberVacation")]]</div>
+        <div class="numberVacation">H:[[readProperty("numberVacation")]]</div>
+        <div class="numberRTT">R:[[readProperty("numberRTT")]]</div>
+        <div class="numberFamilyReason">F:[[readProperty("numberFamilyReason")]]</div>
+        <div class="numberUnpaid">U:[[readProperty("numberUnpaid")]]</div>
       </div>
     </template>
   </template>

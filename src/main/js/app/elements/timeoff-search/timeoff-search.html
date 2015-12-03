@@ -26,19 +26,21 @@
       <nuxeo-operation auto id="login" op="login" response="{{login}}"></nuxeo-operation>
       <nuxeo-operation id="incoming" op="Document.Query" response="{{data}}"></nuxeo-operation>
 
-      <template is="dom-if" if="[[!hasResult]]">
-        <paper-card heading="No incoming holidays">
-          <div class="card-content">
-            No incoming holidays... :/
-          </div>
-        </paper-card>
-      </template>
+      <div class="content">
+        <template is="dom-if" if="[[!hasResult]]">
+          <paper-card heading="No incoming holidays">
+            <div class="card-content">
+              No incoming holidays... :/
+            </div>
+          </paper-card>
+        </template>
 
-      <template is="dom-repeat" items='[[data.entries]]' as="item">
-        <div class="request">
-          <timeoff-entry data=[[item]]></timeoff-entry>
-        </div>
-      </template>
+        <template is="dom-repeat" items='[[data.entries]]' as="item">
+          <div class="request">
+            <timeoff-entry data=[[item]]></timeoff-entry>
+          </div>
+        </template>
+      </div>
 
       <paper-dialog id="beginDatePicker" class="paper-date-picker-dialog" modal>
         <paper-date-picker date="{{filters.date.begin}}"></paper-date-picker>
