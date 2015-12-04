@@ -1,7 +1,8 @@
 <dom-module id="button-accept-task">
   <template>
     <nuxeo-resource id="accept" path="task/[[taskId]]/validate" method="put"></nuxeo-resource>
-    <paper-icon-button on-click="accept" icon="done"></paper-icon-button>
+    <paper-icon-button id="btn" alt="Accept" on-click="accept" icon="done"></paper-icon-button>
+    <paper-tooltip for="btn">Accept&nbsp;request</paper-tooltip>
   </template>
 </dom-module>
 <script>
