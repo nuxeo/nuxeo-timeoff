@@ -4,8 +4,10 @@
   <script src="../../bower_components/es6-promise/promise.min.js"></script>
 
   <template>
+    <style is="custom-style" include="shared-styles"></style>
     <nuxeo-resource id="nxr" path="workflow" method="post" data="{{data}}"></nuxeo-resource>
-    <paper-button raised on-click="openDialog">Submit a new request</paper-button>
+    <paper-icon-button id="btn" icon="add" raised on-click="openDialog" alt="New request"></paper-icon-button>
+    <paper-tooltip for="btn">New request</paper-tooltip>
 
     <dialog-request-creation id="dialog" data="{{data}}" on-submit="_submit"></dialog-request-creation>
 
