@@ -1,9 +1,10 @@
 <dom-module id="button-edit-workflow">
   <template>
-    <nuxeo-resource id="workflow" path="workflow/[[workflowId]]"
-      on-response="handleResponse" method="delete"></nuxeo-resource>
+    <nuxeo-resource id="nxDelete" path="workflow/[[workflow.id]]" method="delete"></nuxeo-resource>
+    <nuxeo-resource id="nxCreate" path="workflow" method="post" data="{{data}}"></nuxeo-resource>
     <paper-icon-button id="btn" alt="Edit" on-click="openForm" icon="create"></paper-icon-button>
     <paper-tooltip for="btn">Edit&nbsp;request</paper-tooltip>
+    <dialog-request-creation id="dialog" data="{{data}}" workflow-id="{{workflow.id}}" on-submit="_submit"></dialog-request-creation>
   </template>
 </dom-module>
 <script>
@@ -11,25 +12,40 @@
     Polymer({
       is: 'button-edit-workflow',
       properties: {
+        data: {
+          type: Object,
+          computed: '_computeData(workflow)'
+        },
         workflow: {
           type: Object,
           value: null
         }
       },
-      openForm: function(e) {
-        var creationForm = app.$.creation;
-        creationForm.workflowId = this.workflow.id;
-
+      _computeData: function(workflow) {
+        if (workflow == null) {
+          return {}
+        }
         var variables = this.workflow.variables;
         // Fix date format
         variables.begin = moment(variables.begin).toDate();
         variables.end = moment(variables.end).toDate();
-        creationForm.data = {
+        return {
           variables: variables,
           workflowModelName: 'TimeOffRequestFlow'
-        };
+        }
+      },
+      openForm: function() {
+        this.$.dialog.open();
+      },
+      _submit: function() {
+        this.$.nxDelete.execute().then(function() {
+          this.$.nxCreate.execute().then(function() {
+            app.$.toast.text = 'Your request has been edited.';
+            app.$.toast.show();
 
-        creationForm.openDialog();
+            this.fire('edited');
+          }.bind(this));
+        }.bind(this));
       }
     });
   }());

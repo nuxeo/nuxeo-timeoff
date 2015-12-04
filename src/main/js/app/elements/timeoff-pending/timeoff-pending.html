@@ -12,8 +12,8 @@
       </paper-header-panel>
 
       <nuxeo-resource id="nxoPending" auto
-        path="workflow"
-        response={{data}}></nuxeo-resource>
+                      path="workflow"
+                      response={{data}}></nuxeo-resource>
 
       <template is="dom-if" if="{{data.entries.length === 0}}">
         No response...
@@ -26,10 +26,11 @@
             <div class="flex-end-justified">
               <button-edit-workflow class="button" on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
               <button-delete-workflow class="button" on-deleted="refreshTasks"
-                workflow-id="[[item.id]]"></button-delete-workflow>
+                                      workflow-id="[[item.id]]"></button-delete-workflow>
             </div>
           </div>
         </template>
+      </div>
       </div>
     </paper-material>
   </template>

@@ -1,0 +1,76 @@
+<dom-module id="dialog-request-creation">
+  <link rel="import" type="css" href="dialog-request-creation.css">
+  <template>
+
+    <paper-dialog id="dialog" class="paper-date-picker-dialog" with-backdrop on-iron-overlay-closed="_closeDialog">
+      <h2 class="header">{{title}}</h2>
+
+      <paper-dialog-scrollable>
+        <form is="iron-form" id="form">
+          <label>Start date</label>
+          <paper-date-picker id="startDate" date="{{data.variables.begin}}"></paper-date-picker>
+          <label>End date</label>
+          <paper-date-picker id="endDate" date="{{data.variables.end}}"></paper-date-picker>
+          <paper-input value="{{data.variables.numberHoliday}}" label="Paid holiday" type="number" min="0"
+                       prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-input value="{{data.variables.numberRTT}}" label="RTT" type="number" min="0" prevent-invalid-input
+                       allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-input value="{{data.variables.numberFamilyCause}}" label="Family" type="number" min="0"
+                       prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-input value="{{data.variables.numberUnpaid}}" label="Unpaid holiday" type="number" min="0"
+                       prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
+          <paper-textarea value="{{data.variables.commentRequester}}" label="Comment"></paper-textarea>
+        </form>
+      </paper-dialog-scrollable>
+
+      <div class="buttons footer">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm>Accept</paper-button>
+      </div>
+    </paper-dialog>
+
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'dialog-request-creation',
+      properties: {
+        data: {
+          type: Object,
+          notify: true
+        },
+        title: {
+          type: String,
+          readOnly: true,
+          computed: "_buildTitle(workflowId)"
+        },
+        workflowId: {
+          type: String,
+          value: null
+        }
+      },
+
+      open: function() {
+        this.$.dialog.open();
+      },
+      _closeDialog: function(e) {
+        if (e.detail.confirmed) {
+          this.fire('submit', {'data': this.data});
+        } else {
+          this.fire('cancel');
+          this._reset();
+        }
+      },
+      _reset: function() {
+        this.data = {};
+      },
+      _buildTitle: function(workflowId) {
+        if (typeof workflowId === 'undefined' || workflowId == null) {
+          return 'New timeoff request';
+        }
+        return 'Edit timeoff request';
+      }
+    });
+  }());
+</script>

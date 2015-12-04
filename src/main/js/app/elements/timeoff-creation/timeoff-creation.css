@@ -1,12 +1,4 @@
 
-:host label {
-    font: inherit;
-    color: var(--paper-input-container-color, --secondary-text-color);
-
-    @apply(--paper-font-common-nowrap);
-    @apply(--paper-font-subhead);
-    @apply(--paper-input-container-label);
-}
 :host paper-button {
     background-color: var(--google-grey-300);
     padding: 5px;
@@ -14,12 +6,4 @@
 :host paper-button:hover {
     background-color: var(--paper-light-blue-200);
     padding: 5px;
-}
-:host paper-date-picker {
-    display: block;
-}
-@media (max-width: 600px) {
-    :host paper-dialog {
-        margin: 0;
-    }
 }

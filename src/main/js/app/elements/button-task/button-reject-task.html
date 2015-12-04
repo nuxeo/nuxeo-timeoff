@@ -4,7 +4,7 @@
   <template>
     <nuxeo-resource id="edit" path="task/[[taskId]]/reject" method="put" data="[[data]]"></nuxeo-resource>
     <paper-icon-button on-click="openDialog" icon="cancel"></paper-icon-button>
-    <dialog-comment-confirm id="dialog" title="Reject requet" comment="{{comment}}" on-submit="submitRequest"></dialog-comment-confirm>
+    <dialog-comment-confirm id="dialog" title="Reject request" comment="{{comment}}" on-submit="submitRequest"></dialog-comment-confirm>
   </template>
 </dom-module>
 <script>
