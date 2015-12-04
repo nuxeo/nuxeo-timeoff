@@ -1,0 +1,18 @@
+<link rel="import" href="timeoff-base.html">
+
+<script>
+  // A global map of message
+  var messages = {
+    'tor.managerapproval.label': 'Manager approval',
+    'tor.hrmanagerapproval.label': 'HR approval',
+    'tor.request_update.label': 'Request update needed'
+  };
+
+  TimeoffBehaviors.Message = {
+
+    getMessage: function(key) {
+      return messages[key];
+    }
+
+  };
+</script>

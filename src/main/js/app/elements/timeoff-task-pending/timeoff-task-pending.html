@@ -1,0 +1,63 @@
+<dom-module id="timeoff-task-pending">
+
+  <link rel="import" type="css" href="timeoff-task-pending.css">
+  <link rel="import" href="../timeoff-behavior/timeoff-message.html">
+
+  <template>
+    <nuxeo-resource id="nxoTaskPending" auto
+                    path="task"
+                    params="{{params}}"
+                    response={{tasks}}></nuxeo-resource>
+    <template is="dom-if" if="{{!isEmpty(tasks)}}">
+      <paper-material>
+        <paper-header-panel>
+          <paper-toolbar>
+            <div>Pending Task Request</div>
+          </paper-toolbar>
+        </paper-header-panel>
+        <template is="dom-repeat" items='[[tasks.entries]]' as="task">
+          <div class="task flex">
+            <timeoff-entry data=[[task]]>
+              <div class="step">Step:[[getMessage(task.name)]]</div>
+            </timeoff-entry>
+            <div class="flex-end-justified">
+              <template is="dom-if" if="{{isManagerHRTask(task)}}">
+                <button-accept-task task-id="[[task.id]]" on-accepted="refreshTasks"></button-accept-task>
+                <button-request-update-task task-id="[[task.id]]" task-name="[[task.name]]" on-request-update="refreshTasks"></button-request-update-task>
+                <button-reject-task task-id="[[task.id]]" task-name="[[task.name]]" on-reject="refreshTasks"></button-reject-task>
+              </template>
+              <template is="dom-if" if="{{!isManagerHRTask(task)}}">
+              </template>
+            </div>
+          </div>
+        </template>
+      </paper-material>
+    </template>
+  </template>
+
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'timeoff-task-pending',
+      properties: {
+        params: {
+          type: Object,
+          value: function() {
+            return {'workflowModelName': 'TimeOffRequestFlow'};
+          }
+        }
+      },
+      behaviors: [TimeoffBehaviors.Message],
+      refreshTasks: function() {
+        this.$.nxoTaskPending.execute();
+      },
+      isEmpty: function(tasks) {
+        return tasks && tasks.entries && tasks.entries.length === 0;
+      },
+      isManagerHRTask: function(task) {
+        return task.name === 'tor.managerapproval.label' || task.name === 'tor.hrmanagerapproval.label';
+      }
+    });
+  }());
+</script>

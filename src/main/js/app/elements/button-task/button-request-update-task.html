@@ -1,0 +1,29 @@
+<link rel="import" href="../timeoff-behavior/timeoff-task-comment.html">
+
+<dom-module id="button-request-update-task">
+  <template>
+    <nuxeo-resource id="edit" path="task/[[taskId]]/request_update" method="put" data="[[data]]"></nuxeo-resource>
+    <paper-icon-button on-click="openDialog" icon="reply"></paper-icon-button>
+    <dialog-comment-confirm id="dialog" title="Ask edition" comment="{{comment}}" on-submit="submitRequest"></dialog-comment-confirm>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'button-request-update-task',
+      behaviors: [TimeoffBehaviors.TaskComment],
+      openDialog: function() {
+        this.$.dialog.open();
+      },
+      submitRequest: function() {
+        this.$.edit.execute().then(function() {
+          this.fire('request-update');
+
+
+          app.$.toast.text = 'Timeoff request update asked.';
+          app.$.toast.show();
+        }.bind(this));
+      }
+    });
+  }());
+</script>

@@ -1,0 +1,22 @@
+<!--
+Just the basic behavior to handle task id.
+-->
+<link rel="import" href="timeoff-base.html">
+
+<script>
+
+  TimeoffBehaviors.TaskId = {
+
+    properties: {
+      taskId: {
+        type: String,
+        notify: true
+      }
+    },
+
+    _buildRequestData: function() {
+      return {'id': this.taskId};
+    }
+
+  };
+</script>

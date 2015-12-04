@@ -7,7 +7,7 @@
     <nuxeo-connection id="nx"></nuxeo-connection>
     <nuxeo-resource id="nxr" path="workflow" method="post" data="{{data}}"></nuxeo-resource>
     <nuxeo-resource id="delete" path="workflow/[[workflowId]]" method="delete"></nuxeo-resource>
-    <paper-button raised on-click="openDialog">plain dialog</paper-button>
+    <paper-button raised on-click="openDialog">Submit a new request</paper-button>
 
     <paper-dialog id="dialog" class="paper-date-picker-dialog" with-backdrop on-iron-overlay-closed="overlayClosed">
       <h2 class="header">New timeoff request</h2>
@@ -78,7 +78,7 @@
           return this.workflowId ? true : false;
         },
         createRequest: function() {
-          this.$.nxr.post().then(function(response) {
+          this.$.nxr.post().then(function() {
             app.$.toast.text = this.isEdit() ? 'Your request has been edited.' : 'Your request has been created.';
             app.$.toast.show();
 
@@ -89,7 +89,7 @@
         editRequest: function() {
           // Edit is delete then create.
           var that = this;
-          this.$.delete.execute().then(function(response) {
+          this.$.delete.execute().then(function() {
             that.createRequest();
           });
         }

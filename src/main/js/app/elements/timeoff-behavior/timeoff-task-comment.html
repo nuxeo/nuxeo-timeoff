@@ -1,0 +1,54 @@
+<!--
+Behavior to handle a comment property which needs to be appended in right place of data.
+-->
+
+<link rel="import" href="timeoff-task-id.html">
+
+<script>
+
+  TimeoffBehaviors.TaskCommentImpl = {
+
+    properties: {
+      taskName: {
+        type: String,
+        notify: true
+      },
+      comment: {
+        type: String,
+        value: ''
+      },
+      data: {
+        type: Object,
+        readOnly: true,
+        computed: '_buildRequestData(comment)'
+      }
+    },
+
+    _buildRequestData: function(comment) {
+      var data = TimeoffBehaviors.TaskId._buildRequestData.call(this);
+      if (typeof this.taskName === 'undefined') {
+        return data;
+      }
+      var commentObj = {};
+      switch (this.taskName) {
+        case 'tor.managerapproval.label':
+          commentObj.comment_manager = comment;
+          break;
+        case 'tor.hrmanagerapproval.label':
+          commentObj.comment_hr = comment;
+          break;
+        case 'tor.request_update.label':
+          commentObj.comment = comment;
+          break;
+        default:
+          console.log('[timeoff-task-comment] Unknown task name ' + this.taskName);
+      }
+      data.variables = commentObj;
+      return data;
+    }
+
+  };
+
+  TimeoffBehaviors.TaskComment = [TimeoffBehaviors.TaskId, TimeoffBehaviors.TaskCommentImpl];
+
+</script>

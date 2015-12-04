@@ -1,0 +1,49 @@
+<dom-module id="dialog-comment-confirm">
+  <template>
+    <paper-dialog id="dialog" with-backdrop on-iron-overlay-closed="_closeDialog">
+      <h2 class="header">[[title]]</h2>
+
+      <paper-dialog-scrollable>
+        <paper-textarea value="{{comment}}" label="Comment"></paper-textarea>
+      </paper-dialog-scrollable>
+
+      <div class="buttons footer">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm>Submit</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'dialog-comment-confirm',
+      properties: {
+        title: {
+          type: String,
+          value: 'Customize your title via \'title\' attribute'
+        },
+        comment: {
+          type: String,
+          notify: true,
+          value: ''
+        }
+      },
+
+      open: function() {
+        this.$.dialog.open();
+      },
+      _closeDialog: function(e) {
+        if (e.detail.confirmed) {
+          this.fire('submit', {'comment': this.comment});
+        } else {
+          this.fire('cancel');
+          this._reset();
+        }
+      },
+      _reset: function() {
+        this.comment = '';
+      }
+    });
+  }());
+</script>

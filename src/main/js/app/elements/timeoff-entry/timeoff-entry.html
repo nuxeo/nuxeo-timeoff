@@ -19,6 +19,7 @@
         <div class="numberRTT">R:[[readProperty("numberRTT")]]</div>
         <div class="numberFamilyReason">F:[[readProperty("numberFamilyReason")]]</div>
         <div class="numberUnpaid">U:[[readProperty("numberUnpaid")]]</div>
+        <content></content>
       </div>
     </template>
   </template>
@@ -39,6 +40,7 @@
           case "document":
             val = this.data.properties['hrholidayrequest:' + prop];
             break;
+          case "task":
           case "workflow":
             val = this.data.variables[prop];
             break;

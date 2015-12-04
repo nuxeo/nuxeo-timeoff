@@ -1,0 +1,31 @@
+<dom-module id="button-accept-task">
+  <template>
+    <nuxeo-resource id="accept" path="task/[[taskId]]/validate" method="put"></nuxeo-resource>
+    <paper-icon-button on-click="accept" icon="done"></paper-icon-button>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'button-accept-task',
+      properties: {
+        taskId: {
+          type: String,
+          value: null
+        }
+      },
+      ready: function() {
+        this.$.accept.data = {'id': this.taskId};
+      },
+      accept: function() {
+        this.$.accept.execute().then(function() {
+          this.fire('accepted');
+
+
+          app.$.toast.text = 'Timeoff request validated.';
+          app.$.toast.show();
+        }.bind(this));
+      }
+    });
+  }());
+</script>

@@ -52,6 +52,7 @@
     <div class="content">
       <timeoff-creation id="creation"></timeoff-creation>
       <timeoff-pending id="pending"></timeoff-pending>
+      <timeoff-task-pending id="task"></timeoff-task-pending>
       <timeoff-search id="search"></timeoff-search>
     </div>
   </paper-scroll-header-panel>
@@ -60,9 +61,11 @@
     <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()"></span>
   </paper-toast>
   <script>
-    document.querySelector('#creation').addEventListener('create-request', function() {
+    function refresh() {
       app.$.pending.refreshTasks();
-    });
+      app.$.task.refreshTasks();
+    }
+    document.querySelector('#creation').addEventListener('create-request', refresh);
   </script>
 
   <paper-dialog id="confirmationDialog" with-backdrop modal>
