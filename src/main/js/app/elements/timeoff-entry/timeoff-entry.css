@@ -1,0 +1,7 @@
+.flex-horizontal {
+    @apply(--layout-horizontal);
+    @apply(--layout-center);
+}
+.timeoff div {
+    margin: 5px;
+}
