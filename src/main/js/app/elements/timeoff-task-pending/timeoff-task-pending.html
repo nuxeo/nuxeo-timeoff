@@ -17,13 +17,15 @@
           </paper-toolbar>
         </paper-header-panel>
         <div class="content">
-          <template is="dom-repeat" items='[[tasks.entries]]' as="task">
+          <template is="dom-repeat" items='[[tasks.entries]]' as="task" index-as="task-index">
             <div class="task flex">
               <timeoff-entry data=[[task]]>
                 <div class="step">Step:[[getMessage(task.name)]]</div>
                 <template is="dom-if" if="{{isCommentExist(task)}}">
-                  <iron-icon id="step-icon-[[task.id]]" alt="Comment" icon="help-outline"></iron-icon>
-                  <paper-tooltip for="step-icon-[[task.id]]">[[getComment(task)]]</paper-tooltip>
+                  <div style="display:inline-block">
+                    <iron-icon alt="Comment" icon="help-outline"></iron-icon>
+                    <paper-tooltip>[[getComment(task)]]</paper-tooltip>
+                  </div>
                 </template>
               </timeoff-entry>
               <div class="flex-end-justified">
