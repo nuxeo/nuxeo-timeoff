@@ -1,25 +1,14 @@
 <dom-module id="timeoff-entry">
-  <!-- var_TimeOffRequestFlow:begin: "2015-11-30T15:59:42.04Z"
-  var_TimeOffRequestFlow:comment_hr: null
-  var_TimeOffRequestFlow:comment_manager: null
-  var_TimeOffRequestFlow:comment_requester: null
-  var_TimeOffRequestFlow:end: "2015-11-30T15:59:42.04Z"
-  var_TimeOffRequestFlow:manager: null
-  var_TimeOffRequestFlow:numberFamilyReason: null
-  var_TimeOffRequestFlow:numberRTT: null
-  var_TimeOffRequestFlow:numberUnpaid: null
-  var_TimeOffRequestFlow:numberVacation: "10" -->
   <link rel="import" type="css" href="timeoff-entry.css">
 
   <template>
     <template is="dom-if" if="{{data}}">
       <div class="timeoff flex-horizontal">
-        <div class="beginTime">[[readProperty("begin", "ll")]] - [[readProperty("end", "ll")]]</div>
-        <div class="numberVacation">H:[[readProperty("numberHoliday")]]</div>
-        <div class="numberRTT">R:[[readInt("numberRTT")]]</div>
-        <div class="numberFamilyReason">F:[[readInt("numberFamilyCause")]]</div>
-        <div class="numberUnpaid">U:[[readInt("numberUnpaid")]]</div>
-        <content></content>
+        <div class="beginTime">[[begin]] - [[end]]</div>
+        <div class="numberHoliday">H:[[holiday]]</div>
+        <div class="numberRTT">R:[[RTT]]</div>
+        <div class="numberFamilyCause">F:[[familyCause]]</div>
+        <div class="numberUnpaid">U:[[unPaid]]</div>
       </div>
     </template>
   </template>
@@ -32,7 +21,49 @@
         data: {
           type: Object,
           value: null
+        },
+        begin: {
+          type: String,
+          computed: "readBegin(data)"
+        },
+        end: {
+          type: String,
+          computed: "readEnd(data)"
+        },
+        holiday: {
+          type: String,
+          computed: "readHoliday(data)"
+        },
+        RTT: {
+          type: String,
+          computed: "readRTT(data)"
+        },
+        familyCause: {
+          type: String,
+          computed: "readFamilyCause(data)"
+        },
+        unPaid: {
+          type: String,
+          computed: "readUnpaid(data)"
         }
+      },
+      readBegin: function() {
+        return this.readProperty("begin", "ll");
+      },
+      readEnd: function() {
+        return this.readProperty("end", "ll");
+      },
+      readHoliday: function() {
+        return this.readInt("numberHoliday");
+      },
+      readRTT: function() {
+        return this.readInt("numberRTT");
+      },
+      readFamilyCause: function() {
+        return this.readInt("numberFamilyCause");
+      },
+      readUnpaid: function() {
+        return this.readInt("numberUnpaid");
       },
       readInt: function(prop) {
         return parseInt(this.readProperty(prop)) || 0;

@@ -12,21 +12,21 @@
       </paper-header-panel>
 
       <nuxeo-resource id="nxoPending" auto
-                      path="workflow"
-                      response={{data}}></nuxeo-resource>
+        path="workflow"
+        response={{data}}></nuxeo-resource>
 
       <template is="dom-if" if="{{data.entries.length === 0}}">
         No response...
       </template>
 
       <div class="content">
-        <template is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
+        <template id="tmpl_entries" is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
           <div class="request flex">
-            <timeoff-entry class="flex-centered" data=[[item]]></timeoff-entry>
+            <timeoff-entry class="flex-centered" data$=[[item]] id="entry_[[item.id]]"></timeoff-entry>
             <div class="flex-end-justified">
               <button-edit-workflow class="button" on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
               <button-delete-workflow class="button" on-deleted="refreshTasks"
-                                      workflow-id="[[item.id]]"></button-delete-workflow>
+                workflow-id="[[item.id]]"></button-delete-workflow>
             </div>
           </div>
         </template>
@@ -44,10 +44,15 @@
         login: {
           type: Object,
           value: null
-        }
+        },
+        data: Object
+      },
+      observers: ["dataUpdated(data)"],
+      dataUpdated: function(data) {
+        return console.log("coucou");
       },
       refreshTasks: function() {
-        this.data = null;
+//        this.data = null;
         this.$.nxoPending.execute();
       },
       timeOffWkf: function(entry) {
