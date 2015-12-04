@@ -2,7 +2,8 @@
   <template>
     <nuxeo-resource id="workflow" path="workflow/[[workflowId]]"
       on-response="handleResponse" method="delete"></nuxeo-resource>
-    <paper-icon-button on-click="openForm" icon="create"></paper-icon-button>
+    <paper-icon-button id="btn" alt="Edit" on-click="openForm" icon="create"></paper-icon-button>
+    <paper-tooltip for="btn">Edit&nbsp;request</paper-tooltip>
   </template>
 </dom-module>
 <script>

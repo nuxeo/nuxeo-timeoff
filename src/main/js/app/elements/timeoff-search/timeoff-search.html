@@ -1,13 +1,14 @@
 <dom-module id="timeoff-search">
 
   <template>
-    <!--HRHolidayRequest-->
+    <style is="custom-style" include="shared-styles"></style>
     <paper-material>
-      <paper-header-panel class="flex">
+      <paper-header-panel>
         <paper-toolbar>
+          <paper-tooltip for="menu">Configure</paper-tooltip>
           <div>Incoming holidays</div>
           <div>H:[[nb.holiday]], R:[[nb.rtt]], F:[[nb.family]], U:[[nb.unpaid]]</div>
-          <paper-icon-button suffix icon="menu" on-click="_toggleCollapse"></paper-icon-button>
+            <paper-icon-button id="menu" suffix icon="menu" on-click="_toggleCollapse"></paper-icon-button>
         </paper-toolbar>
         <iron-collapse id="filtersPanel">
           <div>

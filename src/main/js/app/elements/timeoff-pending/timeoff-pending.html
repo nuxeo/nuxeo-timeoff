@@ -3,6 +3,7 @@
   <link rel="import" type="css" href="timeoff-pending.css">
 
   <template>
+    <style is="custom-style" include="shared-styles"></style>
     <paper-material>
       <paper-header-panel>
         <paper-toolbar>
@@ -18,15 +19,18 @@
         No response...
       </template>
 
-      <template is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
-        <div class="request flex">
-          <timeoff-entry class="flex-centered" data=[[item]]></timeoff-entry>
-          <div class="flex-end-justified">
-            <button-edit-workflow class="button" on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
-            <button-delete-workflow class="button" on-deleted="refreshTasks" workflow-id="[[item.id]]"></button-delete-workflow>
+      <div class="content">
+        <template is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
+          <div class="request flex">
+            <timeoff-entry class="flex-centered" data=[[item]]></timeoff-entry>
+            <div class="flex-end-justified">
+              <button-edit-workflow class="button" on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
+              <button-delete-workflow class="button" on-deleted="refreshTasks"
+                workflow-id="[[item.id]]"></button-delete-workflow>
+            </div>
           </div>
-        </div>
-      </template>
+        </template>
+      </div>
     </paper-material>
   </template>
 
