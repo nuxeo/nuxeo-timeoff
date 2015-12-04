@@ -21,6 +21,10 @@
             <div class="task flex">
               <timeoff-entry data=[[task]]>
                 <div class="step">Step:[[getMessage(task.name)]]</div>
+                <template is="dom-if" if="{{isCommentExist(task)}}">
+                  <iron-icon id="step-icon-[[task.id]]" alt="Comment" icon="help-outline"></iron-icon>
+                  <paper-tooltip for="step-icon-[[task.id]]">[[getComment(task)]]</paper-tooltip>
+                </template>
               </timeoff-entry>
               <div class="flex-end-justified">
                 <template is="dom-if" if="{{isManagerHRTask(task)}}">
@@ -62,6 +66,26 @@
       },
       isManagerHRTask: function(task) {
         return task.name === 'tor.managerapproval.label' || task.name === 'tor.hrmanagerapproval.label';
+      },
+      isCommentExist: function(task) {
+        return (task.name === 'tor.managerapproval.label' && task.variables.commentRequester != null)
+          || (task.name === 'tor.hrmanagerapproval.label' && task.variables.commentRequester != null)
+          || (task.name === 'tor.request_update.label' && (task.variables.commentManager != null || task.variables.commentHr != null))
+      },
+      getComment: function(task) {
+        var result = '';
+        if (task.name === 'tor.managerapproval.label') {
+          result = 'Comment: ' + task.variables.commentRequester;
+        } else if (task.name === 'tor.hrmanagerapproval.label') {
+          result = 'Comment: ' + task.variables.commentRequester;
+        } else if (task.name === 'tor.request_update.label') {
+          if (task.variables.commentManager != null && task.variables.commentManager != '') {
+            result = 'Comment manager: ' + task.variables.commentManager;
+          } else if (task.variables.commentHr != null && task.variables.commentHr != '') {
+            result = 'Comment HR: ' + task.variables.commentHr;
+          }
+        }
+        return result;
       }
     });
   }());
