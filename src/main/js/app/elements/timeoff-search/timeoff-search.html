@@ -25,6 +25,8 @@
 
       <nuxeo-operation auto id="login" op="login" response="{{login}}"></nuxeo-operation>
       <nuxeo-operation id="incoming" op="Document.Query" response="{{data}}"></nuxeo-operation>
+      <nuxeo-resource id="employees" path="directory/EmployeeManagerMapping"
+        on-response="_employeeReceived"></nuxeo-resource>
 
       <div class="content">
         <template is="dom-if" if="[[!hasResult]]">
@@ -82,10 +84,15 @@
         nb: {
           type: Object,
           value: {}
+        },
+        employees: {
+          type: Array,
+          value: []
         }
       },
       observers: [
         "_refreshQuery(login, filters.*)",
+        "_updateEmployees(login)",
         "_calculateHolidays(data)"
       ],
       _refreshQuery: function() {
@@ -102,6 +109,12 @@
 
         // Save current filters
         this.set("_oldFilters", JSON.stringify(this.filters));
+      },
+      _updateEmployees: function() {
+        if (this.employees.length > 0) {
+          return;
+        }
+        this.$.employees.execute();
       },
       _computeQuery: function() {
         var query = 'SELECT * FROM HRHolidayRequest ' +
@@ -143,6 +156,15 @@
       },
       _toggleCollapse: function() {
         this.$.filtersPanel.toggle();
+      },
+      _employeeReceived: function(e) {
+        var employees = [];
+        e.detail.response.entries.forEach(function(entry) {
+          if (entry.properties.label === this.login.username) {
+            employees.push(entry.properties.id);
+          }
+        }.bind(this));
+        this.set('employees', employees.sort());
       },
       _calculateHolidays: function() {
         var nb = {

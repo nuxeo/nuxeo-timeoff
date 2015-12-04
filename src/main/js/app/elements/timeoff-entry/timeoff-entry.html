@@ -15,10 +15,10 @@
     <template is="dom-if" if="{{data}}">
       <div class="timeoff flex-horizontal">
         <div class="beginTime">[[readProperty("begin", "ll")]] - [[readProperty("end", "ll")]]</div>
-        <div class="numberVacation">H:[[readProperty("numberVacation")]]</div>
-        <div class="numberRTT">R:[[readProperty("numberRTT")]]</div>
-        <div class="numberFamilyReason">F:[[readProperty("numberFamilyReason")]]</div>
-        <div class="numberUnpaid">U:[[readProperty("numberUnpaid")]]</div>
+        <div class="numberVacation">H:[[readProperty("numberHoliday")]]</div>
+        <div class="numberRTT">R:[[readInt("numberRTT")]]</div>
+        <div class="numberFamilyReason">F:[[readInt("numberFamilyCause")]]</div>
+        <div class="numberUnpaid">U:[[readInt("numberUnpaid")]]</div>
         <content></content>
       </div>
     </template>
@@ -33,6 +33,9 @@
           type: Object,
           value: null
         }
+      },
+      readInt: function(prop) {
+        return parseInt(this.readProperty(prop)) || 0;
       },
       readProperty: function(prop, format) {
         var val;

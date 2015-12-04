@@ -18,11 +18,11 @@
           <paper-date-picker id="startDate" date="{{data.variables.begin}}"></paper-date-picker>
           <label>End date</label>
           <paper-date-picker id="endDate" date="{{data.variables.end}}"></paper-date-picker>
-          <paper-input value="{{data.variables.numberVacation}}" label="Paid holiday" type="number" min="0"
+          <paper-input value="{{data.variables.numberHoliday}}" label="Paid holiday" type="number" min="0"
             prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
           <paper-input value="{{data.variables.numberRTT}}" label="RTT" type="number" min="0" prevent-invalid-input
             allowed-pattern="[0-9]" auto-validate></paper-input>
-          <paper-input value="{{data.variables.numberFamilyReason}}" label="Family" type="number" min="0"
+          <paper-input value="{{data.variables.numberFamilyCause}}" label="Family" type="number" min="0"
             prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
           <paper-input value="{{data.variables.numberUnpaid}}" label="Unpaid holiday" type="number" min="0"
             prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
@@ -54,9 +54,9 @@
             'variables': {
               'begin': moment().toDate(),
               'end': moment().toDate(),
-              'numberVacation': null,
+              'numberHoliday': null,
               'numberRTT': null,
-              'numberFamilyReason': null,
+              'numberFamilyCause': null,
               'numberUnpaid': null,
               'comment_requester': ''
             },
