@@ -30,11 +30,11 @@
               </timeoff-entry>
               <div class="flex-end-justified">
                 <template is="dom-if" if="{{isManagerHRTask(task)}}">
-                  <button-accept-task task-id="[[task.id]]" on-accepted="refreshTasks"></button-accept-task>
+                  <button-accept-task task-id="[[task.id]]" on-accepted="refresh"></button-accept-task>
                   <button-request-update-task task-id="[[task.id]]" task-name="[[task.name]]"
-                                              on-request-update="refreshTasks"></button-request-update-task>
+                                              on-request-updated="refreshTasks"></button-request-update-task>
                   <button-reject-task task-id="[[task.id]]" task-name="[[task.name]]"
-                                      on-reject="refreshTasks"></button-reject-task>
+                                      on-rejected="refresh"></button-reject-task>
                 </template>
                 <template is="dom-if" if="{{!isManagerHRTask(task)}}">
                   <button-edit-task task="[[task]]" on-edited="refresh"></button-edit-task>
