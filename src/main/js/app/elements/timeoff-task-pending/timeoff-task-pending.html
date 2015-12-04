@@ -37,6 +37,7 @@
                                       on-reject="refreshTasks"></button-reject-task>
                 </template>
                 <template is="dom-if" if="{{!isManagerHRTask(task)}}">
+                  <button-edit-task task="[[task]]" on-edited="refresh"></button-edit-task>
                 </template>
               </div>
             </div>
@@ -63,6 +64,9 @@
       refreshTasks: function() {
         this.$.nxoTaskPending.execute();
       },
+      refresh: function() {
+        this.fire('refresh');
+      },
       isEmpty: function(tasks) {
         return tasks && tasks.entries && tasks.entries.length === 0;
       },
@@ -70,9 +74,9 @@
         return task.name === 'tor.managerapproval.label' || task.name === 'tor.hrmanagerapproval.label';
       },
       isCommentExist: function(task) {
-        return (task.name === 'tor.managerapproval.label' && task.variables.commentRequester != null)
-          || (task.name === 'tor.hrmanagerapproval.label' && task.variables.commentRequester != null)
-          || (task.name === 'tor.request_update.label' && (task.variables.commentManager != null || task.variables.commentHr != null))
+        return (task.name === 'tor.managerapproval.label' && !this._isStringEmpty(task.variables.commentRequester))
+          || (task.name === 'tor.hrmanagerapproval.label' && !this._isStringEmpty(task.variables.commentRequester))
+          || (task.name === 'tor.request_update.label' && !this._isStringEmpty(task.variables.commentManager) || !this._isStringEmpty(task.variables.commentHr))
       },
       getComment: function(task) {
         var result = '';
@@ -81,13 +85,16 @@
         } else if (task.name === 'tor.hrmanagerapproval.label') {
           result = 'Comment: ' + task.variables.commentRequester;
         } else if (task.name === 'tor.request_update.label') {
-          if (task.variables.commentManager != null && task.variables.commentManager != '') {
+          if (!this._isStringEmpty(task.variables.commentManager)) {
             result = 'Comment manager: ' + task.variables.commentManager;
-          } else if (task.variables.commentHr != null && task.variables.commentHr != '') {
+          } else if (!this._isStringEmpty(task.variables.commentHr)) {
             result = 'Comment HR: ' + task.variables.commentHr;
           }
         }
         return result;
+      },
+      _isStringEmpty: function(string) {
+        return string == null || string === '';
       }
     });
   }());

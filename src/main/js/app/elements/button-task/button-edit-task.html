@@ -1,0 +1,55 @@
+<dom-module id="button-edit-task">
+  <template>
+    <nuxeo-resource id="edit" path="task/[[task.id]]/update" method="put" data="[[data]]"></nuxeo-resource>
+    <paper-icon-button id="btn" alt="Edit" on-click="openDialog" icon="create"></paper-icon-button>
+    <paper-tooltip for="btn">Edit&nbsp;request</paper-tooltip>
+    <dialog-request-creation id="dialog" data="{{data}}" workflow-id="{{task.id}}" on-submit="_submit"></dialog-request-creation>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'button-edit-task',
+      properties: {
+        data: {
+          type: Object,
+          computed: '_computeData(task)'
+        },
+        task: {
+          task: {
+            type: Object,
+            value: null
+          }
+        }
+      },
+      _computeData: function(task) {
+        if (task == null) {
+          return {}
+        }
+        var variables = task.variables;
+        // Fix date format
+        variables.begin = moment(variables.begin).toDate();
+        variables.end = moment(variables.end).toDate();
+        console.log(variables.begin);
+        console.log(variables.end);
+
+        return {
+          id: task.id,
+          variables: variables
+        }
+      },
+      openDialog: function() {
+        this.$.dialog.open();
+      },
+      _submit: function() {
+        this.$.edit.execute().then(function() {
+          this.fire('edited');
+
+
+          app.$.toast.text = 'Timeoff request edited.';
+          app.$.toast.show();
+        }.bind(this));
+      }
+    });
+  }());
+</script>

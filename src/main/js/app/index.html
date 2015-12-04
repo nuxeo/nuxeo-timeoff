@@ -66,6 +66,7 @@
       app.$.task.refreshTasks();
     }
     document.querySelector('#creation').addEventListener('create-request', refresh);
+    document.querySelector('#task').addEventListener('refresh', refresh);
   </script>
 
   <paper-dialog id="confirmationDialog" with-backdrop modal>
