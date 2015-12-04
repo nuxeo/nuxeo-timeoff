@@ -8,10 +8,10 @@
           <paper-tooltip for="menu">Configure</paper-tooltip>
           <div>Incoming holidays</div>
           <div>H:[[nb.holiday]], R:[[nb.rtt]], F:[[nb.family]], U:[[nb.unpaid]]</div>
-            <paper-icon-button id="menu" suffix icon="menu" on-click="_toggleCollapse"></paper-icon-button>
+          <paper-icon-button id="menu" suffix icon="menu" on-click="_toggleCollapse"></paper-icon-button>
         </paper-toolbar>
         <iron-collapse id="filtersPanel">
-          <div>
+          <div class="content menu">
             <paper-input label="Begin date" readonly value$="[[filters.date.begin]]">
               <paper-icon-button suffix icon="event" on-click="_openBeginDialog"></paper-icon-button>
               <paper-icon-button suffix icon="clear" on-click="_clearBegin"></paper-icon-button>
@@ -25,6 +25,8 @@
       </paper-header-panel>
 
       <nuxeo-operation auto id="login" op="login" response="{{login}}"></nuxeo-operation>
+      <nuxeo-operation id="userWorkspace" op="User.GetUserWorkspace"
+        on-response="_userWorkspaceReceived"></nuxeo-operation>
       <nuxeo-operation id="incoming" op="Document.Query" response="{{data}}"></nuxeo-operation>
       <nuxeo-resource id="employees" path="directory/EmployeeManagerMapping"
         on-response="_employeeReceived"></nuxeo-resource>
@@ -33,7 +35,7 @@
         <template is="dom-if" if="[[!hasResult]]">
           <paper-card heading="No incoming holidays">
             <div class="card-content">
-              No incoming holidays... :/
+              :/
             </div>
           </paper-card>
         </template>
@@ -69,6 +71,7 @@
       is: 'timeoff-search',
       properties: {
         login: Object,
+        userWorkspace: String,
         data: Object,
         _oldFilters: Object,
         hasResult: {
@@ -92,10 +95,13 @@
         }
       },
       observers: [
-        "_refreshQuery(login, filters.*)",
-        "_updateEmployees(login)",
+        "_updateUserContext(login)",
+        "_refreshQuery(userWorkspace, filters.*)",
         "_calculateHolidays(data)"
       ],
+      _userWorkspaceReceived: function(e) {
+        this.set("userWorkspace", e.detail.response.path);
+      },
       _refreshQuery: function() {
         if (!this.login) {
           return;
@@ -111,15 +117,16 @@
         // Save current filters
         this.set("_oldFilters", JSON.stringify(this.filters));
       },
-      _updateEmployees: function() {
+      _updateUserContext: function() {
         if (this.employees.length > 0) {
           return;
         }
         this.$.employees.execute();
+        this.$.userWorkspace.execute();
       },
       _computeQuery: function() {
         var query = 'SELECT * FROM HRHolidayRequest ' +
-          'where ecm:path startswith "/default-domain/UserWorkspaces/' + this.login.username + '" ';
+          'where ecm:path startswith "' + this.userWorkspace + '" ';
         var filters = this.filters;
         if (!filters.date || !(filters.date.begin || filters.date.end)) {
           filters.date = {
