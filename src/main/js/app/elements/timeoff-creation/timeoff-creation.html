@@ -7,7 +7,7 @@
     <style is="custom-style" include="shared-styles"></style>
     <nuxeo-resource id="nxr" path="workflow" method="post" data="{{data}}"></nuxeo-resource>
     <paper-icon-button id="btn" icon="add" raised on-click="openDialog" alt="New request"></paper-icon-button>
-    <paper-tooltip for="btn">New request</paper-tooltip>
+    <paper-tooltip for="btn" position="top">New request</paper-tooltip>
 
     <dialog-request-creation id="dialog" data="{{data}}" on-submit="_submit"></dialog-request-creation>
 
