@@ -20,7 +20,7 @@
               <paper-icon-button suffix icon="event" on-click="_openEndDialog"></paper-icon-button>
               <paper-icon-button suffix icon="clear" on-click="_clearEnd"></paper-icon-button>
             </paper-input>
-            <paper-input label="Other Employees" value$="[[filters.employees]]">
+            <paper-input label="Other Employees" value="{{filters.employees}}">
               <paper-icon-button suffix icon="add" on-click="_openEmployeeDialog"></paper-icon-button>
             </paper-input>
           </div>
@@ -68,9 +68,12 @@
       </paper-dialog>
       <!-- Employee selection dialog -->
       <paper-dialog id="employeesSelection" modal>
+        <h2>Select employees</h2>
+        <paper-input label="Filter name" value="{{_filterEmployeesValue}}"></paper-input>
         <paper-dialog-scrollable>
           <paper-listbox multi on-iron-deselect="_employeesListChanged" on-iron-select="_employeesListChanged">
-            <template is="dom-repeat" items='[[employees]]' as="item">
+            <template is="dom-repeat" items='[[employees]]' as="item"
+              filter="{{_filterEmployeesSelect(_filterEmployeesValue)}}">
               <paper-item value="[[item]]">[[item]]</paper-item>
             </template>
           </paper-listbox>
@@ -221,6 +224,15 @@
           }
         }.bind(this));
         this.set('employees', employees.sort());
+      },
+      _filterEmployeesSelect: function(e) {
+        if (!e) {
+          return null;
+        }
+        var str = e.toLowerCase();
+        return function(value) {
+          return value.toLowerCase().indexOf(str) != -1;
+        };
       },
       _calculateHolidays: function() {
         var nb = {
