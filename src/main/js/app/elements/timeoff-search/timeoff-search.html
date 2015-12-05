@@ -48,7 +48,11 @@
 
         <template is="dom-repeat" items='[[data.entries]]' as="item">
           <div class="request">
-            <timeoff-entry data=[[item]]></timeoff-entry>
+            <timeoff-entry data=[[item]]>
+              <template is="dom-if" if="[[hasEmployeeFilter]]" restamp="true">
+                [[item.properties.dc:creator]]
+              </template>
+            </timeoff-entry>
           </div>
         </template>
       </div>
@@ -106,6 +110,10 @@
           type: Boolean,
           computed: "_isManager(employees)"
         },
+        hasEmployeeFilter: {
+          type: Boolean,
+          computed: "_hasEmployeeFilter(data)"
+        },
         filters: {
           type: Object,
           value: {
@@ -140,22 +148,31 @@
           return;
         }
 
+        var splitString = function(str) {
+          return str.split(/\s+/).filter(function(e) {
+            return e; // Filter possible empty entries.
+          });
+        }.bind(this);
+
         switch (e.type) {
           case "iron-select":
-            var employees = this.filters.employees.split(/\s+/).filter(function(e) {
-              return e; // Filter possible empty entries.
-            });
+            if (this.filters.employees.indexOf(value) >= 0) {
+              break;
+            }
+
+            var employees = splitString(this.filters.employees);
             employees.push(value);
-            this.set("filters.employees", employees.sort().join(" "));
+            this.set("filters.employees", employees.join(" "));
             break;
           case "iron-deselect":
-            this.set("filters.employees", this.filters.employees.replace(value, "").split(/\s+/).join(" "));
+            this.set("filters.employees", splitString(this.filters.employees.replace(value, '')).join(" "));
             break;
         }
-        console.log(this.filters.employees);
       },
       refreshAll: function() {
-        this.$.incoming.execute();
+        this.debounce('refreshAll', function() {
+          this.$.incoming.execute();
+        }.bind(this), 700);
       },
       _refreshQuery: function() {
         if (!this.login) {
@@ -180,9 +197,22 @@
         this.$.userWorkspace.execute();
       },
       _computeQuery: function() {
-        var query = 'SELECT * FROM HRHolidayRequest ' +
-          'where ecm:path startswith "' + this.userWorkspace + '" ';
+        var query = 'SELECT * FROM HRHolidayRequest where ';
         var filters = this.filters;
+
+        if (filters.employees && filters.employees.length > 0) {
+          var logins = "";
+          // Manager wants to display someone else holidays
+          filters.employees.trim().split(/\s+/).forEach(function(login) {
+            // Strip non alphanumerics chars
+            logins += '"' + login.replace(/[^a-zA-Z\d:_]/g, "") + '", ';
+          });
+          query += 'dc:creator IN (' + logins.substring(0, logins.length - 2) + ') ';
+        } else {
+          // Normal user request his holidays
+          query += 'ecm:path startswith "' + this.userWorkspace + '" ';
+        }
+
         if (!filters.date || !(filters.date.begin || filters.date.end)) {
           filters.date = {
             begin: new Date().setHours(0, 0, 0),
@@ -234,6 +264,9 @@
       },
       _isManager: function() {
         return this.employees && this.employees.length > 0;
+      },
+      _hasEmployeeFilter: function() {
+        return this.filters.employees && this.filters.employees.length > 0;
       },
       _filterEmployeesSelect: function(e) {
         if (!e) {
