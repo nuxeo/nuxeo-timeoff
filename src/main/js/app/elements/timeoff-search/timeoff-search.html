@@ -20,9 +20,12 @@
               <paper-icon-button suffix icon="event" on-click="_openEndDialog"></paper-icon-button>
               <paper-icon-button suffix icon="clear" on-click="_clearEnd"></paper-icon-button>
             </paper-input>
-            <paper-input label="Other Employees" value="{{filters.employees}}">
-              <paper-icon-button suffix icon="add" on-click="_openEmployeeDialog"></paper-icon-button>
-            </paper-input>
+
+            <template is="dom-if" if="[[isManager]]">
+              <paper-input label="Other Employees" value="{{filters.employees}}">
+                <paper-icon-button suffix icon="add" on-click="_openEmployeeDialog"></paper-icon-button>
+              </paper-input>
+            </template>
           </div>
         </iron-collapse>
       </paper-header-panel>
@@ -98,6 +101,10 @@
         hasResult: {
           type: Boolean,
           value: false
+        },
+        isManager: {
+          type: Boolean,
+          computed: "_isManager(employees)"
         },
         filters: {
           type: Object,
@@ -224,6 +231,9 @@
           }
         }.bind(this));
         this.set('employees', employees.sort());
+      },
+      _isManager: function() {
+        return this.employees && this.employees.length > 0;
       },
       _filterEmployeesSelect: function(e) {
         if (!e) {
