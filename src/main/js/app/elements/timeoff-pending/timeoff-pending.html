@@ -1,23 +1,20 @@
 <dom-module id="timeoff-pending">
 
   <link rel="import" type="css" href="timeoff-pending.css">
+  <link rel="import" href="../timeoff-behavior/timeoff-helper.html">
 
   <template>
     <style is="custom-style" include="shared-styles"></style>
+    <nuxeo-resource id="nxoPending" auto
+                    path="workflow"
+                    response={{data}}></nuxeo-resource>
+    <template is="dom-if" if="{{!isEmptyDataResponse(data)}}">
     <paper-material>
       <paper-header-panel>
         <paper-toolbar>
           <div>Pending Request</div>
         </paper-toolbar>
       </paper-header-panel>
-
-      <nuxeo-resource id="nxoPending" auto
-        path="workflow"
-        response={{data}}></nuxeo-resource>
-
-      <template is="dom-if" if="{{data.entries.length === 0}}">
-        No response...
-      </template>
 
       <div class="content">
         <template id="tmpl_entries" is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
@@ -33,6 +30,7 @@
       </div>
       </div>
     </paper-material>
+    </template>
   </template>
 
 </dom-module>
@@ -47,6 +45,7 @@
         },
         data: Object
       },
+      behaviors: [TimeoffBehaviors.Helper],
       refreshTasks: function() {
         this.$.nxoPending.execute();
       },

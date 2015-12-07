@@ -2,6 +2,7 @@
 
   <link rel="import" type="css" href="timeoff-task-pending.css">
   <link rel="import" href="../timeoff-behavior/timeoff-message.html">
+  <link rel="import" href="../timeoff-behavior/timeoff-helper.html">
 
   <template>
     <style is="custom-style" include="shared-styles"></style>
@@ -9,7 +10,7 @@
                     path="task"
                     params="{{params}}"
                     response={{tasks}}></nuxeo-resource>
-    <template is="dom-if" if="{{!isEmpty(tasks)}}">
+    <template is="dom-if" if="{{!isEmptyDataResponse(tasks)}}">
       <paper-material>
         <paper-header-panel>
           <paper-toolbar>
@@ -60,15 +61,12 @@
           }
         }
       },
-      behaviors: [TimeoffBehaviors.Message],
+      behaviors: [TimeoffBehaviors.Message, TimeoffBehaviors.Helper],
       refreshTasks: function() {
         this.$.nxoTaskPending.execute();
       },
       refresh: function() {
         this.fire('refresh');
-      },
-      isEmpty: function(tasks) {
-        return tasks && tasks.entries && tasks.entries.length === 0;
       },
       isManagerHRTask: function(task) {
         return task.name === 'tor.managerapproval.label' || task.name === 'tor.hrmanagerapproval.label';

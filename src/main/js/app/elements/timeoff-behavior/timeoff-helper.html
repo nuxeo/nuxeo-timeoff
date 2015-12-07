@@ -1,0 +1,18 @@
+<!--
+Helper method.
+-->
+<link rel="import" href="timeoff-base.html">
+
+<script>
+
+  TimeoffBehaviors.Helper = {
+
+    isEmptyDataResponse: function(data) {
+      return data && this.isEmptyList(data.entries);
+    },
+    isEmptyList: function(list) {
+      return list && list.length == 0;
+    }
+
+  };
+</script>
