@@ -28,7 +28,7 @@
         }
         var variables = task.variables;
         // Fix date format
-        variables.begin = moment(variables.begin).toDate();
+        variables.beginning = moment(variables.beginning).toDate();
         variables.end = moment(variables.end).toDate();
 
         return {

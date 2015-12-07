@@ -4,7 +4,7 @@
   <template>
     <template is="dom-if" if="{{data}}">
       <div class="timeoff flex-horizontal">
-        <div class="beginTime">[[begin]] - [[end]]</div>
+        <div class="interval">[[beginning]] - [[end]]</div>
         <div class="numberHoliday">H:[[holiday]]</div>
         <div class="numberRTT">R:[[RTT]]</div>
         <div class="numberFamilyCause">F:[[familyCause]]</div>
@@ -23,9 +23,9 @@
           type: Object,
           value: null
         },
-        begin: {
+        beginning: {
           type: String,
-          computed: "readBegin(data)"
+          computed: "readBeginning(data)"
         },
         end: {
           type: String,
@@ -48,8 +48,8 @@
           computed: "readUnpaid(data)"
         }
       },
-      readBegin: function() {
-        return this.readProperty("begin", "ll");
+      readBeginning: function() {
+        return this.readProperty("beginning", "ll");
       },
       readEnd: function() {
         return this.readProperty("end", "ll");

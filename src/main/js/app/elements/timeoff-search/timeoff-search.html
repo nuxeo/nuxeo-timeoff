@@ -12,7 +12,7 @@
         </paper-toolbar>
         <iron-collapse id="filtersPanel">
           <div class="content menu">
-            <paper-input label="Begin date" readonly value$="[[filters.date.begin]]">
+            <paper-input label="Begin date" readonly value$="[[filters.date.beginning]]">
               <paper-icon-button suffix icon="event" on-click="_openBeginDialog"></paper-icon-button>
               <paper-icon-button suffix icon="clear" on-click="_clearBegin"></paper-icon-button>
             </paper-input>
@@ -59,7 +59,7 @@
 
       <!-- Begin date dialog -->
       <paper-dialog id="beginDatePicker" class="paper-date-picker-dialog" modal>
-        <paper-date-picker date="{{filters.date.begin}}"></paper-date-picker>
+        <paper-date-picker date="{{filters.date.beginning}}"></paper-date-picker>
         <div class="buttons">
           <paper-button dialog-dismiss>Cancel</paper-button>
           <paper-button dialog-confirm>OK</paper-button>
@@ -118,7 +118,7 @@
           type: Object,
           value: {
             date: {
-              begin: null,
+              beginning: null,
               end: null
             },
             employees: ""
@@ -213,15 +213,15 @@
           query += 'ecm:path startswith "' + this.userWorkspace + '" ';
         }
 
-        if (!filters.date || !(filters.date.begin || filters.date.end)) {
+        if (!filters.date || !(filters.date.beginning || filters.date.end)) {
           filters.date = {
-            begin: new Date().setHours(0, 0, 0),
+            beginning: new Date().setHours(0, 0, 0),
             end: null
           };
         }
-        var begin = moment(filters.date.begin).toISOString();
-        query += 'and (hrholidayrequest:beginning >= "' + begin + '" ';
-        query += 'or hrholidayrequest:end >= "' + begin + '")';
+        var beginning = moment(filters.date.beginning).toISOString();
+        query += 'and (hrholidayrequest:beginning >= "' + beginning + '" ';
+        query += 'or hrholidayrequest:end >= "' + beginning + '")';
         if (filters.date.end) {
           var end = moment(filters.date.end).toISOString();
           query += 'and hrholidayrequest:beginning < "' + end + '" ';
@@ -246,9 +246,9 @@
         this.set("filters.date.end", null);
       },
       _clearBegin: function() {
-        this.filters.date.begin = null;
+        this.filters.date.beginning = null;
         this.set("filters", this.filters);
-        this.set("filters.date.begin", null);
+        this.set("filters.date.beginning", null);
       },
       _toggleCollapse: function() {
         this.$.filtersPanel.toggle();
