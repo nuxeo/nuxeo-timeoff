@@ -4,7 +4,8 @@
     <nuxeo-resource id="nxCreate" path="workflow" method="post" data="{{data}}"></nuxeo-resource>
     <paper-icon-button id="btn" alt="Edit" on-click="openForm" icon="create"></paper-icon-button>
     <paper-tooltip for="btn">Edit&nbsp;request</paper-tooltip>
-    <dialog-request-creation id="dialog" data="{{data}}" workflow-id="{{workflow.id}}" on-submit="_submit"></dialog-request-creation>
+    <dialog-request-creation id="dialog" data="{{data}}" workflow-id="{{workflow.id}}"
+                             on-submit="_submit"></dialog-request-creation>
   </template>
 </dom-module>
 <script>
@@ -22,8 +23,8 @@
         }
       },
       _computeData: function(workflow) {
-        if (workflow == null) {
-          return {}
+        if (workflow === null) {
+          return {};
         }
         var variables = this.workflow.variables;
         // Fix date format
@@ -33,7 +34,7 @@
         return {
           variables: variables,
           workflowModelName: 'TimeOffRequestFlow'
-        }
+        };
       },
       openForm: function() {
         this.$.dialog.open();
@@ -41,10 +42,10 @@
       _submit: function() {
         this.$.nxDelete.execute().then(function() {
           this.$.nxCreate.execute().then(function() {
+            this.fire('edited');
+
             app.$.toast.text = 'Your request has been edited.';
             app.$.toast.show();
-
-            this.fire('edited');
           }.bind(this));
         }.bind(this));
       }

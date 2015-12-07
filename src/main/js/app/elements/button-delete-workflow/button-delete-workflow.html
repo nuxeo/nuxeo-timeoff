@@ -16,7 +16,7 @@
           value: null
         }
       },
-      confirm: function(e) {
+      confirm: function() {
         var that = this;
         var click = function(e) {
           this.removeEventListener('iron-overlay-closed', click);
@@ -30,8 +30,8 @@
       delete: function() {
         this.$.workflow.execute();
       },
-      handleResponse: function(data) {
-        app.$.toast.text = "Timeoff request deleted.";
+      handleResponse: function() {
+        app.$.toast.text = 'Timeoff request deleted.';
         app.$.toast.show();
         this.fire('deleted');
       }

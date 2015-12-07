@@ -108,11 +108,11 @@
         },
         isManager: {
           type: Boolean,
-          computed: "_isManager(employees)"
+          computed: '_isManager(employees)'
         },
         hasEmployeeFilter: {
           type: Boolean,
-          computed: "_hasEmployeeFilter(data)"
+          computed: '_hasEmployeeFilter(data)'
         },
         filters: {
           type: Object,
@@ -121,7 +121,7 @@
               beginning: null,
               end: null
             },
-            employees: ""
+            employees: ''
           },
           notify: true
         },
@@ -135,12 +135,12 @@
         }
       },
       observers: [
-        "_updateUserContext(login)",
-        "_refreshQuery(userWorkspace, filters.*)",
-        "_calculateHolidays(data)"
+        '_updateUserContext(login)',
+        '_refreshQuery(userWorkspace, filters.*)',
+        '_calculateHolidays(data)'
       ],
       _userWorkspaceReceived: function(e) {
-        this.set("userWorkspace", e.detail.response.path);
+        this.set('userWorkspace', e.detail.response.path);
       },
       _employeesListChanged: function(e) {
         var value = e.detail.item.value.trim();
@@ -155,17 +155,17 @@
         }.bind(this);
 
         switch (e.type) {
-          case "iron-select":
+          case 'iron-select':
             if (this.filters.employees.indexOf(value) >= 0) {
               break;
             }
 
             var employees = splitString(this.filters.employees);
             employees.push(value);
-            this.set("filters.employees", employees.join(" "));
+            this.set('filters.employees', employees.join(' '));
             break;
-          case "iron-deselect":
-            this.set("filters.employees", splitString(this.filters.employees.replace(value, '')).join(" "));
+          case 'iron-deselect':
+            this.set('filters.employees', splitString(this.filters.employees.replace(value, '')).join(' '));
             break;
         }
       },
@@ -187,7 +187,7 @@
         this.refreshAll();
 
         // Save current filters
-        this.set("_oldFilters", JSON.stringify(this.filters));
+        this.set('_oldFilters', JSON.stringify(this.filters));
       },
       _updateUserContext: function() {
         if (this.employees.length > 0) {
@@ -201,11 +201,11 @@
         var filters = this.filters;
 
         if (filters.employees && filters.employees.length > 0) {
-          var logins = "";
+          var logins = '';
           // Manager wants to display someone else holidays
           filters.employees.trim().split(/\s+/).forEach(function(login) {
             // Strip non alphanumerics chars
-            logins += '"' + login.replace(/[^a-zA-Z\d:_]/g, "") + '", ';
+            logins += '"' + login.replace(/[^a-zA-Z\d:_]/g, '') + '", ';
           });
           query += 'dc:creator IN (' + logins.substring(0, logins.length - 2) + ') ';
         } else {
@@ -227,7 +227,7 @@
           query += 'and hrholidayrequest:beginning < "' + end + '" ';
         }
 
-        query += " order by hrholidayrequest:beginning";
+        query += ' order by hrholidayrequest:beginning';
         console.log(query);
         return {query: query};
       },
@@ -242,13 +242,13 @@
       },
       _clearEnd: function() {
         this.filters.date.end = null;
-        this.set("filters", this.filters);
-        this.set("filters.date.end", null);
+        this.set('filters', this.filters);
+        this.set('filters.date.end', null);
       },
       _clearBegin: function() {
         this.filters.date.beginning = null;
-        this.set("filters", this.filters);
-        this.set("filters.date.beginning", null);
+        this.set('filters', this.filters);
+        this.set('filters.date.beginning', null);
       },
       _toggleCollapse: function() {
         this.$.filtersPanel.toggle();
@@ -274,7 +274,7 @@
         }
         var str = e.toLowerCase();
         return function(value) {
-          return value.toLowerCase().indexOf(str) != -1;
+          return value.toLowerCase().indexOf(str) !== -1;
         };
       },
       _calculateHolidays: function() {
@@ -285,7 +285,7 @@
           unpaid: 0
         };
 
-        this.set("hasResult", this.data && this.data.entries && this.data.entries.length > 0);
+        this.set('hasResult', this.data && this.data.entries && this.data.entries.length > 0);
         if (this.hasResult) {
           this.data.entries.forEach(function(entry) {
             nb.family += parseInt(entry.properties['hrholidayrequest:numberFamilyCause']) || 0;
@@ -295,7 +295,7 @@
           });
         }
 
-        this.set("nb", nb);
+        this.set('nb', nb);
       }
     });
   }());

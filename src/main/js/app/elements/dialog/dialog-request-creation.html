@@ -43,7 +43,7 @@
         title: {
           type: String,
           readOnly: true,
-          computed: "_buildTitle(workflowId)"
+          computed: '_buildTitle(workflowId)'
         },
         workflowId: {
           type: String,
@@ -66,7 +66,7 @@
         this.data = {};
       },
       _buildTitle: function(workflowId) {
-        if (typeof workflowId === 'undefined' || workflowId == null) {
+        if (typeof workflowId === 'undefined' || workflowId === null) {
           return 'New timeoff request';
         }
         return 'Edit timeoff request';

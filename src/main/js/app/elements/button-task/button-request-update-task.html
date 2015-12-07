@@ -5,7 +5,8 @@
     <nuxeo-resource id="edit" path="task/[[taskId]]/request_update" method="put" data="[[data]]"></nuxeo-resource>
     <paper-icon-button id="btn" alt="Ask update" on-click="openDialog" icon="reply"></paper-icon-button>
     <paper-tooltip for="btn">Ask&nbsp;request&nbsp;update</paper-tooltip>
-    <dialog-comment-confirm id="dialog" title="Ask edition" comment="{{comment}}" on-submit="submitRequest"></dialog-comment-confirm>
+    <dialog-comment-confirm id="dialog" title="Ask edition" comment="{{comment}}"
+                            on-submit="submitRequest"></dialog-comment-confirm>
   </template>
 </dom-module>
 <script>
@@ -19,7 +20,6 @@
       submitRequest: function() {
         this.$.edit.execute().then(function() {
           this.fire('request-updated');
-
 
           app.$.toast.text = 'Timeoff request update asked.';
           app.$.toast.show();

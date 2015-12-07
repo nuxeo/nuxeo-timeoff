@@ -23,8 +23,8 @@
         }
       },
       _computeData: function(task) {
-        if (task == null) {
-          return {}
+        if (task === null) {
+          return {};
         }
         var variables = task.variables;
         // Fix date format
@@ -34,7 +34,7 @@
         return {
           id: task.id,
           variables: variables
-        }
+        };
       },
       openDialog: function() {
         this.$.dialog.open();
@@ -42,7 +42,6 @@
       _submit: function() {
         this.$.edit.execute().then(function() {
           this.fire('edited');
-
 
           app.$.toast.text = 'Timeoff request edited.';
           app.$.toast.show();

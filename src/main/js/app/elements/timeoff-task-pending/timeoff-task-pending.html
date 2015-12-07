@@ -72,9 +72,10 @@
         return task.name === 'tor.managerapproval.label' || task.name === 'tor.hrmanagerapproval.label';
       },
       isCommentExist: function(task) {
-        return (task.name === 'tor.managerapproval.label' && !this._isStringEmpty(task.variables.commentRequester))
-          || (task.name === 'tor.hrmanagerapproval.label' && !this._isStringEmpty(task.variables.commentRequester))
-          || (task.name === 'tor.request_update.label' && !this._isStringEmpty(task.variables.commentManager) || !this._isStringEmpty(task.variables.commentHr))
+        return (task.name === 'tor.managerapproval.label' && !this._isStringEmpty(task.variables.commentRequester)) ||
+            (task.name === 'tor.hrmanagerapproval.label' && !this._isStringEmpty(task.variables.commentRequester)) ||
+            (task.name === 'tor.request_update.label' &&
+              (!this._isStringEmpty(task.variables.commentManager) || !this._isStringEmpty(task.variables.commentHr)));
       },
       getComment: function(task) {
         var result = '';
@@ -92,7 +93,7 @@
         return result;
       },
       _isStringEmpty: function(string) {
-        return string == null || string === '';
+        return string === null || string === '';
       }
     });
   }());

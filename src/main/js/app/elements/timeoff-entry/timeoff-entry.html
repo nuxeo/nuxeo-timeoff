@@ -25,46 +25,46 @@
         },
         beginning: {
           type: String,
-          computed: "readBeginning(data)"
+          computed: 'readBeginning(data)'
         },
         end: {
           type: String,
-          computed: "readEnd(data)"
+          computed: 'readEnd(data)'
         },
         holiday: {
           type: String,
-          computed: "readHoliday(data)"
+          computed: 'readHoliday(data)'
         },
         RTT: {
           type: String,
-          computed: "readRTT(data)"
+          computed: 'readRTT(data)'
         },
         familyCause: {
           type: String,
-          computed: "readFamilyCause(data)"
+          computed: 'readFamilyCause(data)'
         },
         unPaid: {
           type: String,
-          computed: "readUnpaid(data)"
+          computed: 'readUnpaid(data)'
         }
       },
       readBeginning: function() {
-        return this.readProperty("beginning", "ll");
+        return this.readProperty('beginning', 'll');
       },
       readEnd: function() {
-        return this.readProperty("end", "ll");
+        return this.readProperty('end', 'll');
       },
       readHoliday: function() {
-        return this.readInt("numberHoliday");
+        return this.readInt('numberHoliday');
       },
       readRTT: function() {
-        return this.readInt("numberRTT");
+        return this.readInt('numberRTT');
       },
       readFamilyCause: function() {
-        return this.readInt("numberFamilyCause");
+        return this.readInt('numberFamilyCause');
       },
       readUnpaid: function() {
-        return this.readInt("numberUnpaid");
+        return this.readInt('numberUnpaid');
       },
       readInt: function(prop) {
         return parseInt(this.readProperty(prop)) || 0;
@@ -72,15 +72,15 @@
       readProperty: function(prop, format) {
         var val;
         switch (this.data['entity-type']) {
-          case "document":
+          case 'document':
             val = this.data.properties['hrholidayrequest:' + prop];
             break;
-          case "task":
-          case "workflow":
+          case 'task':
+          case 'workflow':
             val = this.data.variables[prop];
             break;
           default:
-            console.log("[timeoff-entry] Unknown entity-type " + this.data['entity-type']);
+            console.log('[timeoff-entry] Unknown entity-type ' + this.data['entity-type']);
         }
 
         if (typeof format === 'undefined') {
