@@ -6,7 +6,7 @@
     <paper-icon-button id="btn" alt="Reject" on-click="openDialog" icon="cancel"></paper-icon-button>
     <paper-tooltip for="btn">Reject&nbsp;request</paper-tooltip>
     <dialog-comment-confirm id="dialog" title="Reject request" comment="{{comment}}"
-                            on-submit="submitRequest"></dialog-comment-confirm>
+                            on-confirm="submitRequest" on-cancel="_cancel"></dialog-comment-confirm>
   </template>
 </dom-module>
 <script>

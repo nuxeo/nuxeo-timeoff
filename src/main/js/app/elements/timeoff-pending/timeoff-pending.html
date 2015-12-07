@@ -22,7 +22,7 @@
             <timeoff-entry class="flex-centered" data$=[[item]] id="entry_[[item.id]]"></timeoff-entry>
             <div class="flex-end-justified">
               <button-edit-workflow class="button" on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
-              <button-delete-workflow class="button" on-deleted="refreshTasks"
+              <button-delete-workflow class="button" on-deleted="refresh"
                 workflow-id="[[item.id]]"></button-delete-workflow>
             </div>
           </div>
@@ -48,6 +48,9 @@
       behaviors: [TimeoffBehaviors.Helper],
       refreshTasks: function() {
         this.$.nxoPending.execute();
+      },
+      refresh: function() {
+        this.fire('refresh');
       },
       timeOffWkf: function(entry) {
         return entry.workflowModelName === 'TimeOffRequestFlow';

@@ -62,20 +62,13 @@
   </paper-toast>
   <script>
     function refresh() {
-      app.$.pending.refreshTasks();
       app.$.task.refreshTasks();
+      app.$.pending.refreshTasks();
     }
     document.querySelector('#creation').addEventListener('create-request', refresh);
     document.querySelector('#task').addEventListener('refresh', refresh);
+    document.querySelector('#pending').addEventListener('refresh', refresh);
   </script>
-
-  <paper-dialog id="confirmationDialog" with-backdrop modal>
-    <h2>Are you sure to cancel your time off request?</h2>
-    <div class="buttons">
-      <paper-button dialog-dismiss>No</paper-button>
-      <paper-button dialog-confirm autofocus>Yes</paper-button>
-    </div>
-  </paper-dialog>
 </template>
 
 <!-- build:js scripts/app.js -->
