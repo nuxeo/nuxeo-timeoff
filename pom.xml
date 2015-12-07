@@ -7,7 +7,7 @@
     <version>8.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.nuxeo</groupId>
+  <groupId>org.nuxeo.timeoff</groupId>
   <artifactId>nuxeo-timeoff</artifactId>
   <name>Nuxeo Timeoff</name>
   <description>Nuxeo Timeoff</description>
