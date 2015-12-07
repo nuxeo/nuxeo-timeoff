@@ -15,20 +15,19 @@ TimeoffBehaviors.TaskCommentImpl = {
     },
     comment: {
       type: String,
-      value: ''
-    },
-    data: {
-      type: Object,
-      readOnly: true,
-      computed: '_buildRequestData(comment)'
+      value: '',
+      observer: '_buildAndAssignRequestData'
     }
   },
-
+  _buildAndAssignRequestData: function(comment) {
+    this.data = this._buildRequestData(comment);
+  },
   _buildRequestData: function(comment) {
     var data = TimeoffBehaviors.TaskId._buildRequestData.call(this);
     if (typeof this.taskName === 'undefined') {
       return data;
     }
+    comment = comment || '';
     var commentObj = {};
     switch (this.taskName) {
       case 'tor.managerapproval.label':

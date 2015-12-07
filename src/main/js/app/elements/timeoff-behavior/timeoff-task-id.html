@@ -11,9 +11,15 @@ Just the basic behavior to handle task id.
       taskId: {
         type: String,
         notify: true
+      },
+      data: {
+        type: Object,
+        notify: true
       }
     },
-
+    ready: function() {
+      this.data = this._buildRequestData();
+    },
     _buildRequestData: function() {
       return {'id': this.taskId};
     }

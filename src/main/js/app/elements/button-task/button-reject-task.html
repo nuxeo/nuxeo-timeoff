@@ -2,11 +2,11 @@
 
 <dom-module id="button-reject-task">
   <template>
-    <nuxeo-resource id="edit" path="task/[[taskId]]/reject" method="put" data="[[data]]"></nuxeo-resource>
+    <nuxeo-resource id="edit" path="task/[[taskId]]/reject" method="put" data="{{data}}"></nuxeo-resource>
     <paper-icon-button id="btn" alt="Reject" on-click="openDialog" icon="cancel"></paper-icon-button>
     <paper-tooltip for="btn">Reject&nbsp;request</paper-tooltip>
     <dialog-comment-confirm id="dialog" title="Reject request" comment="{{comment}}"
-                            on-confirm="submitRequest" on-cancel="_cancel"></dialog-comment-confirm>
+                            on-confirm="submitRequest"></dialog-comment-confirm>
   </template>
 </dom-module>
 <script>
