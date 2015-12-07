@@ -1,5 +1,5 @@
 {
-  "name": "polymer-starter-kit",
+  "name": "nuxeo-timeoff",
   "private": true,
   "dependencies": {
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
@@ -29,6 +29,7 @@
   "ignore": [],
   "resolutions": {
     "polymer": "^1.2.3",
-    "paper-ripple": "^1.0.0"
+    "paper-ripple": "^1.0.0",
+    "paper-menu": "^1.0.0"
   }
 }

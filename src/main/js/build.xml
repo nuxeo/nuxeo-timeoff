@@ -18,7 +18,7 @@
   <target name="clean-cache" description="Clean npm and bower cache"
           unless="skipCleanCache">
     <delete dir="node_modules" failonerror="true" />
-    <delete dir="app/bower_components" failonerror="true" />
+    <delete dir="bower_components" failonerror="true" />
     <exec executable="${cmd.npm}" failonerror="true">
       <arg value="cache" />
       <arg value="clean" />
@@ -33,8 +33,8 @@
     <exec executable="${cmd.npm}" failonerror="true">
       <arg value="install" />
     </exec>
-    <bower-fetch artifact="polymerelements:iron-elements:1.0.4" />
-    <bower-fetch artifact="polymerelements:paper-elements:1.0.5" />
+    <!--<bower-fetch artifact="polymerelements:iron-elements:1.0.4" />
+    <bower-fetch artifact="polymerelements:paper-elements:1.0.5" />-->
     <exec executable="${cmd.bower}" failonerror="true">
       <arg value="install" />
     </exec>
@@ -65,9 +65,9 @@
     </copy>
   </target>
 
-  <macrodef name="bower-fetch">
+  <!--<macrodef name="bower-fetch">
     <attribute name="artifact"/>
-    <attribute name="dir" default="app/bower_components"/>
+    <attribute name="dir" default="bower_components"/>
     <sequential>
       <echo message="Fetching @{artifact}" />
       <exec executable="${cmd.mvn}" dir="../../.." failonerror="true">
@@ -76,7 +76,7 @@
         <arg value="-DoutputDirectory=src/main/js/@{dir}" />
       </exec>
     </sequential>
-  </macrodef>
+  </macrodef>-->
 
 </project>
 
