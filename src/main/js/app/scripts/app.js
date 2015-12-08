@@ -18,12 +18,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // Sets Momentjs local
   moment.locale(navigator.language || navigator.browserLanguage);
 
-  // Sets app default base URL
-  app.baseUrl = '/';
-  if (window.location.port === '') { // if production
-    // Uncomment app.baseURL below and
-    // set app.baseURL to '/your-pathname/' if running from folder in production
-    // app.baseUrl = '/polymer-starter-kit/';
+  // Sets app default base URL for production
+  app.baseUrl = '/nuxeo/timeoff/';
+  if (window.location.port === '5000') { // if development
+    app.baseUrl = '/';
   }
 
   app.displayInstalledToast = function() {

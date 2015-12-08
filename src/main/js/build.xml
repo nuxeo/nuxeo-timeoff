@@ -58,8 +58,8 @@
   </target>
 
   <target name="distrib-sources">
-    <mkdir dir="../../../target/classes/timeoff" />
-    <copy todir="../../../target/classes/timeoff"
+    <mkdir dir="../../../target/classes/nuxeo.war/timeoff" />
+    <copy todir="../../../target/classes/nuxeo.war/timeoff"
           failonerror="true">
       <fileset dir="dist" />
     </copy>

@@ -4,9 +4,18 @@
   <install>
     <!-- Unzip the contents of our web application into the server -->
     <unzip from="${bundle.fileName}" to="/">
-      <include>timeoff/**</include>
+      <include>nuxeo.war/**</include>
     </unzip>
   </install>
+
+  <extension target="web#STD-AUTH-FILTER">
+    <filter-mapping>
+      <filter-name>NuxeoAuthenticationFilter</filter-name>
+      <url-pattern>/timeoff/*</url-pattern>
+      <dispatcher>REQUEST</dispatcher>
+      <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+  </extension>
 
 </fragment>
 
