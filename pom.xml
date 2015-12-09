@@ -23,7 +23,7 @@
             <phase>process-resources</phase>
             <configuration>
               <target>
-                <ant antfile="${basedir}/src/main/js/build.xml" dir="${basedir}/src/main/js"></ant>
+                <ant antfile="${basedir}/build.xml" dir="${basedir}"></ant>
               </target>
             </configuration>
             <goals>

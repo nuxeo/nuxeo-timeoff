@@ -33,7 +33,6 @@ var glob = require('glob-all');
 var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
 var crypto = require('crypto');
-// var ghPages = require('gulp-gh-pages');
 
 var AUTOPREFIXER_BROWSERS = [
   'ie >= 10',
@@ -47,26 +46,31 @@ var AUTOPREFIXER_BROWSERS = [
   'bb >= 10'
 ];
 
-var DIST = 'dist';
+var APP = 'src/main/app';
+var DIST = 'target/classes/nuxeo.war/timeoff';
+
+var pathIfPresent = function(root, subpath) {
+  return !subpath ? root : path.join(root, subpath);
+};
+
+var appl = function(subpath) {
+  return pathIfPresent(APP, subpath);
+};
 
 var dist = function(subpath) {
-  return !subpath ? DIST : path.join(DIST, subpath);
+  return pathIfPresent(DIST, subpath);
 };
 
 var styleTask = function(stylesPath, srcs) {
   return gulp.src(srcs.map(function(src) {
-      return path.join('app', stylesPath, src);
+      return path.join(APP, stylesPath, src);
     }))
-    .pipe($.changed(stylesPath, {
-      extension: '.css'
-    }))
+    .pipe($.changed(stylesPath, {extension: '.css'}))
     .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
     .pipe(gulp.dest('.tmp/' + stylesPath))
     .pipe($.minifyCss())
     .pipe(gulp.dest(dist(stylesPath)))
-    .pipe($.size({
-      title: stylesPath
-    }));
+    .pipe($.size({title: stylesPath}));
 };
 
 var imageOptimizeTask = function(src, dest) {
@@ -83,7 +87,7 @@ var imageOptimizeTask = function(src, dest) {
 
 var optimizeHtmlTask = function(src, dest) {
   var assets = $.useref.assets({
-    searchPath: ['.tmp', 'app', dist()]
+    searchPath: ['.tmp', appl(), dist()]
   });
 
   return gulp.src(src)
@@ -91,9 +95,7 @@ var optimizeHtmlTask = function(src, dest) {
     .pipe($.if('*.html', $.replace('elements/elements.html', 'elements/elements.vulcanized.html')))
     .pipe(assets)
     // Concatenate and minify JavaScript
-    .pipe($.if('*.js', $.uglify({
-      preserveComments: 'some'
-    })))
+    .pipe($.if('*.js', $.uglify({preserveComments: 'some'})))
     // Concatenate and minify styles
     // In case you are still using useref build blocks
     .pipe($.if('*.css', $.minifyCss()))
@@ -107,9 +109,7 @@ var optimizeHtmlTask = function(src, dest) {
     })))
     // Output files
     .pipe(gulp.dest(dest))
-    .pipe($.size({
-      title: 'html'
-    }));
+    .pipe($.size({title: 'html'}));
 };
 
 // Compile and automatically prefix stylesheets
@@ -124,18 +124,14 @@ gulp.task('elements', function() {
 // Lint JavaScript
 gulp.task('lint', function() {
   return gulp.src([
-      'app/scripts/**/*.js',
-      'app/elements/**/*.js',
-      'app/elements/**/*.html',
-      'gulpfile.js'
+      appl('scripts/**/*.js'),
+      appl('elements/**/*.js'),
+      appl('elements/**/*.html')
     ])
-    .pipe(reload({
-      stream: true,
-      once: true
-    }))
+    .pipe(reload({stream: true, once: true}))
 
-  // JSCS has not yet a extract option
-  .pipe($.if('*.html', $.htmlExtract()))
+    // JSCS has not yet a extract option
+    .pipe($.if('*.html', $.htmlExtract()))
     .pipe($.jshint())
     .pipe($.jscs())
     .pipe($.jscsStylish.combineWithHintResults())
@@ -145,15 +141,15 @@ gulp.task('lint', function() {
 
 // Optimize images
 gulp.task('images', function() {
-  return imageOptimizeTask('app/images/**/*', dist('images'));
+  return imageOptimizeTask(appl('images/**/*'), dist('images'));
 });
 
 // Copy all files at the root level (app)
 gulp.task('copy', function() {
   var app = gulp.src([
-    'app/*',
-    '!app/test',
-    '!app/cache-config.json'
+    appl('*'),
+    '!' + appl('test'),
+    '!' + appl('cache-config.json')
   ], {
     dot: true
   }).pipe(gulp.dest(dist()));
@@ -162,41 +158,37 @@ gulp.task('copy', function() {
     'bower_components/**/*'
   ]).pipe(gulp.dest(dist('bower_components')));
 
-  var elements = gulp.src(['app/elements/**/*.html',
-      'app/elements/**/*.css',
-      'app/elements/**/*.js'
+  var elements = gulp.src([appl('elements/**/*.html'),
+      appl('elements/**/*.css'),
+      appl('elements/**/*.js')
     ])
     .pipe(gulp.dest(dist('elements')));
 
-  var swBootstrap = gulp.src(['bower_components/platinum-sw/bootstrap/*.js'])
-    .pipe(gulp.dest(dist('elements/bootstrap')));
+  //var swBootstrap = gulp.src(['bower_components/platinum-sw/bootstrap/*.js'])
+  //  .pipe(gulp.dest(dist('elements/bootstrap')));
+  //
+  //var swToolbox = gulp.src(['bower_components/sw-toolbox/*.js'])
+  //  .pipe(gulp.dest(dist('sw-toolbox')));
 
-  var swToolbox = gulp.src(['bower_components/sw-toolbox/*.js'])
-    .pipe(gulp.dest(dist('sw-toolbox')));
-
-  var vulcanized = gulp.src(['app/elements/elements.html'])
+  var vulcanized = gulp.src([appl('elements/elements.html')])
     .pipe($.rename('elements.vulcanized.html'))
     .pipe(gulp.dest(dist('elements')));
 
-  return merge(app, bower, elements, vulcanized, swBootstrap, swToolbox)
-    .pipe($.size({
-      title: 'copy'
-    }));
+  return merge(app, bower, elements, vulcanized)
+    .pipe($.size({title: 'copy'}));
 });
 
 // Copy web fonts to dist
 gulp.task('fonts', function() {
-  return gulp.src(['app/fonts/**'])
+  return gulp.src([appl('fonts/**')])
     .pipe(gulp.dest(dist('fonts')))
-    .pipe($.size({
-      title: 'fonts'
-    }));
+    .pipe($.size({title: 'fonts'}));
 });
 
 // Scan your HTML for assets & optimize them
 gulp.task('html', function() {
   return optimizeHtmlTask(
-    ['app/**/*.html', '!app/{elements,test}/**/*.html'],
+    [appl('**/*.html'), '!' + appl('{elements,test}/**/*.html')],
     dist());
 });
 
@@ -209,11 +201,9 @@ gulp.task('vulcanize', function() {
       inlineCss: true,
       inlineScripts: true
     }))
-    .pipe($.minifyInline())
+    //.pipe($.minifyInline())
     .pipe(gulp.dest(DEST_DIR))
-    .pipe($.size({
-      title: 'vulcanize'
-    }));
+    .pipe($.size({title: 'vulcanize'}));
 });
 
 // Generate config data for the <sw-precache-cache> element.
@@ -282,7 +272,7 @@ gulp.task('serve', ['lint', 'styles', 'elements', 'images'], function() {
     //       will present a certificate warning in the browser.
     // https: true,
     server: {
-      baseDir: ['.tmp', 'app'],
+      baseDir: ['.tmp', appl()],
       middleware: [historyApiFallback(), require('proxy-middleware')(proxyOptions)],
       routes: {
         '/bower_components': 'bower_components'
@@ -290,11 +280,11 @@ gulp.task('serve', ['lint', 'styles', 'elements', 'images'], function() {
     }
   });
 
-  gulp.watch(['app/**/*.html'], reload);
-  gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
-  gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
-  gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['lint']);
-  gulp.watch(['app/images/**/*'], reload);
+  gulp.watch([appl('**/*.html')], reload);
+  gulp.watch([appl('styles/**/*.css')], ['styles', reload]);
+  gulp.watch([appl('elements/**/*.css')], ['elements', reload]);
+  gulp.watch([appl('{scripts,elements}/**/{*.js,*.html}')], ['lint']);
+  gulp.watch([appl('images/**/*')], reload);
 });
 
 // Build and serve the output from the dist build
@@ -335,6 +325,4 @@ gulp.task('default', ['clean'], function(cb) {
 require('web-component-tester').gulp.init(gulp);
 
 // Load custom tasks from the `tasks` directory
-try {
-  require('require-dir')('tasks');
-} catch (err) {}
+try {require('require-dir')('tasks');} catch (err) {}

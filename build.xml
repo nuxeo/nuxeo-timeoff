@@ -17,7 +17,6 @@
   ~  Contributors:
   ~     nuxeo
   -->
-
 <project name="Nuxeo Timeoff" default="build" basedir=".">
 
   <!-- set executable names based on OS family -->
@@ -59,29 +58,21 @@
     </exec>
   </target>
 
-  <target name="build" depends="init,build-with-tests,build-skip-tests,distrib-sources" />
+  <target name="build" depends="init,build-with-tests,build-skip-tests" />
   <target name="build-with-tests" unless="skipTests">
     <echo message="build and test" />
     <exec executable="${cmd.gulp}" failonerror="true">
       <arg value="default" />
     </exec>
-    <mkdir dir="../../../target/surefire-reports" />
+    <mkdir dir="target/surefire-reports" />
     <copy file="test-results.xml"
-          todir="../../../target/surefire-reports"
+          todir="target/surefire-reports"
           failonerror="false" />
   </target>
   <target name="build-skip-tests" if="skipTests">
     <exec executable="${cmd.gulp}" failonerror="true">
       <arg value="default" />
     </exec>
-  </target>
-
-  <target name="distrib-sources">
-    <mkdir dir="../../../target/classes/nuxeo.war/timeoff" />
-    <copy todir="../../../target/classes/nuxeo.war/timeoff"
-          failonerror="true">
-      <fileset dir="dist" />
-    </copy>
   </target>
 
   <!--<macrodef name="bower-fetch">
@@ -98,4 +89,3 @@
   </macrodef>-->
 
 </project>
-
