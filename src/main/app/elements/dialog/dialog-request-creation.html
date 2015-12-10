@@ -30,6 +30,7 @@
           <paper-date-picker id="startDate" date="{{data.variables.beginning}}"></paper-date-picker>
           <label>End date</label>
           <paper-date-picker id="endDate" date="{{data.variables.end}}"></paper-date-picker>
+          <p id="dateErrorMessage" class="error">End date must be after start date</p>
           <paper-input value="{{data.variables.numberHoliday}}" label="Paid holiday" type="number" min="0"
                        prevent-invalid-input allowed-pattern="[0-9]" auto-validate></paper-input>
           <paper-input value="{{data.variables.numberRTT}}" label="RTT" type="number" min="0" prevent-invalid-input
@@ -69,9 +70,21 @@
           value: null
         }
       },
+      observers: ['_dateChange(data.variables.beginning, data.variables.end)'],
 
+      _dateChange: function(beginning, end) {
+        if (beginning > end) {
+          this.$.dateErrorMessage.hidden = false;
+        } else {
+          this.$.dateErrorMessage.hidden = true;
+        }
+      },
       open: function() {
         this.$.dialog.open();
+      },
+      _submit: function() {
+        this.$.form.submit();
+        this.$.dialog.close();
       },
       _closeDialog: function(e) {
         if (e.detail.confirmed) {
