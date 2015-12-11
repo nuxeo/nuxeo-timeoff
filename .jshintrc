@@ -22,6 +22,7 @@
     "app": true,
     "moment": true,
     "TimeoffBehaviors": true,
-    "google": true
+    "google": true,
+    "PaperSuggestion": true
   }
 }

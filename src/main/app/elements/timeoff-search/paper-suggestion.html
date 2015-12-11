@@ -1,0 +1,284 @@
+<!--
+  ~ (C) Copyright 2006-2016 Nuxeo SA (http://nuxeo.com/) and contributors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~
+  ~  Contributors:
+  ~     nuxeo
+  -->
+
+<link rel="import" href="paper-suggestion-hover.html">
+
+<dom-module id="paper-suggestion">
+  <template>
+
+    <style>
+      :host {
+        display: block;
+      }
+
+      input::-webkit-input-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+
+      input:-moz-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+
+      input::-moz-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+
+      input:-ms-input-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+
+      :host ul.choices {
+        margin: 0;
+        padding: 0 5px 0 0;
+        position: relative;
+        cursor: text;
+        overflow: hidden;
+      }
+
+      :host ul.choices li {
+        float: left;
+        list-style: none;
+      }
+
+      :host ul.choices li.choice {
+        padding: 3px 5px 3px 5px;
+        margin: 3px 0 3px 5px;
+        position: relative;
+        line-height: 13px;
+        color: #333;
+        cursor: default;
+        border: 1px solid #aaaaaa;
+        border-radius: 3px;
+        -webkit-box-shadow: 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+        box-shadow: 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+        background-clip: padding-box;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      :host ul.choices li.search input {
+        width: 100%;
+      }
+
+      :host ul.choices li.search .active {
+        background-color: blue;
+      }
+    </style>
+
+    <paper-input-container no-label-float="[[noLabelFloat]]"
+                           always-float-label="[[_computeAlwaysFloatLabel(value.*,alwaysFloatLabel,placeholder)]]"
+                           auto-validate$="[[autoValidate]]"
+                           disabled$="[[disabled]]"
+                           invalid="[[invalid]]">
+
+      <content select="[prefix]"></content>
+
+      <label hidden$="[[!label]]">[[label]]</label>
+
+      <ul class="choices">
+        <template is="dom-repeat" items="[[value]]">
+          <li class="choice">
+            <div>[[formatItem(item)]]</div>
+          </li>
+        </template>
+        <li class="search">
+          <input is="iron-input" id="input"
+                 disabled$="[[disabled]]"
+                 bind-value="{{typedValue}}"
+                 invalid="{{invalid}}"
+                 name$="[[name]]"
+                 readonly$="[[readonly]]"
+                 list$="[[list]]"
+                 size$="[[size]]"
+                 on-change="_onChange"
+                 type="text"
+                 autocomplete="off"
+                 autocorrect="off"
+                 autocapitalize="off"
+                 spellcheck="false"
+                 placeholder=""/>
+          <template is="dom-if" if="[[!_hideSuggest]]">
+            <paper-material id="suggests" elevation="1" on-mouseleave="_mouseLeaveSuggests">
+              <template is="dom-repeat" items="[[data]]" filter="{{filterItem}}">
+                <paper-item id="suggest-[[index]]" position$="[[index]]" on-mouseenter="_mouseEnterSuggest" on-click="_enterPressed">
+                  <span>[[formatItem(item)]]</span>
+                </paper-item>
+              </template>
+            </paper-material>
+          </template>
+        </li>
+      </ul>
+
+      <content select="[suffix]"></content>
+
+    </paper-input-container>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'paper-suggestion',
+
+    properties: {
+      async: {
+        type: Boolean
+      },
+      typedValue: {
+        type: String,
+        observer: '_typedValueChanged',
+        notify: true
+      },
+      data: {
+        type: Array,
+        observer: '_dataChanged'
+      },
+      maxSuggest: {
+        type: Number,
+        value: 10
+      },
+      /**
+       * An array of selected input data.
+       */
+      value: {
+        type: Array,
+        notify: true,
+        value: []
+      },
+      _hideSuggest: {
+        type: Boolean,
+        value: true
+      },
+      formatItem: {
+        type: Function,
+        value: function() {
+          return function(item) {
+            return item;
+          };
+        }
+      },
+      keyItem: {
+        type: Function,
+        value: function() {
+          return function(item) {
+            return item;
+          };
+        }
+      },
+      filterItem: {
+        type: Function,
+        value: function() {
+          return function(item) {
+            if (!this.value) {
+              return true;
+            }
+            for (var i = 0; i < this.value.length; i++) {
+              if (this.keyItem(this.value[i]) === this.keyItem(item)) {
+                return false;
+              }
+            }
+            return true;
+          }.bind(this);
+        }
+      }
+
+    },
+
+    behaviors: [
+      Polymer.IronFormElementBehavior,
+      Polymer.PaperInputBehavior,
+      Polymer.IronControlState,
+      PaperSuggestion.HoverBehavior
+    ],
+
+    keyBindings: {
+      'up': '_upPressed',
+      'down': '_downPressed',
+      'esc': '_escPressed',
+      'enter': '_enterPressed'
+    },
+
+    selectSuggest: function(itemIndex) {
+      this.push('value', this.data[itemIndex]);
+      this.typedValue = '';
+      this.closeSuggest();
+    },
+    closeSuggest: function() {
+      this._hideSuggest = true;
+      this.unhover();
+      this.decorateHoverables(this.data);
+    },
+
+    _upPressed: function(e) {
+      if (!this._hideSuggest) {
+        e.preventDefault();
+        this.hoverPrevious(this.data);
+      }
+    },
+    _downPressed: function(e) {
+      if (!this._hideSuggest) {
+        e.preventDefault();
+        this.hoverNext(this.data);
+      } else if (this.data.length) {
+        this._hideSuggest = false;
+      }
+    },
+    _escPressed: function() {
+      this._hideSuggest = true;
+    },
+    _enterPressed: function() {
+      if (this.isHovered) {
+        this.selectSuggest(this.hovered);
+      }
+    },
+    _typedValueChanged: function(value) {
+      if (value && value.length > 0) {
+        this.unhover();
+        this.decorateHoverables(this.data);
+        if (!this.async) {
+          this._hideSuggest = this.data.length ? false : true;
+        }
+      } else {
+        this._hideSuggest = true;
+      }
+    },
+    _dataChanged: function(data) {
+      if (this.async) {
+        this._hideSuggest = (this.typedValue && this.typedValue !== '' && data && data.length) ? false : true;
+      }
+    },
+    _mouseEnterSuggest: function(e) {
+      this.hover(Number(e.target.getAttribute('position')));
+      this.decorateHoverables(this.data);
+    },
+    _mouseLeaveSuggests: function() {
+      this.unhover();
+      this.decorateHoverables(this.data);
+    },
+    _computeAlwaysFloatLabel: function() {
+      return this.value && this.value.length > 0 || this.placeholder || this.alwaysFloatLabel;
+    },
+    _hoverableSelector: function(index) {
+      return '#suggest-' + index;
+    }
+  });
+</script>

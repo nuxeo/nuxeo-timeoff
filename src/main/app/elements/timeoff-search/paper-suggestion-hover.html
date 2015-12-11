@@ -1,0 +1,94 @@
+<!--
+  ~ (C) Copyright 2006-2016 Nuxeo SA (http://nuxeo.com/) and contributors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~
+  ~  Contributors:
+  ~     nuxeo
+  -->
+
+<!--
+Handle hover state in this behavior.
+-->
+
+<script>
+
+window.PaperSuggestion = window.PaperSuggestion || {};
+PaperSuggestion.HoverBehavior = {
+
+  properties: {
+    hovered: {
+      type: Number,
+      value: null
+    }
+  },
+
+  hover: function(hovered) {
+    this.hovered = hovered;
+  },
+  unhover: function() {
+    this.hovered = null;
+  },
+  /**
+   * @param {Array} data The data array to hover.
+   */
+  hoverPrevious: function(data) {
+    var length = data.length;
+    this.hovered = ((this.isHovered ? this.hovered : 0) - 1 + length) % length;
+    this.decorateHoverables(data);
+  },
+  /**
+   * @param {Array} data The data array to hover.
+   */
+  hoverNext: function(data) {
+    this.hovered = ((this.isHovered ? this.hovered : -1) + 1) % data.length;
+    this.decorateHoverables(data);
+  },
+  /**
+   * @param {Array} data The data array to hover.
+   */
+  decorateHoverables: function(data) {
+    for (var i = 0; i < data.length; i++) {
+      var hoverable = this.$$(this._hoverableSelector(i));
+      if (hoverable) {
+        var clazz = hoverable.getAttribute('class');
+        if (this.isHovered && i === this.hovered) {
+          clazz = clazz + ' ' + this._hoverClass();
+        } else {
+          clazz = clazz.replace(this._hoverClass(), '');
+        }
+        hoverable.setAttribute('class', clazz);
+      }
+    }
+  },
+
+  get isHovered() {
+    return this.hovered !== null;
+  },
+
+  _hoverClass: function() {
+    return 'active';
+  },
+  /**
+   * Returns the selector for input index elements in data array.
+   *
+   * @param {number} index The element index in data array.
+   * @private
+   */
+  _hoverableSelector: function(index) {
+    return '#hoverable-' + index;
+  }
+
+};
+
+</script>

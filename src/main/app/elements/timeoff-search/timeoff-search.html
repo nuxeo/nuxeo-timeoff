@@ -19,6 +19,8 @@
 
 <dom-module id="timeoff-search">
 
+  <link rel="stylesheet" href="../../bower_components/select2/select2.css">
+
   <template>
     <style is="custom-style" include="shared-styles"></style>
     <paper-material>
@@ -44,6 +46,8 @@
               <paper-input label="Other Employees" value="{{filters.employees}}">
                 <paper-icon-button suffix icon="add" on-click="_openEmployeeDialog"></paper-icon-button>
               </paper-input>
+              <nuxeo-user-suggestion multiple></nuxeo-user-suggestion>
+              <nuxeo-paper-user-suggestion label="Other Employees" search-type="USER_TYPE"></nuxeo-paper-user-suggestion>
             </template>
           </div>
         </iron-collapse>
@@ -151,6 +155,7 @@
           type: Array,
           value: []
         }
+
       },
       observers: [
         '_updateUserContext(login)',
