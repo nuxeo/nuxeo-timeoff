@@ -1,0 +1,149 @@
+<!--
+  ~ (C) Copyright 2006-2016 Nuxeo SA (http://nuxeo.com/) and contributors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~
+  ~  Contributors:
+  ~     nuxeo
+  -->
+
+<dom-module id="timeoff-calendar-chart">
+
+  <template>
+    <style is="custom-style" include="shared-styles"></style>
+    <style>
+      :host google-chart {
+        width: 100%;
+        height: 100%;
+        overflow-x: scroll;
+        overflow-y: hidden;
+      }
+    </style>
+
+    <google-chart
+        id="chart"
+        type='calendar'
+        options='{{options}}'
+        cols='[{"label":"Date", "type":"date"}, {"label":"Number of timeoff", "type":"number"}, {"type": "string", "role": "tooltip", "p": {"html": true}}]'
+        rows='{{rows}}'>
+    </google-chart>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'timeoff-calendar-chart',
+      properties: {
+        data: Object,
+        options: {
+          type: Object,
+          computed: '_computeOptions(data)'
+        },
+        rows: {
+          type: Array,
+          computed: '_computeRows(data)'
+        }
+      },
+
+      ready: function() {
+        var chart = this.$.chart;
+        chart._loadChartTypes = function() {
+          // Retrieve basic chart types, add calendar and inject it in current chart
+          // We need to create a new element here due to google dependency loaded asynchronously
+          var basicChart = document.createElement('google-chart');
+          basicChart._loadChartTypes();
+          chart._chartTypes = basicChart._chartTypes;
+          chart._chartTypes.calendar =  google.visualization.Calendar;
+        };
+        // Load basic packages before overriding load function
+        chart._loadPackageByChartType();
+        chart._loadPackageByChartType = function() {
+          chart._packages.calendar = 'calendar';
+        };
+      },
+
+      _computeOptions: function(data) {
+        var entries = data ? data.entries : [];
+        var years = entries.map(function(entry) {
+          return moment(entry.properties['hrholidayrequest:beginning']).get('year');
+        });
+        years = years.filter(function(e, i, arr) {
+          return arr.lastIndexOf(e) === i;
+        });
+        var height = 18 + years.length * 140;
+        return {
+          title: 'Distribution of timeoffs',
+          calendar: {
+            cellSize: 14
+          },
+          width: 980,
+          height: height,
+          colorAxis: {
+            minValue: 0
+          },
+          tooltip: {isHtml: true}
+        };
+      },
+      _computeRows: function(data) {
+        var entries = data ? data.entries : [];
+        entries = entries.flatMap(function(entry) {
+          var beginning = moment(entry.properties['hrholidayrequest:beginning']);
+          var end = moment(entry.properties['hrholidayrequest:end']);
+
+          var result = [];
+          for (var m = beginning; m.isBefore(end) || m.isSame(end); m.add(1, 'days')) {
+            result.push({
+              date: m.clone(),
+              person: entry.properties['dc:creator']
+            });
+          }
+          return result;
+        });
+
+        entries.sort(function(a, b) {
+          return a.date.diff(b.date);
+        });
+
+        var dateIndex = {};
+        return entries.reduce(function(previousValue, currentValue) {
+          var currentDate = currentValue.date;
+          var obj = previousValue[dateIndex[currentDate]] || [];
+          if (obj.length === 0) {
+            obj[0] = currentDate.toDate();
+            dateIndex[currentDate] = previousValue.length;
+            previousValue.push(obj);
+          }
+          obj[1] = (obj[1] || 0) + 1;
+          obj[2] = this._computeTooltip(obj[2], currentDate, currentValue.person);
+
+          return previousValue;
+        }.bind(this), []);
+      },
+      _computeTooltip: function(previousValue, date, person) {
+        var value = previousValue;
+        if (typeof value === 'undefined' || value === null || value === '') {
+          value = '<div style="padding:10px;">';
+          value += '<p style="font-size: 16px;margin: 0;">' + date.format('MMMM D, YYYY') + '</p>';
+        } else {
+          value = value.replace(/<\/div>$/, '') + '<br/>';
+        }
+        value += person;
+        value += '</div>';
+        return value;
+      }
+    });
+  }());
+Array.prototype.flatMap = function(lambda) {
+  return Array.prototype.concat.apply([], this.map(lambda));
+};
+</script>

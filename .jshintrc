@@ -21,6 +21,7 @@
     "page": true,
     "app": true,
     "moment": true,
-    "TimeoffBehaviors": true
+    "TimeoffBehaviors": true,
+    "google": true
   }
 }

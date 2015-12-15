@@ -74,6 +74,9 @@
             </timeoff-entry>
           </div>
         </template>
+        <template is="dom-if" if="[[hasResult]]">
+          <timeoff-calendar-chart data="[[data]]"></timeoff-calendar-chart>
+        </template>
       </div>
 
       <!-- Begin date dialog -->
