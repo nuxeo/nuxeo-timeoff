@@ -16,6 +16,7 @@
   ~  Contributors:
   ~     nuxeo
   -->
+<link rel="import" href="../timeoff-behavior/timeoff-entry-helper.html">
 
 <dom-module id="timeoff-calendar-chart">
 
@@ -43,8 +44,9 @@
   (function() {
     Polymer({
       is: 'timeoff-calendar-chart',
+      behaviors: [TimeoffBehaviors.EntryHelper],
       properties: {
-        data: Object,
+        data: Array,
         options: {
           type: Object,
           computed: '_computeOptions(data)'
@@ -63,7 +65,7 @@
           var basicChart = document.createElement('google-chart');
           basicChart._loadChartTypes();
           chart._chartTypes = basicChart._chartTypes;
-          chart._chartTypes.calendar =  google.visualization.Calendar;
+          chart._chartTypes.calendar = google.visualization.Calendar;
         };
         // Load basic packages before overriding load function
         chart._loadPackageByChartType();
@@ -73,10 +75,10 @@
       },
 
       _computeOptions: function(data) {
-        var entries = data ? data.entries : [];
+        var entries = data || [];
         var years = entries.map(function(entry) {
-          return moment(entry.properties['hrholidayrequest:beginning']).get('year');
-        });
+          return moment(this.readPropertyFrom(entry, 'beginning')).get('year');
+        }.bind(this));
         years = years.filter(function(e, i, arr) {
           return arr.lastIndexOf(e) === i;
         });
@@ -95,20 +97,20 @@
         };
       },
       _computeRows: function(data) {
-        var entries = data ? data.entries : [];
+        var entries = data || [];
         entries = entries.flatMap(function(entry) {
-          var beginning = moment(entry.properties['hrholidayrequest:beginning']);
-          var end = moment(entry.properties['hrholidayrequest:end']);
+          var beginning = moment(this.readPropertyFrom(entry, 'beginning'));
+          var end = moment(this.readPropertyFrom(entry, 'end'));
 
           var result = [];
           for (var m = beginning; m.isBefore(end) || m.isSame(end); m.add(1, 'days')) {
             result.push({
               date: m.clone(),
-              person: entry.properties['dc:creator']
+              person: this.readPropertyFrom(entry, 'creator')
             });
           }
           return result;
-        });
+        }.bind(this));
 
         entries.sort(function(a, b) {
           return a.date.diff(b.date);

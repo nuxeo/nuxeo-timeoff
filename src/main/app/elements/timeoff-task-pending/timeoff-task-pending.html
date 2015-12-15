@@ -55,6 +55,7 @@
                                               on-request-updated="refreshTasks"></button-request-update-task>
                   <button-reject-task task-id="[[task.id]]" task-name="[[task.name]]"
                                       on-rejected="refresh"></button-reject-task>
+                  <button-task-detail task="[[task]]"></button-task-detail>
                 </template>
                 <template is="dom-if" if="{{!isManagerHRTask(task)}}">
                   <button-edit-task task="[[task]]" on-edited="refresh"></button-edit-task>

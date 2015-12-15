@@ -1,0 +1,98 @@
+<!--
+  ~ (C) Copyright 2006-2016 Nuxeo SA (http://nuxeo.com/) and contributors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~
+  ~  Contributors:
+  ~     nuxeo
+  -->
+<link rel="import" href="../timeoff-behavior/timeoff-entry-helper.html">
+
+<dom-module id="dialog-task-detail">
+  <template>
+    <style>
+      :host paper-dialog {
+        /*min-width: 1000px;*/
+        /*width: 100%;*/
+      }
+    </style>
+    <paper-dialog id="dialog" with-backdrop on-iron-overlay-opened="_center" on-iron-overlay-closed="_closeDialog">
+      <nuxeo-operation id="incoming" op="Document.Query" params="[[params]]" response="{{data2}}"></nuxeo-operation>
+      <h2 class="header">Task detail</h2>
+
+      <paper-dialog-scrollable>
+        <timeoff-entry data=[[task]]></timeoff-entry>
+        <template is="dom-if" if="[[opened]]">
+          <timeoff-calendar-chart data="[[data1]]" on-google-chart-render="_center"></timeoff-calendar-chart>
+          <timeoff-calendar-chart data="[[data2.entries]]" on-google-chart-render="_center"></timeoff-calendar-chart>
+        </template>
+      </paper-dialog-scrollable>
+
+      <div class="buttons footer">
+        <paper-button dialog-confirm>Close</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'dialog-task-detail',
+      behaviors: [TimeoffBehaviors.EntryHelper],
+      properties: {
+        task: Object,
+        params: {
+          type: Object,
+          computed: '_buildQuery(task)'
+        },
+        data1: {
+          type: Array,
+          computed: '_convertToArray(task)'
+        },
+        data2: Array,
+        opened: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      open: function() {
+        this.opened = true;
+        this.$.incoming.execute();
+        this.$.dialog.open();
+      },
+      _center: function() {
+        this.$.dialog.center();
+      },
+      _closeDialog: function() {
+        this.opened = false;
+        this.fire('close');
+      },
+      _buildQuery: function(task) {
+        var beginning = moment(this.readPropertyFrom(task, 'beginning')).add(-1, 'month').toISOString();
+        var end = moment(this.readPropertyFrom(task, 'end')).add(1, 'month').toISOString();
+
+        var query = 'SELECT * FROM HRHolidayRequest where ';
+        query += 'hrholidayrequest:beginning >= "' + beginning + '"';
+        query += ' or hrholidayrequest:end >= "' + end + '"';
+
+        return {query: query};
+      },
+      _convertToArray: function(task) {
+        var entries = [];
+        entries.push(task);
+        return entries;
+      }
+    });
+  }());
+</script>

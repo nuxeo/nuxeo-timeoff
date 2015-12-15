@@ -18,19 +18,36 @@
   -->
 
 <!--
-Helper methods.
+Entry helper methods.
 -->
 <link rel="import" href="timeoff-base.html">
 
 <script>
 
-TimeoffBehaviors.Helper = {
+TimeoffBehaviors.EntryHelper = {
 
-  isEmptyDataResponse: function(data) {
-    return data && this.isEmptyList(data.entries);
+  readProperty: function(prop, format) {
+    return this.readPropertyFrom(this.data, prop, format);
   },
-  isEmptyList: function(list) {
-    return list && list.length === 0;
+  readPropertyFrom: function(entry, prop, format) {
+    var val;
+    switch (entry['entity-type']) {
+      case 'document':
+        val = entry.properties['hrholidayrequest:' + prop] || entry.properties['dc:' + prop];
+        break;
+      case 'task':
+      case 'workflow':
+        val = entry.variables[prop];
+        break;
+      default:
+        console.log('[timeoff-entry] Unknown entity-type ' + entry['entity-type']);
+    }
+
+    if (typeof format === 'undefined') {
+      return val || '-';
+    } else {
+      return moment(val).format(format); // Localized readable format
+    }
   }
 
 };

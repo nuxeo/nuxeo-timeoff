@@ -75,7 +75,7 @@
           </div>
         </template>
         <template is="dom-if" if="[[hasResult]]">
-          <timeoff-calendar-chart data="[[data]]"></timeoff-calendar-chart>
+          <timeoff-calendar-chart data="[[data.entries]]"></timeoff-calendar-chart>
         </template>
       </div>
 
@@ -250,7 +250,6 @@
         }
 
         query += ' order by hrholidayrequest:beginning';
-        console.log(query);
         return {query: query};
       },
       _openBeginDialog: function() {

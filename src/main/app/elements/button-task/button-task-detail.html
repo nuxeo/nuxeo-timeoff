@@ -17,22 +17,28 @@
   ~     nuxeo
   -->
 
-<!--
-Helper methods.
--->
-<link rel="import" href="timeoff-base.html">
-
+<dom-module id="button-task-detail">
+  <template>
+    <paper-icon-button id="btn" alt="See details" on-click="openDialog" icon="info"></paper-icon-button>
+    <paper-tooltip for="btn">See&nbsp;details</paper-tooltip>
+    <dialog-task-detail id="dialog" task="{{task}}"></dialog-task-detail>
+  </template>
+</dom-module>
 <script>
-
-TimeoffBehaviors.Helper = {
-
-  isEmptyDataResponse: function(data) {
-    return data && this.isEmptyList(data.entries);
-  },
-  isEmptyList: function(list) {
-    return list && list.length === 0;
-  }
-
-};
-
+  (function() {
+    Polymer({
+      is: 'button-task-detail',
+      properties: {
+        task: {
+          task: {
+            type: Object,
+            value: null
+          }
+        }
+      },
+      openDialog: function() {
+        this.$.dialog.open();
+      }
+    });
+  }());
 </script>

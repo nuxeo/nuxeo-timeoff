@@ -16,6 +16,7 @@
   ~  Contributors:
   ~     nuxeo
   -->
+<link rel="import" href="../timeoff-behavior/timeoff-entry-helper.html">
 
 <dom-module id="timeoff-entry">
   <link rel="import" type="css" href="timeoff-entry.css">
@@ -37,6 +38,7 @@
   (function() {
     Polymer({
       is: 'timeoff-entry',
+      behaviors: [TimeoffBehaviors.EntryHelper],
       properties: {
         data: {
           type: Object,
@@ -87,26 +89,6 @@
       },
       readInt: function(prop) {
         return parseInt(this.readProperty(prop)) || 0;
-      },
-      readProperty: function(prop, format) {
-        var val;
-        switch (this.data['entity-type']) {
-          case 'document':
-            val = this.data.properties['hrholidayrequest:' + prop];
-            break;
-          case 'task':
-          case 'workflow':
-            val = this.data.variables[prop];
-            break;
-          default:
-            console.log('[timeoff-entry] Unknown entity-type ' + this.data['entity-type']);
-        }
-
-        if (typeof format === 'undefined') {
-          return val;
-        } else {
-          return moment(val).format(format); // Localized readable format
-        }
       }
     });
   }());
