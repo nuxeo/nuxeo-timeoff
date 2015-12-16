@@ -40,9 +40,10 @@
           <template is="dom-repeat" items='[[tasks.entries]]' as="task" index-as="task-index">
             <div class="task flex">
               <timeoff-entry data=[[task]]>
-                <div class="step">Step:[[getMessage(task.name)]]</div>
+                <div prefix class="requester">[[task.variables.requester]]</div>
+                <div suffix class="step">Step: [[getMessage(task.name)]]</div>
                 <template is="dom-if" if="{{isCommentExist(task)}}">
-                  <div style="display:inline-block">
+                  <div suffix style="display:inline-block">
                     <iron-icon alt="Comment" icon="help-outline"></iron-icon>
                     <paper-tooltip>[[getComment(task)]]</paper-tooltip>
                   </div>

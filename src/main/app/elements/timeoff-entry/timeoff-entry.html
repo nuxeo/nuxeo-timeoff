@@ -24,12 +24,13 @@
   <template>
     <template is="dom-if" if="{{data}}">
       <div class="timeoff flex-horizontal">
+        <content select="[prefix]"></content>
         <div class="interval">[[beginning]] - [[end]]</div>
         <div class="numberHoliday">H:[[holiday]]</div>
         <div class="numberRTT">R:[[RTT]]</div>
         <div class="numberFamilyCause">F:[[familyCause]]</div>
         <div class="numberUnpaid">U:[[unPaid]]</div>
-        <content></content>
+        <content select="[suffix]"></content>
       </div>
     </template>
   </template>
@@ -76,19 +77,23 @@
         return this.readProperty('end', 'll');
       },
       readHoliday: function() {
-        return this.readInt('numberHoliday');
+        return this.readFloat('numberHoliday');
       },
       readRTT: function() {
-        return this.readInt('numberRTT');
+        return this.readFloat('numberRTT');
       },
       readFamilyCause: function() {
-        return this.readInt('numberFamilyCause');
+        return this.readFloat('numberFamilyCause');
       },
       readUnpaid: function() {
-        return this.readInt('numberUnpaid');
+        return this.readFloat('numberUnpaid');
       },
-      readInt: function(prop) {
-        return parseInt(this.readProperty(prop)) || 0;
+      readFloat: function(prop) {
+        var value = this.readProperty(prop);
+        if (value && value !== '' && value !== '-') {
+          return parseFloat(value);
+        }
+        return 0;
       }
     });
   }());
