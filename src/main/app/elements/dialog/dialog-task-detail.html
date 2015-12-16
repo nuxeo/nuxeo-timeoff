@@ -33,8 +33,8 @@
       <paper-dialog-scrollable>
         <timeoff-entry data=[[task]]></timeoff-entry>
         <template is="dom-if" if="[[opened]]">
-          <timeoff-calendar-chart data="[[data1]]" on-google-chart-render="_center"></timeoff-calendar-chart>
-          <timeoff-calendar-chart data="[[data2.entries]]" on-google-chart-render="_center"></timeoff-calendar-chart>
+          <timeoff-calendar-chart id="chart1" data="[[data1]]" on-google-chart-render="_center" on-scroll="_scrollBottom"></timeoff-calendar-chart>
+          <timeoff-calendar-chart id="chart2" data="[[data2.entries]]" on-google-chart-render="_center" on-scroll="_scrollTop"></timeoff-calendar-chart>
         </template>
       </paper-dialog-scrollable>
 
@@ -92,6 +92,15 @@
         var entries = [];
         entries.push(task);
         return entries;
+      },
+      _scrollTop: function(e) {
+        this._scrollElement(e, '#chart1');
+      },
+      _scrollBottom: function(e) {
+        this._scrollElement(e, '#chart2');
+      },
+      _scrollElement: function(e, selector) {
+        Polymer.dom(this.root).querySelector(selector).querySelector('google-chart').scrollLeft = e.detail.scrollLeft;
       }
     });
   }());

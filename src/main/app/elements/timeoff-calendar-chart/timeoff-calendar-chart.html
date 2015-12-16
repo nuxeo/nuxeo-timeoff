@@ -36,7 +36,8 @@
         type='calendar'
         options='{{options}}'
         cols='[{"label":"Date", "type":"date"}, {"label":"Number of timeoff", "type":"number"}, {"type": "string", "role": "tooltip", "p": {"html": true}}]'
-        rows='{{rows}}'>
+        rows='{{rows}}'
+        on-scroll="_scroll">
     </google-chart>
   </template>
 </dom-module>
@@ -142,6 +143,9 @@
         value += person;
         value += '</div>';
         return value;
+      },
+      _scroll: function(e) {
+        this.fire('scroll', {scrollLeft: e.target.scrollLeft});
       }
     });
   }());
