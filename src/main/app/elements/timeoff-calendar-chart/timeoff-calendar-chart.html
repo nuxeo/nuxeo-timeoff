@@ -48,9 +48,13 @@
       behaviors: [TimeoffBehaviors.EntryHelper],
       properties: {
         data: Array,
+        title: {
+          type: String,
+          value: 'Distribution of timeoffs'
+        },
         options: {
           type: Object,
-          computed: '_computeOptions(data)'
+          computed: '_computeOptions(data, title)'
         },
         rows: {
           type: Array,
@@ -75,7 +79,7 @@
         };
       },
 
-      _computeOptions: function(data) {
+      _computeOptions: function(data, title) {
         var entries = data || [];
         var years = entries.map(function(entry) {
           return moment(this.readPropertyFrom(entry, 'beginning')).get('year');
@@ -85,7 +89,7 @@
         });
         var height = 18 + years.length * 140;
         return {
-          title: 'Distribution of timeoffs',
+          title: title,
           calendar: {
             cellSize: 14
           },
