@@ -69,7 +69,7 @@
           <div class="request">
             <timeoff-entry data=[[item]]>
               <template is="dom-if" if="[[hasEmployeeFilter]]" restamp="true">
-                [[item.properties.dc:creator]]
+                <div prefix class="requester">[[item.properties.dc:creator]]</div>
               </template>
             </timeoff-entry>
           </div>

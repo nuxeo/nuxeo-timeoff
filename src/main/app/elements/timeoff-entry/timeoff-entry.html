@@ -94,7 +94,7 @@
       },
       readFloat: function(prop) {
         var value = this.readProperty(prop);
-        if (value && value !== '' && value !== '-') {
+        if (value && value !== '' && value !== '-' && value !== 'null') {
           return parseFloat(value);
         }
         return 0;
