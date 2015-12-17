@@ -1,0 +1,81 @@
+<!--
+  ~ (C) Copyright 2006-2016 Nuxeo SA (http://nuxeo.com/) and contributors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~
+  ~  Contributors:
+  ~     nuxeo
+  -->
+<link rel="import" href="../timeoff-behavior/timeoff-entry-helper.html">
+
+<dom-module id="timeoff-entry-user">
+  <template>
+    <nuxeo-resource id="nxr" path="user/[[username]]" method="get"></nuxeo-resource>
+    <timeoff-entry data="{{data}}">
+      <content select="[prefix]"></content>
+      <div prefix class="requester" hidden$="[[userHidden]]">[[user]]</div>
+      <content select="[suffix]"></content>
+    </timeoff-entry>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'timeoff-entry-user',
+      behaviors: [TimeoffBehaviors.EntryHelper],
+      properties: {
+        data: {
+          type: Object,
+          value: null
+        },
+        username: {
+          type: String,
+          computed: '_readUsername(data)',
+          observer: '_retrieveUser'
+        },
+        user: {
+          type: String
+        },
+        userHidden: {
+          type: Boolean,
+          value: false
+        }
+      },
+      _readUsername: function(entry) {
+        var key;
+        switch (entry['entity-type']) {
+          case 'document':
+            key = 'creator';
+            break;
+          case 'task':
+          case 'workflow':
+            key = 'requester';
+            break;
+          default:
+            console.log('[timeoff-entry-user] Unknown entity-type ' + entry['entity-type']);
+        }
+        return this.readProperty(key);
+      },
+      _retrieveUser: function(username) {
+        this.$.nxr.execute().then(function(response) {
+          var properties = response.properties;
+          if (properties && (properties.firstName !== '' || properties.lastName !== '')) {
+            this.user = properties.firstName + ' ' + properties.lastName;
+          } else {
+            this.user = username;
+          }
+        }.bind(this));
+      }
+    });
+  }());
+</script>

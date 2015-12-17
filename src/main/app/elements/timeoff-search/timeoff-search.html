@@ -67,11 +67,7 @@
 
         <template is="dom-repeat" items='[[data.entries]]' as="item">
           <div class="request">
-            <timeoff-entry data=[[item]]>
-              <template is="dom-if" if="[[hasEmployeeFilter]]" restamp="true">
-                <div prefix class="requester">[[item.properties.dc:creator]]</div>
-              </template>
-            </timeoff-entry>
+            <timeoff-entry-user data="[[item]]" user-hidden="[[!hasEmployeeFilter]]"></timeoff-entry-user>
           </div>
         </template>
         <template is="dom-if" if="[[hasResult]]">
