@@ -37,7 +37,7 @@
           </paper-toolbar>
         </paper-header-panel>
         <div class="content">
-          <template is="dom-repeat" items='[[tasks.entries]]' as="task" index-as="task-index">
+          <template is="dom-repeat" items='[[tasks.entries]]' as="task" index-as="task-index" sort="compareEntityByBeginningDate">
             <div class="task flex">
               <timeoff-entry data=[[task]]>
                 <div prefix class="requester">[[task.variables.requester]]</div>
@@ -88,6 +88,9 @@
       },
       refresh: function() {
         this.fire('refresh');
+      },
+      compareEntityByBeginningDate: function(a, b) {
+        return a.variables['beginning'] - b.variables['beginning'];
       },
       isManagerHRTask: function(task) {
         return task.name === 'tor.managerapproval.label' || task.name === 'tor.hrmanagerapproval.label';
