@@ -19,7 +19,6 @@
 
 <dom-module id="timeoff-task-pending">
 
-  <link rel="import" type="css" href="timeoff-task-pending.css">
   <link rel="import" href="../timeoff-behavior/timeoff-message.html">
   <link rel="import" href="../timeoff-behavior/timeoff-helper.html">
 
@@ -90,7 +89,7 @@
         this.fire('refresh');
       },
       compareEntityByBeginningDate: function(a, b) {
-        return a.variables['beginning'] - b.variables['beginning'];
+        return a.variables.beginning - b.variables.beginning;
       },
       isManagerHRTask: function(task) {
         return task.name === 'tor.managerapproval.label' || task.name === 'tor.hrmanagerapproval.label';

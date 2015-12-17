@@ -18,8 +18,32 @@
   -->
 
 <dom-module id="dialog-request-creation">
-  <link rel="import" type="css" href="dialog-request-creation.css">
   <template>
+    <style>
+      :host label {
+        font: inherit;
+        color: var(--paper-input-container-color, --secondary-text-color);
+
+        @apply(--paper-font-common-nowrap);
+        @apply(--paper-font-subhead);
+        @apply(--paper-input-container-label);
+      }
+      :host paper-date-picker {
+        display: block;
+      }
+      @media (max-width: 600px) {
+        :host paper-dialog {
+          margin: 0;
+        }
+      }
+      :host .error {
+        display: inline-block;
+        color: var(--paper-input-container-invalid-color, --google-red-500);
+        @apply(--paper-font-caption);
+        @apply(--paper-input-error);
+        margin: 0;
+      }
+    </style>
 
     <paper-dialog id="dialog" class="paper-date-picker-dialog" with-backdrop on-iron-overlay-closed="_closeDialog">
       <h2 class="header">{{title}}</h2>

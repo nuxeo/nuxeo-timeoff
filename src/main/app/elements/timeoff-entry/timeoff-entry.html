@@ -19,9 +19,13 @@
 <link rel="import" href="../timeoff-behavior/timeoff-entry-helper.html">
 
 <dom-module id="timeoff-entry">
-  <link rel="import" type="css" href="timeoff-entry.css">
-
   <template>
+    <style is="custom-style" include="shared-styles"></style>
+    <style>
+      .timeoff div {
+        margin: 5px;
+      }
+    </style>
     <template is="dom-if" if="{{data}}">
       <div class="timeoff flex-horizontal">
         <content select="[prefix]"></content>
