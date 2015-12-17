@@ -22,23 +22,14 @@
 
   <template>
     <style is="custom-style" include="shared-styles"></style>
-    <style>
-      :host google-chart {
-        width: 100%;
-        height: 100%;
-        overflow-x: scroll;
-        overflow-y: hidden;
-      }
-    </style>
 
-    <google-chart
+    <nuxeo-google-chart
         id="chart"
         type='calendar'
         options='{{options}}'
         cols='[{"label":"Date", "type":"date"}, {"label":"Number of timeoff", "type":"number"}, {"type": "string", "role": "tooltip", "p": {"html": true}}]'
-        rows='{{rows}}'
-        on-scroll="_scroll">
-    </google-chart>
+        rows='{{rows}}'>
+    </nuxeo-google-chart>
   </template>
 </dom-module>
 <script>
@@ -60,23 +51,6 @@
           type: Array,
           computed: '_computeRows(data)'
         }
-      },
-
-      ready: function() {
-        var chart = this.$.chart;
-        chart._loadChartTypes = function() {
-          // Retrieve basic chart types, add calendar and inject it in current chart
-          // We need to create a new element here due to google dependency loaded asynchronously
-          var basicChart = document.createElement('google-chart');
-          basicChart._loadChartTypes();
-          chart._chartTypes = basicChart._chartTypes;
-          chart._chartTypes.calendar = google.visualization.Calendar;
-        };
-        // Load basic packages before overriding load function
-        chart._loadPackageByChartType();
-        chart._loadPackageByChartType = function() {
-          chart._packages.calendar = 'calendar';
-        };
       },
 
       _computeOptions: function(data, title) {
@@ -147,9 +121,6 @@
         value += person;
         value += '</div>';
         return value;
-      },
-      _scroll: function(e) {
-        this.fire('scroll', {scrollLeft: e.target.scrollLeft});
       }
     });
   }());
