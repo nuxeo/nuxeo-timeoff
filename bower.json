@@ -17,12 +17,14 @@
     "paper-input": "PolymerElements/paper-input#~1.1.1",
     "iron-form": "PolymerElements/iron-form#~1.0.13",
     "moment": "momentjs#~2.10.6",
+    "nuxeo": "nuxeo#~0.9.0",
     "paper-date-picker": "akervern/paper-date-picker#master",
     "paper-card": "PolymerElements/paper-card#~1.0.8",
     "paper-dialog-scrollable": "PolymerElements/paper-dialog-scrollable#~1.1.0",
     "paper-tooltip": "PolymerElements/paper-tooltip#~1.1.1",
     "paper-listbox": "PolymerElements/paper-listbox#~1.1.0",
-    "google-chart": "GoogleWebComponents/google-chart#~1.0.4"
+    "google-chart": "GoogleWebComponents/google-chart#~1.0.4",
+    "nuxeo-dataviz-elements": "nuxeo/nuxeo-dataviz-elements#~0.2.4"
   },
   "devDependencies": {
     "web-component-tester": "*"
@@ -31,6 +33,7 @@
   "resolutions": {
     "polymer": "^1.2.3",
     "paper-ripple": "^1.0.0",
-    "paper-menu": "^1.0.0"
+    "paper-menu": "^1.0.0",
+    "nuxeo": "master"
   }
 }

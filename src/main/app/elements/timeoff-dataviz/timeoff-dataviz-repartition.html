@@ -1,0 +1,117 @@
+<!--
+  ~ (C) Copyright 2006-2016 Nuxeo SA (http://nuxeo.com/) and contributors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~
+  ~  Contributors:
+  ~     nuxeo
+  -->
+
+<dom-module id="timeoff-dataviz-repartition">
+
+  <link rel="import" href="../timeoff-behavior/timeoff-helper.html">
+
+  <template>
+    <nuxeo-workflow-data id="timeoffRepartion"
+      workflow="TimeOffRequestFlow"
+      task="tor.hrmanagerapproval.label"
+      grouped-by="taskActor"
+      with-date-intervals="day"
+      data="{{data}}">
+    </nuxeo-workflow-data>
+
+    <google-chart id='mysuperpie'
+      type='pie'
+      options="[[options]]"
+      cols='[{"label":"Month", "type":"string"}, {"label":"Days", "type":"number"}]'
+      rows='[[rows]]'>
+    </google-chart>
+  </template>
+
+</dom-module>
+<script>
+  (function() {
+      Polymer({
+        is: 'timeoff-dataviz-repartition',
+        properties: {
+          startDate: {
+            type: Function,
+            value: function() {
+              return moment(this.endDate).subtract(1, 'year').startOf('day').toDate();
+            }
+          },
+          endDate: {
+            type: Function,
+            value: function() {
+              return moment().endOf('week').toDate();
+            }
+          },
+          singleUser: {
+            type: Boolean,
+            value: true
+          },
+          data: Array,
+          rows: {
+            type: String,
+            computed: '_computeData(data)'
+          },
+          title: {
+            type: String,
+            value: null
+          },
+          options: {
+            type: Object,
+            computed: "_options(title)"
+          }
+        },
+        _options: function(title) {
+          return {
+            is3D: true,
+            backgroundColor: 'transparent',
+            title: title
+          };
+        },
+        _computeData: function(data) {
+          if (!data || data.length === 0) {
+            return [];
+          }
+
+          // current user Only
+          var ret = [];
+          moment.monthsShort().forEach(function(month) {
+            ret[month] = 0;
+          });
+
+          data.forEach(function(entry) {
+            // Filter depending on the connected username
+            if (!this.singleUser && entry.key !== app.$.nxc.username) {
+              return;
+            }
+
+            entry.value.forEach(function(val) {
+              ret[moment(val).format('MMM')] += 1;
+            });
+          });
+
+          var arr = [];
+          moment.monthsShort().forEach(function(month) {
+            arr.push([month, ret[month]]);
+          });
+          return arr;
+        }
+      });
+    }
+    ()
+  )
+  ;
+</script>
