@@ -29,100 +29,100 @@
   </template>
 </dom-module>
 <script>
-  // A map of username information with following format:
-  // {
-  //   '$username': {
-  //     'name': '$name',
-  //     'date': '$date'
-  //   },
-  //   '$username': {
-  //     'loading': boolean
-  //   },
-  //   ...
-  // }
-  var names = {};
-  // A map of elements which subscribe to callback of resource request:
-  // {
-  //   '$username': [ 'element1', 'element2', ...],
-  //   ...
-  // }
-  var elements = {};
-  (function() {
-    Polymer({
-      is: 'timeoff-entry-user',
-      behaviors: [TimeoffBehaviors.EntryHelper],
-      properties: {
-        data: {
-          type: Object,
-          value: null
-        },
-        username: {
-          type: String,
-          computed: '_readUsername(data)',
-          observer: '_retrieveUser'
-        },
-        user: {
-          type: String
-        },
-        userHidden: {
-          type: Boolean,
-          value: false
-        }
+// A map of username information with following format:
+// {
+//   '$username': {
+//     'name': '$name',
+//     'date': '$date'
+//   },
+//   '$username': {
+//     'loading': boolean
+//   },
+//   ...
+// }
+var names = {};
+// A map of elements which subscribe to callback of resource request:
+// {
+//   '$username': [ 'element1', 'element2', ...],
+//   ...
+// }
+var elements = {};
+(function() {
+  Polymer({
+    is: 'timeoff-entry-user',
+    behaviors: [TimeoffBehaviors.EntryHelper],
+    properties: {
+      data: {
+        type: Object,
+        value: null
       },
-      _readUsername: function(entry) {
-        var key;
-        switch (entry['entity-type']) {
-          case 'document':
-            key = 'creator';
-            break;
-          case 'task':
-          case 'workflow':
-            key = 'requester';
-            break;
-          default:
-            console.log('[timeoff-entry-user] Unknown entity-type ' + entry['entity-type']);
-        }
-        return this.readProperty(key);
+      username: {
+        type: String,
+        computed: '_readUsername(data)',
+        observer: '_retrieveUser'
       },
-      _readUser: function() {
-        if (names[this.username]) {
-          this.user = names[this.username].name;
-        } else {
-          this.user = 'NC';
-        }
+      user: {
+        type: String
       },
-      _retrieveUser: function() {
-        var name = names[this.username];
-        var needLoad = !name || typeof name.date == 'undefined' || moment(name.date).add(1, 'week').isBefore(moment());
-        var loading = typeof name !== 'undefined' && name.loading;
-        if (needLoad) {
-          elements[this.username] = elements[this.username] || [];
-          elements[this.username].push(this);
-          if (!loading) {
-            // First put an object to do only one request by this.username
-            names[this.username] = {loading: true};
-            // Second retrieve value
-            this.$.nxr.execute().then(function(response) {
-              name = {};
-              var properties = response.properties;
-              if (properties && (properties.firstName !== '' || properties.lastName !== '')) {
-                name.name = properties.firstName + ' ' + properties.lastName;
-              } else {
-                name.name = this.username;
-              }
-              name.date = moment().toDate();
-              names[this.username] = name;
-
-              elements[this.username].forEach(function(element) {
-                element._readUser();
-              });
-              elements[this.username] = [];
-            }.bind(this));
-          }
-        } else {
-          this._readUser();
-        }
+      userHidden: {
+        type: Boolean,
+        value: false
       }
-    });
-  }());
+    },
+    _readUsername: function(entry) {
+      var key;
+      switch (entry['entity-type']) {
+        case 'document':
+          key = 'creator';
+          break;
+        case 'task':
+        case 'workflow':
+          key = 'requester';
+          break;
+        default:
+          console.log('[timeoff-entry-user] Unknown entity-type ' + entry['entity-type']);
+      }
+      return this.readProperty(key);
+    },
+    _readUser: function() {
+      if (names[this.username]) {
+        this.user = names[this.username].name;
+      } else {
+        this.user = 'NC';
+      }
+    },
+    _retrieveUser: function() {
+      var name = names[this.username];
+      var needLoad = !name || typeof name.date === 'undefined' || moment(name.date).add(1, 'week').isBefore(moment());
+      var loading = typeof name !== 'undefined' && name.loading;
+      if (needLoad) {
+        elements[this.username] = elements[this.username] || [];
+        elements[this.username].push(this);
+        if (!loading) {
+          // First put an object to do only one request by this.username
+          names[this.username] = {loading: true};
+          // Second retrieve value
+          this.$.nxr.execute().then(function(response) {
+            name = {};
+            var properties = response.properties;
+            if (properties && (properties.firstName !== '' || properties.lastName !== '')) {
+              name.name = properties.firstName + ' ' + properties.lastName;
+            } else {
+              name.name = this.username;
+            }
+            name.date = moment().toDate();
+            names[this.username] = name;
+
+            elements[this.username].forEach(function(element) {
+              element._readUser();
+            });
+            elements[this.username] = [];
+          }.bind(this));
+        }
+      } else {
+        this._readUser();
+      }
+    }
+  });
+}());
 </script>
