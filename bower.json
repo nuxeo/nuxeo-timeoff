@@ -34,6 +34,7 @@
     "polymer": "^1.2.3",
     "paper-ripple": "^1.0.0",
     "paper-menu": "^1.0.0",
-    "nuxeo": "master"
+    "nuxeo": "master",
+    "nuxeo-elements": "master"
   }
 }
