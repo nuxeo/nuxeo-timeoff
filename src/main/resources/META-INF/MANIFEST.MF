@@ -5,4 +5,4 @@ Bundle-Version: 0.0.1
 Bundle-Name: Nuxeo Time Off
 Bundle-ManifestVersion: 1
 Bundle-SymbolicName: org.nuxeo.timeoff;singleton:=true
-
+Nuxeo-Component: OSGI-INF/auth-config.xml

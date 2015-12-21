@@ -238,11 +238,11 @@
           };
         }
         var beginning = moment(filters.date.beginning).toISOString();
-        query += 'and (hrholidayrequest:beginning >= "' + beginning + '" ';
-        query += 'or hrholidayrequest:end >= "' + beginning + '")';
+        query += 'and (hrholidayrequest:beginning >= TIMESTAMP "' + beginning + '" ';
+        query += 'or hrholidayrequest:end >= TIMESTAMP "' + beginning + '")';
         if (filters.date.end) {
           var end = moment(filters.date.end).toISOString();
-          query += 'and hrholidayrequest:beginning < "' + end + '" ';
+          query += 'and hrholidayrequest:beginning < TIMESTAMP "' + end + '" ';
         }
 
         query += ' order by hrholidayrequest:beginning';

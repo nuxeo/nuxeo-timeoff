@@ -85,8 +85,8 @@
         var end = moment(this.readPropertyFrom(task, 'end')).add(1, 'month').toISOString();
 
         var query = 'SELECT * FROM HRHolidayRequest where ';
-        query += 'hrholidayrequest:beginning >= "' + beginning + '"';
-        query += ' or hrholidayrequest:end >= "' + end + '"';
+        query += 'hrholidayrequest:beginning >= TIMESTAMP "' + beginning + '"';
+        query += ' or hrholidayrequest:end >= TIMESTAMP "' + end + '"';
 
         return {query: query};
       },
