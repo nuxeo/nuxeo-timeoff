@@ -19,7 +19,7 @@
 
 <dom-module id="dialog-confirm">
   <template>
-    <paper-dialog id="dialog" with-backdrop on-iron-overlay-closed="_closeDialog">
+    <paper-dialog id="dialog" modal="true" with-backdrop on-iron-overlay-closed="_closeDialog">
       <h2 class="header">[[title]]</h2>
       <content></content>
       <div class="buttons footer">

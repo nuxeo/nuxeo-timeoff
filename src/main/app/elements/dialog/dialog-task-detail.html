@@ -81,8 +81,8 @@
         this.fire('close');
       },
       _buildQuery: function(task) {
-        var beginning = moment(this.readPropertyFrom(task, 'beginning')).add(-1, 'month').toISOString();
-        var end = moment(this.readPropertyFrom(task, 'end')).add(1, 'month').toISOString();
+        var beginning = moment(this.readPropertyFrom(task, 'beginning')).add(-3, 'month').toISOString();
+        var end = moment(this.readPropertyFrom(task, 'end')).add(3, 'month').toISOString();
 
         var query = 'SELECT * FROM HRHolidayRequest where ';
         query += 'hrholidayrequest:beginning >= TIMESTAMP "' + beginning + '"';
