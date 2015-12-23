@@ -28,20 +28,15 @@
         @apply(--paper-font-subhead);
         @apply(--paper-input-container-label);
       }
+
       :host paper-date-picker {
         display: block;
       }
+
       @media (max-width: 600px) {
         :host paper-dialog {
           margin: 0;
         }
-      }
-      :host .error {
-        display: inline-block;
-        color: var(--paper-input-container-invalid-color, --google-red-500);
-        @apply(--paper-font-caption);
-        @apply(--paper-input-error);
-        margin: 0;
       }
     </style>
 
@@ -54,22 +49,21 @@
           <paper-date-picker id="startDate" date="{{data.variables.beginning}}"></paper-date-picker>
           <label>End date</label>
           <paper-date-picker id="endDate" date="{{data.variables.end}}"></paper-date-picker>
-          <p id="dateErrorMessage" class="error">End date must be after start date</p>
           <paper-input value="{{data.variables.numberHoliday}}" label="Paid holiday" type="number" min="0" step="0.5"
-                       prevent-invalid-input allowed-pattern="[0-9.]" auto-validate></paper-input>
+            prevent-invalid-input allowed-pattern="[0-9.]" auto-validate></paper-input>
           <paper-input value="{{data.variables.numberRTT}}" label="RTT" type="number" min="0" step="0.5"
-                       prevent-invalid-input allowed-pattern="[0-9.]" auto-validate></paper-input>
+            prevent-invalid-input allowed-pattern="[0-9.]" auto-validate></paper-input>
           <paper-input value="{{data.variables.numberFamilyCause}}" label="Family" type="number" min="0" step="0.5"
-                       prevent-invalid-input allowed-pattern="[0-9.]" auto-validate></paper-input>
+            prevent-invalid-input allowed-pattern="[0-9.]" auto-validate></paper-input>
           <paper-input value="{{data.variables.numberUnpaid}}" label="Unpaid holiday" type="number" min="0" step="0.5"
-                       prevent-invalid-input allowed-pattern="[0-9.]" auto-validate></paper-input>
+            prevent-invalid-input allowed-pattern="[0-9.]" auto-validate></paper-input>
           <paper-textarea value="{{data.variables.commentRequester}}" label="Comment"></paper-textarea>
         </form>
       </paper-dialog-scrollable>
 
       <div class="buttons footer">
         <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm>Accept</paper-button>
+        <paper-button on-click="_submit">Accept</paper-button>
       </div>
     </paper-dialog>
 
@@ -94,29 +88,46 @@
           value: null
         }
       },
-      observers: ['_dateChange(data.variables.beginning, data.variables.end)'],
-
-      _dateChange: function(beginning, end) {
-        if (beginning > end) {
-          this.$.dateErrorMessage.hidden = false;
-        } else {
-          this.$.dateErrorMessage.hidden = true;
-        }
-      },
       open: function() {
         this.$.dialog.open();
       },
+      _hasErrors: function() {
+        var messages = [];
+        var total = this.data.variables.numberHoliday || 0;
+        total += this.data.variables.numberRTT || 0;
+        total += this.data.variables.numberFamilyCause || 0;
+        total += this.data.variables.numberUnpaid || 0;
+
+        if (total === 0) {
+          messages.push('Please set the correct number of days.');
+        }
+        if (total % 1 !== 0 && this.data.variables.commentRequester.trim().length === 0) {
+          messages.push('Add a comment to specify the morning or the afternoon.');
+        }
+        if (moment(this.data.variables.beginning).isAfter(this.data.variables.end)) {
+          messages.push('End date must be after start date.');
+        }
+
+        if (messages.length > 0) {
+          app.$.toast.text = messages.join(' ');
+          app.$.toast.show();
+          return true;
+        }
+        return false;
+      },
       _submit: function() {
-        this.$.form.submit();
-        this.$.dialog.close();
+        if (this._hasErrors()) {
+          return;
+        }
+        this.fire('submit', {'data': this.data});
+        this._closeDialog();
       },
       _closeDialog: function(e) {
-        if (e.detail.confirmed) {
-          this.fire('submit', {'data': this.data});
-        } else {
+        if (e && !e.detail.confirmed) {
           this.fire('cancel');
           this._reset();
         }
+        this.$.dialog.close();
       },
       _reset: function() {
         this.data = {};
@@ -127,6 +138,7 @@
         }
         return 'Edit timeoff request';
       }
-    });
+    })
+    ;
   }());
 </script>

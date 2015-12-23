@@ -24,7 +24,7 @@
     <paper-material>
       <paper-header-panel>
         <paper-toolbar>
-          <div>Incoming holidays</div>
+          <div>Incoming</div>
           <div>H:[[nb.holiday]], R:[[nb.rtt]], F:[[nb.family]], U:[[nb.unpaid]]</div>
           <paper-icon-button id="menu" suffix icon="menu" on-click="_toggleCollapse"></paper-icon-button>
           <paper-tooltip for="menu">Configure</paper-tooltip>
@@ -58,20 +58,18 @@
 
       <div class="content">
         <template is="dom-if" if="[[!hasResult]]">
-          <paper-card heading="No incoming holidays">
-            <div class="card-content">
-              :/
-            </div>
+          <paper-card heading="No Incoming Day Off">
+            <div class="card-content"></div>
           </paper-card>
         </template>
 
+        <template is="dom-if" if="[[hasResult]]">
+          <timeoff-calendar-chart data="[[data.entries]]"></timeoff-calendar-chart>
+        </template>
         <template is="dom-repeat" items='[[data.entries]]' as="item">
           <div class="request">
             <timeoff-entry-user data="[[item]]" user-hidden="[[!hasEmployeeFilter]]"></timeoff-entry-user>
           </div>
-        </template>
-        <template is="dom-if" if="[[hasResult]]">
-          <timeoff-calendar-chart data="[[data.entries]]"></timeoff-calendar-chart>
         </template>
       </div>
 
@@ -96,7 +94,8 @@
         <h2>Select employees</h2>
         <paper-input label="Filter name" value="{{_filterEmployeesValue}}"></paper-input>
         <paper-dialog-scrollable>
-          <paper-listbox multi on-iron-deselect="_employeesListChanged" on-iron-select="_employeesListChanged">
+          <paper-listbox id="listBoxEmployees" multi on-iron-deselect="_employeesListChanged"
+            on-iron-select="_employeesListChanged">
             <template is="dom-repeat" items='[[employees]]' as="item"
               filter="{{_filterEmployeesSelect(_filterEmployeesValue)}}">
               <paper-item value="[[item]]">[[item]]</paper-item>
@@ -126,7 +125,11 @@
         },
         isManager: {
           type: Boolean,
-          computed: '_isManager(employees)'
+          computed: '_isManager(employees, isHrManager)'
+        },
+        isHrManager: {
+          type: Boolean,
+          value: false
         },
         hasEmployeeFilter: {
           type: Boolean,
@@ -154,8 +157,10 @@
       },
       observers: [
         '_updateUserContext(login)',
+        '_updateEmployeesSelection(filters.employees)',
         '_refreshQuery(userWorkspace, filters.*)',
-        '_calculateHolidays(data)'
+        '_calculateHolidays(data)',
+        '_fillEmployeesFilter(employees)'
       ],
       _userWorkspaceReceived: function(e) {
         this.set('userWorkspace', e.detail.response.path);
@@ -178,9 +183,9 @@
               break;
             }
 
-            var employees = splitString(this.filters.employees);
-            employees.push(value);
-            this.set('filters.employees', employees.join(' '));
+            var fEmployees = splitString(this.filters.employees);
+            fEmployees.push(value);
+            this.set('filters.employees', fEmployees.join(' '));
             break;
           case 'iron-deselect':
             this.set('filters.employees', splitString(this.filters.employees.replace(value, '')).join(' '));
@@ -207,7 +212,13 @@
         // Save current filters
         this.set('_oldFilters', JSON.stringify(this.filters));
       },
-      _updateUserContext: function() {
+      _updateUserContext: function(loginData) {
+        console.log(loginData);
+        this.set('isHrManager', loginData && loginData.groups.find(function(g) {
+            // return g === 'hr_manager';
+            return g === 'administrators';
+          }) || false);
+
         if (this.employees.length > 0) {
           return;
         }
@@ -271,19 +282,34 @@
         this.$.filtersPanel.toggle();
       },
       _employeeReceived: function(e) {
-        var employees = [];
+        var filteredEmployees = [];
         e.detail.response.entries.forEach(function(entry) {
-          if (entry.properties.label === this.login.username) {
-            employees.push(entry.properties.id);
+          if (this.isHrManager || entry.properties.label === this.login.username) {
+            filteredEmployees.push(entry.properties.id);
           }
         }.bind(this));
-        this.set('employees', employees.sort());
+        this.set('employees', filteredEmployees.sort());
       },
       _isManager: function() {
-        return this.employees && this.employees.length > 0;
+        return this.isHrManager || this.employees && this.employees.length > 0;
       },
       _hasEmployeeFilter: function() {
         return this.filters.employees && this.filters.employees.length > 0;
+      },
+      _fillEmployeesFilter: function() {
+        this.set('filters.employees', this.employees.join(' '));
+      },
+      _updateEmployeesSelection: function() {
+        //this.debounce('updateEmployeesSelection', function() {
+        //var selectedValues = this.$.listBoxEmployees.selectedValues || [];
+        //this.$.listBoxEmployees.items.forEach(function(item, i) {
+        //if (this.filters.employees.match(Polymer.dom(item).textContent)) {
+        //selectedValues.push(i);
+        //}
+        //}.bind(this));
+        //
+        //this.$.listBoxEmployees.selectedValues = selectedValues;
+        //}.bind(this), 700);
       },
       _filterEmployeesSelect: function(e) {
         if (!e) {
