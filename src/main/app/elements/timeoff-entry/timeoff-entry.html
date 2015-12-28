@@ -30,10 +30,30 @@
       <div class="timeoff flex-horizontal">
         <content select="[prefix]"></content>
         <div class="interval">[[beginning]] - [[end]]</div>
-        <div class="numberHoliday">H:[[holiday]]</div>
-        <div class="numberRTT">R:[[RTT]]</div>
-        <div class="numberFamilyCause">F:[[familyCause]]</div>
-        <div class="numberUnpaid">U:[[unPaid]]</div>
+        <template is="dom-if" if="[[holiday]]">
+          <div class="dayoff holiday">
+            <label>[[holiday]]</label>
+            <paper-tooltip>Holiday</paper-tooltip>
+          </div>
+        </template>
+        <template is="dom-if" if="[[RTT]]">
+          <div class="dayoff RTT">
+            <label>[[RTT]]</label>
+            <paper-tooltip>RTT</paper-tooltip>
+          </div>
+        </template>
+        <template is="dom-if" if="[[familyCause]]">
+          <div class="dayoff familyCause">
+            <label>[[familyCause]]</label>
+            <paper-tooltip>Family Cause</paper-tooltip>
+          </div>
+        </template>
+        <template is="dom-if" if="[[unPaid]]">
+          <div class="dayoff unpaid">
+            <label>[[unPaid]]</label>
+            <paper-tooltip>Unpaid</paper-tooltip>
+          </div>
+        </template>
         <content select="[suffix]"></content>
       </div>
     </template>
