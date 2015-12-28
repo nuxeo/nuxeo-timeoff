@@ -21,17 +21,29 @@
 
   <template>
     <style is="custom-style" include="shared-styles">
-      paper-material .content {
+      :host timeoff-calendar-chart {
         background-color: #fff;
+        box-shadow: 0 2px 1px rgba(0,0,0,0.2);
         padding: 1em;
+        display: block;
+        margin-bottom: 1em;
       }
+
+      iron-collapse#filtersPanel {
+        background-color: #fff;
+        margin-bottom: 1em;
+        box-shadow: 0 2px 1px rgba(0,0,0,0.2);
+      }
+
+      #filtersPanel .content {
+        padding: 0 1em 1em  ;
+      }
+
     </style>
     <paper-material elevation="0">
       <paper-header-panel>
         <paper-toolbar class="container">
-          <div>
-            <label>Incoming:&nbsp;</label>
-          </div>
+          <label>Holidays</label>
           <div class="flex">&nbsp;</div>
           <div>
             <paper-icon-button id="menu" suffix icon="search" on-click="_toggleCollapse"></paper-icon-button>

@@ -30,14 +30,15 @@
     <paper-material elevation="0">
       <paper-header-panel>
         <paper-toolbar>
-          <div>My Pending Requests</div>
+          <div>Not validated yet</div>
         </paper-toolbar>
       </paper-header-panel>
 
       <div class="content">
         <template id="tmpl_entries" is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
           <div class="request flex">
-            <timeoff-entry class="flex-centered" data$=[[item]] id="entry_[[item.id]]"></timeoff-entry>
+            <timeoff-entry class="flex-centered" data$=[[item]] id="entry_[[item.id]]">
+            </timeoff-entry>
             <div class="flex-end-justified">
               <button-edit-workflow class="button" on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
               <button-delete-workflow class="button" on-deleted="refresh"

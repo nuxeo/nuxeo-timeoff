@@ -24,9 +24,8 @@
 
   <template>
     <style is="custom-style" include="shared-styles">
-
       paper-toolbar .timeoff-task-pending {
-        color: red;
+        color: #00adff;
       }
 
       .step.timeoff-task-pending {
@@ -55,7 +54,7 @@
                 <div suffix class="step">Requires [[getMessage(task.name)]]</div>
                 <template is="dom-if" if="{{isCommentExist(task)}}">
                   <div suffix style="display:inline-block">
-                    <iron-icon alt="Comment" icon="help-outline"></iron-icon>
+                    <iron-icon alt="Comment" icon="feedback"></iron-icon>
                     <paper-tooltip>[[getComment(task)]]</paper-tooltip>
                   </div>
                 </template>
@@ -115,14 +114,14 @@
       getComment: function(task) {
         var result = '';
         if (task.name === 'tor.managerapproval.label') {
-          result = 'Comment: ' + task.variables.commentRequester;
+          result = task.variables.commentRequester;
         } else if (task.name === 'tor.hrmanagerapproval.label') {
-          result = 'Comment: ' + task.variables.commentRequester;
+          result = task.variables.commentRequester;
         } else if (task.name === 'tor.request_update.label') {
           if (!this._isStringEmpty(task.variables.commentManager)) {
-            result = 'Comment manager: ' + task.variables.commentManager;
+            result = 'Manager says: ' + task.variables.commentManager;
           } else if (!this._isStringEmpty(task.variables.commentHr)) {
-            result = 'Comment HR: ' + task.variables.commentHr;
+            result = 'HR says: ' + task.variables.commentHr;
           }
         }
         return result;
