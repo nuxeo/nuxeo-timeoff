@@ -19,6 +19,7 @@
 
 <dom-module id="dialog-confirm">
   <template>
+    <style is="custom-style" include="shared-styles"></style>
     <paper-dialog id="dialog" modal="true" with-backdrop on-iron-overlay-closed="_closeDialog">
       <h2 class="header">[[title]]</h2>
       <content></content>

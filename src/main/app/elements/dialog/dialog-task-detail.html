@@ -20,10 +20,9 @@
 
 <dom-module id="dialog-task-detail">
   <template>
-    <style>
-      :host paper-dialog {
-        /*min-width: 1000px;*/
-        /*width: 100%;*/
+    <style is="custom-style" include="shared-styles">
+      paper-dialog {
+        background-color: #fff;
       }
     </style>
     <paper-dialog id="dialog" with-backdrop on-iron-overlay-opened="_center" on-iron-overlay-closed="_closeDialog">

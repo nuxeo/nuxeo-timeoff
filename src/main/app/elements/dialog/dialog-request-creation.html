@@ -19,7 +19,11 @@
 
 <dom-module id="dialog-request-creation">
   <template>
-    <style>
+    <style is="custom-style" include="shared-styles">
+      paper-dialog {
+        background-color: #fff;
+      }
+
       :host label {
         font: inherit;
         color: var(--paper-input-container-color, --secondary-text-color);
