@@ -21,7 +21,6 @@
   <template>
     <style is="custom-style" include="shared-styles">
       paper-dialog {
-        background-color: #fff;
         width: 80%;
       }
 
@@ -68,7 +67,7 @@
 
       <div class="buttons footer">
         <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button primary on-click="_submit">Send Request</paper-button>
+        <paper-button class="primary" on-click="_submit">Send Request</paper-button>
       </div>
     </paper-dialog>
 
