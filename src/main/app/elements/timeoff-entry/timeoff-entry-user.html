@@ -23,7 +23,9 @@
     <nuxeo-resource id="nxr" path="user/[[username]]" method="get"></nuxeo-resource>
     <timeoff-entry data="{{data}}">
       <content select="[prefix]"></content>
-      <div prefix class="requester" hidden$="[[userHidden]]">[[user]]</div>
+      <div prefix class="requester" hidden$="[[userHidden]]">
+        <iron-icon icon="account-circle"></iron-icon>[[user]]
+      </div>
       <content select="[suffix]"></content>
     </timeoff-entry>
   </template>

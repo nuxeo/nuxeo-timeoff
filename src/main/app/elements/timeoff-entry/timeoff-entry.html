@@ -29,7 +29,10 @@
     <template is="dom-if" if="{{data}}">
       <div class="timeoff flex-horizontal">
         <content select="[prefix]"></content>
-        <div class="interval">[[beginning]] - [[end]]</div>
+        <div class="interval">
+          <iron-icon icon="event"></iron-icon>
+          [[beginning]] - [[end]]
+        </div>
         <template is="dom-if" if="[[holiday]]">
           <div class="dayoff holiday">
             <label>[[holiday]]</label>
