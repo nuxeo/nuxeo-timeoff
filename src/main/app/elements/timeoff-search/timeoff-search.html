@@ -24,8 +24,33 @@
     <paper-material>
       <paper-header-panel>
         <paper-toolbar>
-          <div>Incoming</div>
-          <div>H:[[nb.holiday]], R:[[nb.rtt]], F:[[nb.family]], U:[[nb.unpaid]]</div>
+          <label>Incoming:&nbsp;</label>
+          <div>
+            <template is="dom-if" if="[[nb.holiday]]">
+              <div class="dayoff holiday">
+                <label>[[nb.holiday]]</label>
+                <paper-tooltip>Holiday</paper-tooltip>
+              </div>
+            </template>
+            <template is="dom-if" if="[[nb.rtt]]">
+              <div class="dayoff RTT">
+                <label>[[nb.rtt]]</label>
+                <paper-tooltip>RTT</paper-tooltip>
+              </div>
+            </template>
+            <template is="dom-if" if="[[nb.family]]">
+              <div class="dayoff familyCause">
+                <label>[[nb.family]]</label>
+                <paper-tooltip>Family Cause</paper-tooltip>
+              </div>
+            </template>
+            <template is="dom-if" if="[[nb.unpaid]]">
+              <div class="dayoff unpaid">
+                <label>[[nb.unpaid]]</label>
+                <paper-tooltip>Unpaid</paper-tooltip>
+              </div>
+            </template>
+          </div>
           <paper-icon-button id="menu" suffix icon="menu" on-click="_toggleCollapse"></paper-icon-button>
           <paper-tooltip for="menu">Configure</paper-tooltip>
         </paper-toolbar>
