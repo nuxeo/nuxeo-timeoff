@@ -23,13 +23,26 @@
   <link rel="import" href="../timeoff-behavior/timeoff-helper.html">
 
   <template>
-    <style is="custom-style" include="shared-styles"></style>
+    <style is="custom-style" include="shared-styles">
+
+      paper-toolbar .timeoff-task-pending {
+        color: red;
+      }
+
+      .step.timeoff-task-pending {
+        background-color: #ddd;
+        padding: .2em .4em;
+        border-radius: .15em;
+        color: gray;
+        font-size: .9em;
+      }
+    </style>
     <nuxeo-resource id="nxoTaskPending" auto
                     path="task"
                     params="{{params}}"
                     response={{tasks}}></nuxeo-resource>
     <template is="dom-if" if="{{!isEmptyDataResponse(tasks)}}">
-      <paper-material>
+      <paper-material elevation="0">
         <paper-header-panel>
           <paper-toolbar>
             <div>To Validate</div>

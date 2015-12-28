@@ -21,7 +21,7 @@
 
   <template>
     <style is="custom-style" include="shared-styles"></style>
-    <paper-material>
+    <paper-material elevation="0">
       <paper-header-panel>
         <paper-toolbar>
           <label>Incoming:&nbsp;</label>
@@ -51,7 +51,7 @@
               </div>
             </template>
           </div>
-          <paper-icon-button id="menu" suffix icon="menu" on-click="_toggleCollapse"></paper-icon-button>
+          <paper-icon-button id="menu" suffix icon="search" on-click="_toggleCollapse"></paper-icon-button>
           <paper-tooltip for="menu">Configure</paper-tooltip>
         </paper-toolbar>
         <iron-collapse id="filtersPanel">
