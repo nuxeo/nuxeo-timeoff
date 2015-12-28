@@ -39,7 +39,7 @@
           <template is="dom-repeat" items='[[tasks.entries]]' as="task" index-as="task-index" sort="compareEntityByBeginningDate">
             <div class="task flex">
               <timeoff-entry-user data="[[task]]">
-                <div suffix class="step">Step: [[getMessage(task.name)]]</div>
+                <div suffix class="step">Requires [[getMessage(task.name)]]</div>
                 <template is="dom-if" if="{{isCommentExist(task)}}">
                   <div suffix style="display:inline-block">
                     <iron-icon alt="Comment" icon="help-outline"></iron-icon>
