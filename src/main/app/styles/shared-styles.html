@@ -34,14 +34,35 @@
           font-size: 24px!important;
         }
       }
-      .content {
-        margin-top: 20px;
-        margin-left: 8.33%;
-        margin-right: 8.33%;
+
+      #headerContainer paper-toolbar {
+        background-color: #fff;
+        box-shadow: 0 0 3px rgba(0, 0, 0, .3);
+        color: #213f7d;
       }
-      .content paper-material {
+
+      .logo {
+        width: 110px;
+        margin: 0 2em 0 1em;
+      }
+
+      #mainContainer > .content {
+        padding: 2em 8%;
+      }
+
+      paper-material {
+        border-radius: .5em;
+        margin: 0 0 2em;
+      }
+
+      paper-material .content {
+        background-color: #fff;
+        padding: 1.5em 8% 1em;
+      }
+
+      /*.content paper-material {
         padding: 10px;
-      }
+      }*/
 
       .flex {
         @apply(--layout-horizontal);
