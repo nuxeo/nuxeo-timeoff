@@ -88,8 +88,16 @@
           value: null
         }
       },
+      observers: ['_beginChanged(data.variables.beginning)'],
       open: function() {
         this.$.dialog.open();
+      },
+      _beginChanged: function() {
+        this.debounce('beginChanged', function() {
+          if (!this.data.variables.end || moment(this.data.variables.beginning).isAfter(this.data.variables.end)) {
+            this.set('data.variables.end', this.data.variables.beginning);
+          }
+        }, 200);
       },
       _hasErrors: function() {
         var messages = [];
