@@ -20,7 +20,7 @@
 
 <dom-module id="timeoff-entry-user">
   <template>
-    <nuxeo-resource id="nxr" path="user/[[username]]" method="get"></nuxeo-resource>
+    <nuxeo-resource id="nxr" path="user/[[username]]" method="get" enrichers="userprofile" enrichers-entity="user"></nuxeo-resource>
     <timeoff-entry data="{{data}}">
       <content select="[prefix]"></content>
       <div prefix class="requester" hidden$="[[userHidden]]">
