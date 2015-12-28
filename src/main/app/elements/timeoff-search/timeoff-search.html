@@ -21,43 +21,22 @@
 
   <template>
     <style is="custom-style" include="shared-styles">
-    paper-material .content {
-      background-color: #fff;
-      padding: 1em;
-    }
+      paper-material .content {
+        background-color: #fff;
+        padding: 1em;
+      }
     </style>
     <paper-material elevation="0">
       <paper-header-panel>
-        <paper-toolbar>
-          <label>Incoming:&nbsp;</label>
+        <paper-toolbar class="container">
           <div>
-            <template is="dom-if" if="[[nb.holiday]]">
-              <div class="dayoff holiday">
-                <label>[[nb.holiday]]</label>
-                <paper-tooltip>Holiday</paper-tooltip>
-              </div>
-            </template>
-            <template is="dom-if" if="[[nb.rtt]]">
-              <div class="dayoff RTT">
-                <label>[[nb.rtt]]</label>
-                <paper-tooltip>RTT</paper-tooltip>
-              </div>
-            </template>
-            <template is="dom-if" if="[[nb.family]]">
-              <div class="dayoff familyCause">
-                <label>[[nb.family]]</label>
-                <paper-tooltip>Family Cause</paper-tooltip>
-              </div>
-            </template>
-            <template is="dom-if" if="[[nb.unpaid]]">
-              <div class="dayoff unpaid">
-                <label>[[nb.unpaid]]</label>
-                <paper-tooltip>Unpaid</paper-tooltip>
-              </div>
-            </template>
+            <label>Incoming:&nbsp;</label>
           </div>
-          <paper-icon-button id="menu" suffix icon="search" on-click="_toggleCollapse"></paper-icon-button>
-          <paper-tooltip for="menu">Configure</paper-tooltip>
+          <div class="flex">&nbsp;</div>
+          <div>
+            <paper-icon-button id="menu" suffix icon="search" on-click="_toggleCollapse"></paper-icon-button>
+            <paper-tooltip for="menu">Configure</paper-tooltip>
+          </div>
         </paper-toolbar>
         <iron-collapse id="filtersPanel">
           <div class="content menu">
@@ -96,6 +75,33 @@
         <template is="dom-if" if="[[hasResult]]">
           <timeoff-calendar-chart data="[[data.entries]]"></timeoff-calendar-chart>
         </template>
+        <div>
+          Total:&nbsp;
+          <template is="dom-if" if="[[nb.holiday]]">
+            <div class="dayoff holiday">
+              <label>[[nb.holiday]]</label>
+              <paper-tooltip>Holiday</paper-tooltip>
+            </div>
+          </template>
+          <template is="dom-if" if="[[nb.rtt]]">
+            <div class="dayoff RTT">
+              <label>[[nb.rtt]]</label>
+              <paper-tooltip>RTT</paper-tooltip>
+            </div>
+          </template>
+          <template is="dom-if" if="[[nb.family]]">
+            <div class="dayoff familyCause">
+              <label>[[nb.family]]</label>
+              <paper-tooltip>Family Cause</paper-tooltip>
+            </div>
+          </template>
+          <template is="dom-if" if="[[nb.unpaid]]">
+            <div class="dayoff unpaid">
+              <label>[[nb.unpaid]]</label>
+              <paper-tooltip>Unpaid</paper-tooltip>
+            </div>
+          </template>
+        </div>
         <template is="dom-repeat" items='[[data.entries]]' as="item">
           <div class="request">
             <timeoff-entry-user data="[[item]]" user-hidden="[[!hasEmployeeFilter]]"></timeoff-entry-user>
