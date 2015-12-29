@@ -261,7 +261,6 @@
         this.set('_oldFilters', JSON.stringify(this.filters));
       },
       _updateUserContext: function(loginData) {
-        console.log(loginData);
         this.set('isHrManager', loginData && loginData.groups.find(function(g) {
             // return g === 'hr_manager';
             return g === 'administrators';

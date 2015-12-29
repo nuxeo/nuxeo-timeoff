@@ -38,7 +38,8 @@
 //   '$username': {
 //     'name': '$name',
 //     'date': '$date',
-//     'color': '$color'
+//     'color': '$color',
+//     'avatar': '$avatar_url'
 //   },
 //   '$username': {
 //     'loading': boolean
@@ -54,7 +55,8 @@ var names = {};
 var elements = {};
 var colors = {
   depth: [300, 500, 700, 900],
-  color: ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'light-blue', 'cyan', 'teal', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange']
+  color: ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'light-blue', 'cyan', 'teal', 'light-green', 'lime',
+    'yellow', 'amber', 'orange', 'deep-orange']
 };
 (function() {
   Polymer({
@@ -113,6 +115,7 @@ var colors = {
           // Second retrieve value
           this.$.nxr.execute().then(function(response) {
             name = {};
+            // Handling user properties
             var properties = response.properties;
             if (properties && (properties.firstName !== '' || properties.lastName !== '')) {
               name.name = properties.firstName + ' ' + properties.lastName;
@@ -121,8 +124,12 @@ var colors = {
             }
             name.date = moment().toDate();
             name.color = this._computeColor(name.name.trim());
-            names[this.username] = name;
 
+            // Handling user profile variables
+            var userprofile = response.contextParameters.userprofile;
+            name.avatar = userprofile.avatar;
+
+            names[this.username] = name;
             elements[this.username].forEach(function(element) {
               element._readUser();
             });
