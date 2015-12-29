@@ -72,6 +72,13 @@
         box-shadow: 0 2px 1px rgba(0,0,0,0.2);
         border-top: 1px solid #e5e6e7;
         padding: .2em .5em;
+        transition: all 0.15s ease 0s;
+      }
+
+      .task.timeoff-task-pending:hover,
+      .request.timeoff-pending:hover,
+      .request.timeoff-search:hover {
+        background-color: #f7fafc;
       }
 
       .task.timeoff-task-pending:first-child,
@@ -99,10 +106,6 @@
       .flex-end-justified {
         @apply(--layout-end-justified);
         @apply(--layout-horizontal);
-      }
-
-      .request, .button {
-        height: 2.6em;
       }
 
       .flex-centered {
@@ -134,7 +137,7 @@
       }
 
       .interval {
-        color: #213f7D;
+        color: #777;
         font-size: .9em;
         font-weight: 200;
         width: 16em;
@@ -174,6 +177,7 @@
 
       .user.timeoff-entry-user {
         min-width: 220px;
+        color: #213f7d;
       }
 
       paper-dialog h2 {
@@ -227,6 +231,39 @@
         fill: #00adff;
       }
 
+      @media (max-width: 1024px) {
+        .timeoff.timeoff-entry {
+          @apply(--layout-vertical);
+          @apply(--layout-wrap);
+          align-items: baseline !important;
+          transition: all 0.15s ease-in-out 0s;
+        }
+        ::content .timeoff .user.timeoff-entry-user.timeoff-entry-user,
+        ::content .timeoff .interval {
+          min-width: initial;
+          width: auto;
+        }
+        ::content .timeoff.timeoff-entry div.interval,
+        ::content .timeoff.timeoff-entry div.day-types {
+          margin-left: 2.5em;
+        }
+
+        ::content .request .timeoff.timeoff-entry div.interval,
+        ::content .request .timeoff.timeoff-entry div.day-types {
+          margin-left: 0;
+        }
+        .request.timeoff-search {
+          @apply(--layout-vertical);
+          @apply(--layout-wrap);
+          align-items: baseline !important;
+          transition: all 0.15s ease-in-out 0s;
+        }
+        ::content .request .user.timeoff-entry-user.timeoff-entry-user,
+        ::content .request .interval {
+          min-width: initial;
+          width: auto;
+        }
+      }
     </style>
   </template>
 </dom-module>

@@ -25,6 +25,35 @@
       .timeoff div {
         margin: .3em;
       }
+
+      ::content paper-icon-button#btn {
+        transition: all 0.15s ease 0s;
+        border-radius: 2em;
+      }
+
+      ::content paper-icon-button#btn:hover {
+        color: #00adff;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+      }
+
+      @media (max-width: 1024px) {
+        .timeoff.timeoff-entry {
+          @apply(--layout-vertical);
+          @apply(--layout-wrap);
+          align-items: baseline !important;
+          transition: all 0.15s ease-in-out 0s;
+        }
+        ::content .timeoff .user.timeoff-entry-user.timeoff-entry-user,
+        ::content .timeoff .interval {
+          min-width: initial;
+          width: auto;
+        }
+        ::content .timeoff.timeoff-entry div.interval,
+        ::content .timeoff.timeoff-entry div.day-types {
+          margin-left: 2.5em;
+        }
+      }
     </style>
     <template is="dom-if" if="{{data}}">
       <div class="timeoff flex-horizontal">
@@ -59,9 +88,7 @@
             </div>
           </template>
         </div>
-        <div class="actions">
-          <content select="[suffix]"></content>
-        </div>
+        <content select="[suffix]"></content>
       </div>
     </template>
   </template>

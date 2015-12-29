@@ -22,7 +22,8 @@
   <link rel="import" href="../timeoff-behavior/timeoff-helper.html">
 
   <template>
-    <style is="custom-style" include="shared-styles"></style>
+    <style is="custom-style" include="shared-styles">
+    </style>
     <nuxeo-resource id="nxoPending" auto
                     path="workflow"
                     response={{data}}></nuxeo-resource>
@@ -36,9 +37,8 @@
 
       <div class="content">
         <template id="tmpl_entries" is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
-          <div class="request flex">
-            <timeoff-entry class="flex-centered" data$=[[item]] id="entry_[[item.id]]">
-            </timeoff-entry>
+          <div class="request flex-horizontal">
+            <timeoff-entry class="flex" data$=[[item]] id="entry_[[item.id]]"></timeoff-entry>
             <div class="flex-end-justified">
               <button-edit-workflow class="button" on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
               <button-delete-workflow class="button" on-deleted="refresh"
