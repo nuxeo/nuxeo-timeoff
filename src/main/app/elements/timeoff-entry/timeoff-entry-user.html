@@ -32,6 +32,10 @@
     .username {
       text-transform: capitalize;
     }
+
+    .initials {
+      text-transform: uppercase;
+    }
   </style>
   <template>
     <nuxeo-resource id="nxr" path="user/[[username]]" method="get" enrichers="userprofile"
@@ -42,7 +46,7 @@
           <img class="dayoff" src="[[avatar]]" />
         </template>
         <template is="dom-if" if="[[!avatar]]">
-          <span class="dayoff" id="badge">[[initials]]</span>
+          <span class="dayoff initials" id="badge">[[initials]]</span>
         </template>
         <span class="username">[[user]]</span>
       </div>
@@ -110,8 +114,12 @@ var colors = {
     },
     _computeInitials: function(user) {
       var index = user.indexOf(' ');
-      var strSpLess = user.replace(/\s+/, '');
-      return user[0].toUpperCase() + strSpLess.substr(index, 1).toUpperCase();
+      if (index < 0) {
+        return user[0];
+      } else {
+        var strSpLess = user.replace(/\s+/, '');
+        return user[0] + strSpLess.substr(index, 1);
+      }
     },
     _readUsername: function(entry) {
       var key;
