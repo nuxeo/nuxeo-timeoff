@@ -19,10 +19,10 @@
 
 <dom-module id="dialog-comment-confirm">
   <template>
-    <dialog-confirm id="dialog" title="{{title}}" no="Cancel" yes="Submit" on-cancel="_cancel">
+    <dialog-confirm class="tiny" id="dialog" title="{{title}}" no="Cancel" yes="Submit" on-cancel="_cancel">
 
       <paper-dialog-scrollable>
-        <paper-textarea value="{{comment}}" label="Comment" required></paper-textarea>
+        <paper-textarea always-float-label placeholder="Add some details" value="{{comment}}" label="Comment" required></paper-textarea>
       </paper-dialog-scrollable>
 
     </dialog-confirm>

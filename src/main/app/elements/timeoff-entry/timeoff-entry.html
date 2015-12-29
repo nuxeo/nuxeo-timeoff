@@ -23,7 +23,7 @@
     <style is="custom-style" include="shared-styles"></style>
     <style>
       .timeoff div {
-        margin: 5px;
+        margin: .3em;
       }
     </style>
     <template is="dom-if" if="{{data}}">
@@ -33,31 +33,35 @@
           <iron-icon icon="event"></iron-icon>
           [[beginning]] - [[end]]
         </div>
-        <template is="dom-if" if="[[holiday]]">
-          <div class="dayoff holiday">
-            <label>[[holiday]]</label>
-            <paper-tooltip>Holiday</paper-tooltip>
-          </div>
-        </template>
-        <template is="dom-if" if="[[RTT]]">
-          <div class="dayoff RTT">
-            <label>[[RTT]]</label>
-            <paper-tooltip>RTT</paper-tooltip>
-          </div>
-        </template>
-        <template is="dom-if" if="[[familyCause]]">
-          <div class="dayoff familyCause">
-            <label>[[familyCause]]</label>
-            <paper-tooltip>Family Cause</paper-tooltip>
-          </div>
-        </template>
-        <template is="dom-if" if="[[unPaid]]">
-          <div class="dayoff unpaid">
-            <label>[[unPaid]]</label>
-            <paper-tooltip>Unpaid</paper-tooltip>
-          </div>
-        </template>
-        <content select="[suffix]"></content>
+        <div class="day-types">
+          <template is="dom-if" if="[[holiday]]">
+            <div class="dayoff holiday">
+              <label>[[holiday]]</label>
+              <paper-tooltip>Holiday</paper-tooltip>
+            </div>
+          </template>
+          <template is="dom-if" if="[[RTT]]">
+            <div class="dayoff RTT">
+              <label>[[RTT]]</label>
+              <paper-tooltip>RTT</paper-tooltip>
+            </div>
+          </template>
+          <template is="dom-if" if="[[familyCause]]">
+            <div class="dayoff familyCause">
+              <label>[[familyCause]]</label>
+              <paper-tooltip>Family Cause</paper-tooltip>
+            </div>
+          </template>
+          <template is="dom-if" if="[[unPaid]]">
+            <div class="dayoff unpaid">
+              <label>[[unPaid]]</label>
+              <paper-tooltip>Unpaid</paper-tooltip>
+            </div>
+          </template>
+        </div>
+        <div class="actions">
+          <content select="[suffix]"></content>
+        </div>
       </div>
     </template>
   </template>

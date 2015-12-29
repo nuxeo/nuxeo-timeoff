@@ -22,7 +22,7 @@
   <style is="custom-style" include="shared-styles"></style>
   <style>
     #badge {
-      background: var(--user-color, black);
+      background: var(--user-color, #e4e6e8);
     }
 
     img {
@@ -41,7 +41,7 @@
     <nuxeo-resource id="nxr" path="user/[[username]]" method="get" enrichers="userprofile"
       enrichers-entity="user"></nuxeo-resource>
     <timeoff-entry data="{{data}}">
-      <div prefix hidden$="[[userHidden]]">
+      <div prefix hidden$="[[userHidden]]" class="user">
         <template is="dom-if" if="[[avatar]]">
           <img class="dayoff" src="[[avatar]]" />
         </template>

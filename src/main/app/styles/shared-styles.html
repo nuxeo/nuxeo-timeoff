@@ -56,7 +56,7 @@
 
       paper-material paper-toolbar {
         background: transparent;
-        color: #000;
+        color: #213f7d;
         font-weight: 700;
         border-bottom: 1px solid #e5e6e7;
       }
@@ -133,12 +133,52 @@
         background: var(--holiday-type-unpaid);
       }
 
-      :host ::content h2#paper-dialog-header-366 {
-        color: #00adff;
-      };
+      .interval {
+        color: #213f7D;
+        font-size: .9em;
+        font-weight: 200;
+        width: 16em;
+      }
+
+      .day-types {
+        font-size: .8em;
+      }
+
+      .timeoff-search .day-types {
+        font-size: .75em;
+        margin-bottom: .5em;
+        text-align: right;
+      }
+
+      .timeoff-search .day-types .dayoff {
+        margin: 0 .5em;
+      }
+
+      .timeoff-search .day-types .dayoff:first-child {
+        margin-left: -.3em;
+      }
+
+      .timeoff-search .day-types .dayoff:before {
+        content: "+";
+        display: inline-block;
+        color: #000;
+        margin-left: -1.7em;
+        padding-right: 1em;
+      }
+
+      .timeoff-search .day-types .dayoff:first-child:before {
+        content: "";
+        margin: -.1em;
+        padding: 0;
+      }
+
+      .user.timeoff-entry-user {
+        min-width: 220px;
+      }
 
       paper-dialog h2 {
         color: #00adff;
+        padding: .5em 1em;
       }
 
       paper-dialog label.main-label.dialog-request-creation {
@@ -147,6 +187,18 @@
         color: #213f7d;
         margin-bottom: .5em;
         display: block;
+      }
+
+      paper-dialog .buttons {
+        background-color: #f4f7f9;
+      }
+
+      ::content .tiny paper-dialog {
+        width: 400px;
+      }
+
+      ::content .tiny paper-dialog .paper-dialog-scrollable {
+        min-height: 120px;
       }
 
       ::content paper-date-picker #heading.paper-date-picker.pg-chooseDate {

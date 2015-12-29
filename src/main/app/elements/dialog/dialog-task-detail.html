@@ -21,8 +21,9 @@
 <dom-module id="dialog-task-detail">
   <template>
     <style is="custom-style" include="shared-styles">
-      paper-dialog {
-        background-color: #fff;
+      ::content .dialog-task-detail .timeoff.timeoff-entry {
+        border: 1px solid #e5e6e7;
+        margin-bottom: 1em;
       }
     </style>
     <paper-dialog id="dialog" with-backdrop on-iron-overlay-opened="_center" on-iron-overlay-closed="_closeDialog">

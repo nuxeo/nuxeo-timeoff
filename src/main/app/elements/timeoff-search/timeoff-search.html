@@ -107,8 +107,8 @@
         <template is="dom-if" if="[[hasResult]]">
           <timeoff-calendar-chart data="[[data.entries]]"></timeoff-calendar-chart>
         </template>
-        <div>
-          Total:&nbsp;
+        <div class="day-types">
+          Sum of days = &nbsp;
           <template is="dom-if" if="[[nb.holiday]]">
             <div class="dayoff holiday">
               <label>[[nb.holiday]]</label>
