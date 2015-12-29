@@ -20,11 +20,13 @@
 
 <dom-module id="timeoff-entry-user">
   <template>
-    <nuxeo-resource id="nxr" path="user/[[username]]" method="get" enrichers="userprofile" enrichers-entity="user"></nuxeo-resource>
+    <nuxeo-resource id="nxr" path="user/[[username]]" method="get" enrichers="userprofile"
+      enrichers-entity="user"></nuxeo-resource>
     <timeoff-entry data="{{data}}">
       <content select="[prefix]"></content>
       <div prefix class="requester" hidden$="[[userHidden]]">
-        <iron-icon icon="account-circle"></iron-icon>[[user]]
+        <iron-icon icon="account-circle"></iron-icon>
+        [[user]]
       </div>
       <content select="[suffix]"></content>
     </timeoff-entry>
@@ -35,7 +37,8 @@
 // {
 //   '$username': {
 //     'name': '$name',
-//     'date': '$date'
+//     'date': '$date',
+//     'color': '$color'
 //   },
 //   '$username': {
 //     'loading': boolean
@@ -49,6 +52,10 @@ var names = {};
 //   ...
 // }
 var elements = {};
+var colors = {
+  depth: [300, 500, 700, 900],
+  color: ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'light-blue', 'cyan', 'teal', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange']
+};
 (function() {
   Polymer({
     is: 'timeoff-entry-user',
@@ -113,6 +120,7 @@ var elements = {};
               name.name = this.username;
             }
             name.date = moment().toDate();
+            name.color = this._computeColor(name.name.trim());
             names[this.username] = name;
 
             elements[this.username].forEach(function(element) {
@@ -124,6 +132,27 @@ var elements = {};
       } else {
         this._readUser();
       }
+    },
+    _computeColor: function(name) {
+      var stPart = name;
+      var ndPart = name;
+      var spIndex = name.indexOf(' ');
+      var tmpName = name.replace(/\s+/g, '');
+      if (spIndex > 0) {
+        stPart = tmpName.substr(0, spIndex);
+        ndPart = tmpName.substr(spIndex, tmpName.length);
+      }
+      var depth = this._calcCharCodes(stPart) % colors.depth.length;
+      var color = this._calcCharCodes(ndPart) % colors.color.length;
+      return '--paper-' + colors.color[color] + '-' + colors.depth[depth];
+    },
+    _calcCharCodes: function(str) {
+      // Calc a fixed index depending of the text
+      return str.split('').map(function(entry) {
+        return entry.charCodeAt(0);
+      }).reduce(function(prev, current) {
+        return prev + current;
+      });
     }
   });
 }());
