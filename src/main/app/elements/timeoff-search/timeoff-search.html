@@ -39,6 +39,25 @@
         padding: 0 1em 1em  ;
       }
 
+      .nodayoff.timeoff-search {
+        font-size: 2em;
+        color: #ccc;
+        padding: 2em;
+        text-align: center;
+      }
+
+      .nodayoff.timeoff-search span {
+        max-width: 480px;
+        display: inline-block;
+        text-align: left;
+      }
+
+      .nodayoff iron-icon.timeoff-search {
+        width: 200px;
+        float: left;
+        height: 70px;
+      }
+
     </style>
     <paper-material elevation="0">
       <paper-header-panel>
@@ -47,7 +66,7 @@
           <div class="flex">&nbsp;</div>
           <div>
             <paper-icon-button id="menu" suffix icon="search" on-click="_toggleCollapse"></paper-icon-button>
-            <paper-tooltip for="menu">Configure</paper-tooltip>
+            <paper-tooltip for="menu">Search</paper-tooltip>
           </div>
         </paper-toolbar>
         <iron-collapse id="filtersPanel">
@@ -79,9 +98,10 @@
 
       <div class="content">
         <template is="dom-if" if="[[!hasResult]]">
-          <paper-card heading="No Incoming Day Off">
-            <div class="card-content"></div>
-          </paper-card>
+          <div class="nodayoff">
+            <iron-icon alt="holiday" icon="flight-takeoff"></iron-icon>
+            <span>You're working too hard, it's time to schedule some days off.</span>
+          </div>
         </template>
 
         <template is="dom-if" if="[[hasResult]]">

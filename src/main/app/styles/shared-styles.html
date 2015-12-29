@@ -58,7 +58,7 @@
         background: transparent;
         color: #000;
         font-weight: 700;
-        margin-left: -14px;
+        border-bottom: 1px solid #e5e6e7;
       }
 
       paper-dialog {
@@ -70,7 +70,7 @@
       .request.timeoff-search {
         background-color: #fff;
         box-shadow: 0 2px 1px rgba(0,0,0,0.2);
-        border-top: 1px solid #eee;
+        border-top: 1px solid #e5e6e7;
         padding: .2em .5em;
       }
 
@@ -121,16 +121,58 @@
       }
 
       .holiday {
-        background: var(--paper-green-500);
+        background: var(--holiday-type-paid);
       }
       .RTT {
-        background: var(--paper-blue-500);
+        background: var(--holiday-type-rtt);
       }
       .familyCause {
-        background: var(--paper-pink-500);
+        background: var(--holiday-type-family);
       }
       .unpaid {
-        background: var(--paper-purple-500);
+        background: var(--holiday-type-unpaid);
+      }
+
+      :host ::content h2#paper-dialog-header-366 {
+        color: #00adff;
+      };
+
+      paper-dialog h2 {
+        color: #00adff;
+      }
+
+      paper-dialog label.main-label.dialog-request-creation {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #213f7d;
+        margin-bottom: .5em;
+        display: block;
+      }
+
+      ::content paper-date-picker #heading.paper-date-picker.pg-chooseDate {
+        display: block;
+        height: initial;
+        background-color: #213f7d;
+        padding: .6em 1.5em;
+      }
+
+      ::content paper-date-picker #heading .year.paper-date-picker {
+        float: right;
+        font-size: 15px;
+      }
+
+      ::content paper-date-picker #heading .date.paper-date-picker {
+        float: left;
+      }
+
+      ::content paper-date-picker #heading.paper-date-picker .date.paper-date-picker,
+      ::content paper-date-picker #heading .date.paper-date-picker span {
+        font-size: 17px !important;
+        line-height: normal !important;
+      }
+
+      ::content paper-date-picker .paper-calendar .day-item.selected.paper-calendar .selection.paper-calendar {
+        fill: #00adff;
       }
 
     </style>
