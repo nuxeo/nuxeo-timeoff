@@ -52,6 +52,10 @@
           type: String,
           value: 'Time-offs distribution'
         },
+        colors: {
+          type: String,
+          value: "#FFFFFF, #018CD8"
+        },
         options: {
           type: Object,
           computed: '_computeOptions(data, title)'
@@ -90,6 +94,7 @@
         years = years.filter(function(e, i, arr) {
           return arr.lastIndexOf(e) === i;
         });
+        console.log(this.colors);
         var height = 18 + years.length * 140;
         return {
           title: title,
@@ -99,9 +104,14 @@
           width: 980,
           height: height,
           colorAxis: {
-            minValue: 0
+            minValue: 0,
+            colors: this.colors.split(/[,\s]+/g)
           },
-          tooltip: {isHtml: true}
+          tooltip: {isHtml: true},
+          noDataPattern: {
+            backgroundColor: '#f5f7fa',
+            color: '#f5f7fa'
+          }
         };
       },
       _computeRows: function(data) {

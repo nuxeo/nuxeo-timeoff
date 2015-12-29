@@ -33,7 +33,7 @@
         <timeoff-entry data=[[task]]></timeoff-entry>
         <template is="dom-if" if="[[opened]]">
           <timeoff-calendar-chart id="chart1" data="[[data1]]" title="User request" on-google-chart-render="_center" on-scroll="_scrollBottom"></timeoff-calendar-chart>
-          <timeoff-calendar-chart id="chart2" data="[[data2.entries]]" title="Request on same period" on-google-chart-render="_center" on-scroll="_scrollTop"></timeoff-calendar-chart>
+          <timeoff-calendar-chart id="chart2" data="[[data2.entries]]" title="Request on same period" colors="#FFFFFF, #DD1C00" on-google-chart-render="_center" on-scroll="_scrollTop"></timeoff-calendar-chart>
         </template>
       </paper-dialog-scrollable>
 
