@@ -19,16 +19,35 @@
 <link rel="import" href="../timeoff-behavior/timeoff-entry-helper.html">
 
 <dom-module id="timeoff-entry-user">
+  <style is="custom-style" include="shared-styles"></style>
+  <style>
+    #badge {
+      background: var(--user-color, black);
+    }
+
+    img {
+      vertical-align: middle;
+    }
+
+    .username {
+      text-transform: capitalize;
+    }
+  </style>
   <template>
     <nuxeo-resource id="nxr" path="user/[[username]]" method="get" enrichers="userprofile"
       enrichers-entity="user"></nuxeo-resource>
     <timeoff-entry data="{{data}}">
-      <content select="[prefix]"></content>
-      <div prefix class="requester" hidden$="[[userHidden]]">
-        <iron-icon icon="account-circle"></iron-icon>
-        [[user]]
+      <div prefix hidden$="[[userHidden]]">
+        <template is="dom-if" if="[[avatar]]">
+          <img class="dayoff" src="[[avatar]]" />
+        </template>
+        <template is="dom-if" if="[[!avatar]]">
+          <span class="dayoff" id="badge">[[initials]]</span>
+        </template>
+        <span class="username">[[user]]</span>
       </div>
-      <content select="[suffix]"></content>
+
+      <div suffix></div>
     </timeoff-entry>
   </template>
 </dom-module>
@@ -54,7 +73,7 @@ var names = {};
 // }
 var elements = {};
 var colors = {
-  depth: [300, 500, 700, 900],
+  depth: [300, 400, 500, 700, 800, 900],
   color: ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'light-blue', 'cyan', 'teal', 'light-green', 'lime',
     'yellow', 'amber', 'orange', 'deep-orange']
 };
@@ -73,12 +92,26 @@ var colors = {
         observer: '_retrieveUser'
       },
       user: {
-        type: String
+        type: String,
+        observer: '_userChanged'
+      },
+      initials: {
+        type: String,
+        computed: '_computeInitials(user)'
+      },
+      avatar: {
+        type: String,
+        value: null
       },
       userHidden: {
         type: Boolean,
         value: false
       }
+    },
+    _computeInitials: function(user) {
+      var index = user.indexOf(' ');
+      var strSpLess = user.replace(/\s+/, '');
+      return user[0].toUpperCase() + strSpLess.substr(index, 1).toUpperCase();
     },
     _readUsername: function(entry) {
       var key;
@@ -96,11 +129,16 @@ var colors = {
       return this.readProperty(key);
     },
     _readUser: function() {
+      var user = 'NC';
       if (names[this.username]) {
-        this.user = names[this.username].name;
-      } else {
-        this.user = 'NC';
+        user = names[this.username].name;
       }
+      this.set('user', user);
+      this.set('avatar', names[this.username].avatar);
+    },
+    _userChanged: function(user) {
+      this.customStyle["--user-color"] = 'var(' + names[this.username].color + ');';
+      this.updateStyles();
     },
     _retrieveUser: function() {
       var name = names[this.username];
@@ -147,7 +185,7 @@ var colors = {
       var tmpName = name.replace(/\s+/g, '');
       if (spIndex > 0) {
         stPart = tmpName.substr(0, spIndex);
-        ndPart = tmpName.substr(spIndex, tmpName.length);
+        ndPart = tmpName.substr(spIndex);
       }
       var depth = this._calcCharCodes(stPart) % colors.depth.length;
       var color = this._calcCharCodes(ndPart) % colors.color.length;
