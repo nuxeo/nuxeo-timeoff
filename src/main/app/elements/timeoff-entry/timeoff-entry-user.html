@@ -136,8 +136,8 @@ var colors = {
       this.set('user', user);
       this.set('avatar', names[this.username].avatar);
     },
-    _userChanged: function(user) {
-      this.customStyle["--user-color"] = 'var(' + names[this.username].color + ');';
+    _userChanged: function() {
+      this.customStyle['--user-color'] = 'var(' + names[this.username].color + ');';
       this.updateStyles();
     },
     _retrieveUser: function() {
