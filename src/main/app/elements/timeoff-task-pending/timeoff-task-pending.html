@@ -37,9 +37,9 @@
       }
     </style>
     <nuxeo-resource id="nxoTaskPending" auto
-                    path="task"
-                    params="{{params}}"
-                    response={{tasks}}></nuxeo-resource>
+      path="task"
+      params="{{params}}"
+      response={{tasks}}></nuxeo-resource>
     <template is="dom-if" if="{{!isEmptyDataResponse(tasks)}}">
       <paper-material elevation="0">
         <paper-header-panel>
@@ -48,24 +48,27 @@
           </paper-toolbar>
         </paper-header-panel>
         <div class="content">
-          <template is="dom-repeat" items='[[tasks.entries]]' as="task" index-as="task-index" sort="compareEntityByBeginningDate">
+          <template is="dom-repeat" items='[[tasks.entries]]' as="task" index-as="task-index"
+            sort="compareEntityByBeginningDate">
             <div class="task flex">
               <timeoff-entry-user data="[[task]]">
-                <div suffix class="step">Requires [[getMessage(task.name)]]</div>
-                <template is="dom-if" if="{{isCommentExist(task)}}">
-                  <div suffix style="display:inline-block">
-                    <iron-icon alt="Comment" icon="feedback"></iron-icon>
-                    <paper-tooltip>[[getComment(task)]]</paper-tooltip>
-                  </div>
-                </template>
+                <div suffix class="step">
+                  <span>Requires [[getMessage(task.name)]]</span>
+                  <template is="dom-if" if="{{isCommentExist(task)}}">
+                    <div style="display:inline-block">
+                      <iron-icon alt="Comment" icon="feedback"></iron-icon>
+                      <paper-tooltip>[[getComment(task)]]</paper-tooltip>
+                    </div>
+                  </template>
+                </div>
               </timeoff-entry-user>
               <div class="flex-end-justified">
                 <template is="dom-if" if="{{isManagerHRTask(task)}}">
                   <button-accept-task task-id="[[task.id]]" on-accepted="refresh"></button-accept-task>
                   <button-request-update-task task-id="[[task.id]]" task-name="[[task.name]]"
-                                              on-request-updated="refreshTasks"></button-request-update-task>
+                    on-request-updated="refreshTasks"></button-request-update-task>
                   <button-reject-task task-id="[[task.id]]" task-name="[[task.name]]"
-                                      on-rejected="refresh"></button-reject-task>
+                    on-rejected="refresh"></button-reject-task>
                   <button-task-detail task="[[task]]"></button-task-detail>
                 </template>
                 <template is="dom-if" if="{{!isManagerHRTask(task)}}">
@@ -87,8 +90,8 @@
       properties: {
         params: {
           type: Object,
-          value: function() {
-            return {'workflowModelName': 'TimeOffRequestFlow'};
+          value: {
+            'workflowModelName': 'TimeOffRequestFlow'
           }
         }
       },
@@ -107,9 +110,9 @@
       },
       isCommentExist: function(task) {
         return (task.name === 'tor.managerapproval.label' && !this._isStringEmpty(task.variables.commentRequester)) ||
-            (task.name === 'tor.hrmanagerapproval.label' && !this._isStringEmpty(task.variables.commentRequester)) ||
-            (task.name === 'tor.request_update.label' &&
-              (!this._isStringEmpty(task.variables.commentManager) || !this._isStringEmpty(task.variables.commentHr)));
+          (task.name === 'tor.hrmanagerapproval.label' && !this._isStringEmpty(task.variables.commentRequester)) ||
+          (task.name === 'tor.request_update.label' &&
+          (!this._isStringEmpty(task.variables.commentManager) || !this._isStringEmpty(task.variables.commentHr)));
       },
       getComment: function(task) {
         var result = '';

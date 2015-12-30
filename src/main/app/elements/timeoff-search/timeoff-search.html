@@ -109,34 +109,36 @@
 
         <template is="dom-if" if="[[hasResult]]">
           <timeoff-calendar-chart data="[[data.entries]]"></timeoff-calendar-chart>
+
+          <div class="day-types">
+            Sum of days = &nbsp;
+            <template is="dom-if" if="[[nb.holiday]]">
+              <div class="dayoff holiday">
+                <label>[[nb.holiday]]</label>
+                <paper-tooltip>Holiday</paper-tooltip>
+              </div>
+            </template>
+            <template is="dom-if" if="[[nb.rtt]]">
+              <div class="dayoff RTT">
+                <label>[[nb.rtt]]</label>
+                <paper-tooltip>RTT</paper-tooltip>
+              </div>
+            </template>
+            <template is="dom-if" if="[[nb.family]]">
+              <div class="dayoff familyCause">
+                <label>[[nb.family]]</label>
+                <paper-tooltip>Family Cause</paper-tooltip>
+              </div>
+            </template>
+            <template is="dom-if" if="[[nb.unpaid]]">
+              <div class="dayoff unpaid">
+                <label>[[nb.unpaid]]</label>
+                <paper-tooltip>Unpaid</paper-tooltip>
+              </div>
+            </template>
+          </div>
         </template>
-        <div class="day-types">
-          Sum of days = &nbsp;
-          <template is="dom-if" if="[[nb.holiday]]">
-            <div class="dayoff holiday">
-              <label>[[nb.holiday]]</label>
-              <paper-tooltip>Holiday</paper-tooltip>
-            </div>
-          </template>
-          <template is="dom-if" if="[[nb.rtt]]">
-            <div class="dayoff RTT">
-              <label>[[nb.rtt]]</label>
-              <paper-tooltip>RTT</paper-tooltip>
-            </div>
-          </template>
-          <template is="dom-if" if="[[nb.family]]">
-            <div class="dayoff familyCause">
-              <label>[[nb.family]]</label>
-              <paper-tooltip>Family Cause</paper-tooltip>
-            </div>
-          </template>
-          <template is="dom-if" if="[[nb.unpaid]]">
-            <div class="dayoff unpaid">
-              <label>[[nb.unpaid]]</label>
-              <paper-tooltip>Unpaid</paper-tooltip>
-            </div>
-          </template>
-        </div>
+
         <template is="dom-repeat" items='[[data.entries]]' as="item">
           <div class="request">
             <timeoff-entry-user data="[[item]]" user-hidden="[[!hasEmployeeFilter]]"></timeoff-entry-user>

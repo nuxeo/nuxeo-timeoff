@@ -42,6 +42,8 @@
       enrichers-entity="user"></nuxeo-resource>
     <timeoff-entry data="{{data}}">
       <div prefix hidden$="[[userHidden]]" class="user">
+        <content select="[prefix]"></content>
+
         <template is="dom-if" if="[[avatar]]">
           <img class="dayoff" src="[[avatar]]" />
         </template>
@@ -50,8 +52,9 @@
         </template>
         <span class="username">[[user]]</span>
       </div>
-
-      <div suffix></div>
+      <div suffix>
+        <content select="[suffix]"></content>
+      </div>
     </timeoff-entry>
   </template>
 </dom-module>
