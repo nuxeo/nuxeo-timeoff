@@ -34,6 +34,7 @@
         border-radius: .15em;
         color: #213f7d;
         font-size: .9em;
+        display: inline-block;
       }
     </style>
     <nuxeo-resource id="nxoTaskPending" auto
@@ -54,13 +55,13 @@
               <timeoff-entry-user data="[[task]]">
                 <div suffix class="step">
                   <span>Requires [[getMessage(task.name)]]</span>
-                  <template is="dom-if" if="{{isCommentExist(task)}}">
-                    <div style="display:inline-block">
-                      <iron-icon alt="Comment" icon="feedback"></iron-icon>
-                      <paper-tooltip>[[getComment(task)]]</paper-tooltip>
-                    </div>
-                  </template>
                 </div>
+                <template is="dom-if" if="{{isCommentExist(task)}}">
+                  <div suffix style="display:inline-block">
+                    <iron-icon alt="Comment" icon="feedback"></iron-icon>
+                    <paper-tooltip>[[getComment(task)]]</paper-tooltip>
+                  </div>
+                </template>
               </timeoff-entry-user>
               <div class="flex-end-justified">
                 <template is="dom-if" if="{{isManagerHRTask(task)}}">

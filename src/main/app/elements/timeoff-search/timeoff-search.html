@@ -287,8 +287,7 @@
       },
       _updateUserContext: function(loginData) {
         this.set('isHrManager', loginData && loginData.groups.find(function(g) {
-            // return g === 'hr_manager';
-            return g === 'administrators';
+            return g === 'hr_manager';
           }) || false);
 
         if (this.employees.length > 0) {
