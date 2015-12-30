@@ -66,6 +66,10 @@
           width: 100%;
         }
       }
+
+      :host {
+        --text-disabled-color: var(--paper-grey-400);
+      }
     </style>
 
     <paper-dialog id="dialog" class="paper-date-picker-dialog" with-backdrop on-iron-overlay-closed="_closeDialog">
@@ -78,7 +82,7 @@
           </div>
           <div class="calendar-holder">
             <label class="main-label">... and a day to come back</label>
-            <paper-date-picker force-narrow="true" id="endDate" date="{{data.variables.end}}"></paper-date-picker>
+            <paper-date-picker force-narrow="true" id="endDate" min-date="[[data.variables.beginning]]" date="{{data.variables.end}}"></paper-date-picker>
           </div>
           <div class="days-distribution">
             <label class="main-label">Then select the day off types</label>
