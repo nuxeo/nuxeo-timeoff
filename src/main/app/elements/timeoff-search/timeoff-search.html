@@ -232,8 +232,7 @@
         '_updateUserContext(login)',
         '_updateEmployeesSelection(filters.employees)',
         '_refreshQuery(userWorkspace, filters.*)',
-        '_calculateHolidays(data)',
-        '_fillEmployeesFilter(employees)'
+        '_calculateHolidays(data)'
       ],
       _userWorkspaceReceived: function(e) {
         this.set('userWorkspace', e.detail.response.path);
@@ -366,9 +365,6 @@
       },
       _hasEmployeeFilter: function() {
         return this.filters.employees && this.filters.employees.length > 0;
-      },
-      _fillEmployeesFilter: function() {
-        this.set('filters.employees', this.employees.join(' '));
       },
       _updateEmployeesSelection: function() {
         //this.debounce('updateEmployeesSelection', function() {
