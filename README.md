@@ -33,11 +33,11 @@ This whole application is built as a single app page, with several [Iron and Pap
  
 ### Manually
 
-Too deploy on Nuxeo Platform manually: copy the builded JAR bundles into `$NUXEO_HOME/nxserver/bundles` and `nuxeo-timeoff-studio` Studio Project that contains workflows.
+To deploy on Nuxeo Platform manually: copy the builded JAR bundles into `$NUXEO_HOME/nxserver/bundles` and `nuxeo-timeoff-studio` Studio Project that contains workflows.
 
 ### Nuxeo Package
 
-For now, a Nuxeo pakcage is available on his [dedicated repository](https://github.com/nuxeo/marketplace-nuxeo-timeoff) and at last will be available in the same repository.
+Use the Nuxeo package provided by nuxeo-timeoff-marketplace sub module.
  
 # Resources
  
