@@ -141,7 +141,7 @@
 
         <template is="dom-repeat" items='[[data.entries]]' as="item">
           <div class="request">
-            <timeoff-entry-user data="[[item]]" user-hidden="[[!hasEmployeeFilter]]"></timeoff-entry-user>
+            <timeoff-entry-user data="[[item]]" user-hidden="[[!_isManager()]]"></timeoff-entry-user>
           </div>
         </template>
       </div>
@@ -204,10 +204,6 @@
           type: Boolean,
           value: false
         },
-        hasEmployeeFilter: {
-          type: Boolean,
-          computed: '_hasEmployeeFilter(data)'
-        },
         filters: {
           type: Object,
           value: {
@@ -230,7 +226,6 @@
       },
       observers: [
         '_updateUserContext(login)',
-        '_updateEmployeesSelection(filters.employees)',
         '_refreshQuery(userWorkspace, filters.*)',
         '_calculateHolidays(data)'
       ],
@@ -362,21 +357,6 @@
       },
       _isManager: function() {
         return this.isHrManager || this.employees && this.employees.length > 0;
-      },
-      _hasEmployeeFilter: function() {
-        return this.filters.employees && this.filters.employees.length > 0;
-      },
-      _updateEmployeesSelection: function() {
-        //this.debounce('updateEmployeesSelection', function() {
-        //var selectedValues = this.$.listBoxEmployees.selectedValues || [];
-        //this.$.listBoxEmployees.items.forEach(function(item, i) {
-        //if (this.filters.employees.match(Polymer.dom(item).textContent)) {
-        //selectedValues.push(i);
-        //}
-        //}.bind(this));
-        //
-        //this.$.listBoxEmployees.selectedValues = selectedValues;
-        //}.bind(this), 700);
       },
       _filterEmployeesSelect: function(e) {
         if (!e) {
