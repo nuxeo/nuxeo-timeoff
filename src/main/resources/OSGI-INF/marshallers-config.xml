@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<component name="org.nuxeo.timeoff.marshallers" version="1.0.0">
-  <extension target="org.nuxeo.ecm.core.io.MarshallerRegistry" point="marshallers">
-    <!-- user profile enricher -->
-    <register class="org.nuxeo.timeoff.ProfileEnricher" enable="true" />
-  </extension>
-</component>
