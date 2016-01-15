@@ -37,8 +37,13 @@
 
       <div class="content">
         <template id="tmpl_entries" is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
+          <nuxeo-resource auto path="workflow/[[item.id]]/graph" response="{{graph}}"></nuxeo-resource>
           <div class="request flex-horizontal">
-            <timeoff-entry class="flex" data$=[[item]] id="entry_[[item.id]]"></timeoff-entry>
+            <timeoff-entry class="flex" data$=[[item]] id="entry_[[item.id]]">
+              <div suffix class="step">
+                <span>Requires [[getSuspendedNode(graph)]]</span>
+              </div>
+            </timeoff-entry>
             <div class="flex-end-justified">
               <button-edit-workflow class="button" on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
               <button-delete-workflow class="button" on-deleted="refresh"
@@ -73,6 +78,17 @@
       },
       timeOffWkf: function(entry) {
         return entry.workflowModelName === 'TimeOffRequestFlow';
+      },
+      getSuspendedNode: function(graph) {
+        if (graph && graph.nodes) {
+          for (var i = 0; i < graph.nodes.length; i++) {
+            var node = graph.nodes[i];
+            if (node.state === 'suspended') {
+              return node.title;
+            }
+          }
+        }
+        return '';
       }
     });
   }());
