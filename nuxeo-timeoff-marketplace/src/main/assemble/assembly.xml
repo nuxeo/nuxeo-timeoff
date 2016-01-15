@@ -1,0 +1,86 @@
+<project name="nuxeo-timeoff" default="build" xmlns:nx="urn:nuxeo-build" xmlns:artifact="urn:nuxeo-artifact">
+  <taskdef resource="org/nuxeo/build/antlib.xml" uri="urn:nuxeo-build" />
+  <taskdef resource="org/nuxeo/build/artifact/antlib.xml" uri="urn:nuxeo-artifact" />
+  <taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+  <target name="build" description="Build Nuxeo Timeoff Package">
+    <property name="outdir" value="${maven.project.build.directory}" />
+    <!-- Include your artifacts in the graph adding your groupId to groupPrefixes -->
+    <artifact:nuxeo-expand includeTestScope="true" groupPrefixes="org.nuxeo, org.nuxeo.timeoff, nuxeo-studio" />
+    <!-- Prints the graph for debugging purpose -->
+    <artifact:print output="${outdir}/dependency-tree.log" />
+    <tstamp />
+
+    <delete failonerror="false" dir="${outdir}/nxr" />
+    <mkdir dir="${outdir}/nxr" />
+    <delete failonerror="false" dir="${outdir}/marketplace" />
+    <mkdir dir="${outdir}/marketplace" />
+    <copy todir="${outdir}/marketplace">
+      <fileset dir="src/main/resources" />
+      <filterset>
+        <filter token="VERSION" value="${maven.project.version}" />
+        <filter token="DISTRIB_VERSION" value="${nuxeo.distribution.version}" />
+      </filterset>
+    </copy>
+
+    <!-- Base distribution NXR -->
+    <copy todir="${outdir}">
+      <artifact:file key="org.nuxeo.ecm.distribution:nuxeo-distribution-cap::zip" />
+    </copy>
+
+    <!-- Nuxeo bundles -->
+    <copy todir="${outdir}/nxr/bundles" overwrite="true">
+      <artifact:set>
+        <includes>
+          <artifact groupId="org.nuxeo*" scope="!test" type="!pom" />
+          <!-- Include your artifacts using their groupId for instance -->
+          <artifact groupId="org.nuxeo.timeoff*" scope="!test" type="!pom" />
+          <artifact groupId="nuxeo-studio*" scope="!test" type="!pom" />
+        </includes>
+        <excludes>
+          <artifact groupId="org.nuxeo.lib*" />
+        </excludes>
+      </artifact:set>
+    </copy>
+    <!-- Temporary ZIP Nuxeo NXR to compare with base distribution NXR -->
+    <zip destfile="${outdir}/nxr-${maven.project.version}.zip" basedir="${outdir}/nxr" />
+    <!-- Optionally attach the NXR for later use by other modules -->
+    <artifact:attach file="${outdir}/nxr-${maven.project.version}.zip" classifier="nxr" type="zip" />
+
+    <!-- Your MP only needs to include files not already provided by the base distribution -->
+    <nx:zipdiff file1="${outdir}/nxr-${maven.project.version}.zip"
+                file2="${outdir}/nuxeo-distribution-cap-${nuxeo.distribution.version}.zip"
+                includesfile="${outdir}/includes"
+                excludesfile="${outdir}/excludesfile"
+                patternsetid="sample.versus.cap"
+                ignoreContent="false"
+                ignoreContentPattern=".*\.jar$">
+    </nx:zipdiff>
+    <unzip src="${outdir}/nxr-${maven.project.version}.zip" dest="${outdir}/marketplace/install">
+      <patternset refid="sample.versus.cap" />
+    </unzip>
+
+    <!-- Generate install.xml content -->
+    <!-- See documentation at http://doc.nuxeo.com/x/IgIz -->
+    <var name="install.bundles" value="" />
+    <if>
+      <available file="${outdir}/marketplace/install/bundles" />
+      <then>
+        <var name="install.bundles"
+             value="${line.separator}
+  &lt;update file=&quot;${package.root}/install/bundles&quot; todir=&quot;${env.bundles}&quot; /&gt;" />
+      </then>
+    </if>
+
+    <copy file="src/main/resources/install.xml" todir="${outdir}/marketplace" overwrite="true">
+      <filterset>
+        <filter token="BUNDLES" value="${install.bundles}" />
+      </filterset>
+    </copy>
+
+    <zip destfile="${outdir}/${maven.project.artifactId}-${maven.project.version}.zip"
+         basedir="${outdir}/marketplace" />
+    <artifact:attach file="${outdir}/${maven.project.artifactId}-${maven.project.version}.zip" type="zip" />
+  </target>
+
+</project>

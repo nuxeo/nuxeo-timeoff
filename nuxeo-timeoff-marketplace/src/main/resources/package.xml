@@ -1,0 +1,20 @@
+<package type="addon" name="nuxeo-timeoff" version="@VERSION@">
+  <title>Nuxeo Timeoff</title>
+  <description>
+    <p>This addon adds the "nuxeo-timeoff" functionality to Nuxeo.</p>
+  </description>
+  <home-page>http://doc.nuxeo.com/</home-page>
+  <vendor>Nuxeo</vendor>
+  <installer restart="true" />
+  <uninstaller restart="true" />
+  <nuxeo-validation>nuxeo_certified</nuxeo-validation>
+  <production-state>testing</production-state>
+  <supported>false</supported>
+  <platforms>
+    <platform>cap-@DISTRIB_VERSION@</platform>
+    <platform>cap-@DISTRIB_VERSION@-HF*</platform>
+  </platforms>
+  <license>LGPL 2.1</license>
+  <license-url>http://www.gnu.org/licenses/lgpl-2.1.html</license-url>
+  <visibility>PUBLIC</visibility>
+</package>

@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.nuxeo.ecm.distribution</groupId>
@@ -9,42 +8,50 @@
 
   <groupId>org.nuxeo.timeoff</groupId>
   <artifactId>nuxeo-timeoff</artifactId>
-  <name>Nuxeo Timeoff</name>
-  <description>Nuxeo Timeoff</description>
+  <packaging>pom</packaging>
+  <name>Nuxeo Timeoff - Parent</name>
+  <description>Convenience POM for running sub-modules</description>
+  <version>1.0.0-SNAPSHOT</version>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.nuxeo.ecm.core</groupId>
-      <artifactId>nuxeo-core-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.ecm.platform</groupId>
-      <artifactId>nuxeo-user-profile</artifactId>
-    </dependency>
-  </dependencies>
+  <properties>
+    <nuxeo.timeoff.studio.version>12.3.2</nuxeo.timeoff.studio.version>
+  </properties>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>grunt-build</id>
-            <phase>process-resources</phase>
-            <configuration>
-              <target>
-                <ant antfile="${basedir}/build.xml" dir="${basedir}"></ant>
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+  <modules>
+    <module>nuxeo-timeoff-web</module>
+    <module>nuxeo-timeoff-marketplace</module>
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>ftest</id>
+      <modules>
+        <module>nuxeo-timeoff-ftest/webdriver</module>
+      </modules>
+    </profile>
+  </profiles>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.nuxeo.timeoff</groupId>
+        <artifactId>nuxeo-timeoff-web</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.timeoff</groupId>
+        <artifactId>nuxeo-timeoff-marketplace</artifactId>
+        <version>${project.version}</version>
+        <type>zip</type>
+      </dependency>
+      <!-- Additional bundles to be deployed by the MP -->
+      <dependency>
+        <groupId>nuxeo-studio</groupId>
+        <artifactId>nuxeo-timeoff-studio</artifactId>
+        <version>${nuxeo.timeoff.studio.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <repositories>
     <repository>
@@ -64,7 +71,19 @@
         <enabled>false</enabled>
       </releases>
       <snapshots>
+        <updatePolicy>always</updatePolicy>
         <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>nuxeo-studio</id>
+      <url>https://connect.nuxeo.com/nuxeo/site/studio/maven</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
       </snapshots>
     </repository>
   </repositories>
@@ -74,5 +93,6 @@
     <developerConnection>scm:git:ssh://git@github.com:nuxeo/nuxeo-timeoff.git</developerConnection>
     <url>https://github.com/nuxeo/nuxeo-timeoff</url>
   </scm>
+
 </project>
 
