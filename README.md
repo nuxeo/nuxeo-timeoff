@@ -1,8 +1,8 @@
 # About Nuxeo Timeoff plugin
 
-Nuxeo Timeoff is a holiday / timeoff request plugin. It deploys a [Polymer](https://www.polymer-project.org) based site to handle requests and all the managers / HR validation process. This plugin is only the website, all the business process is handled inside the Studio Project.
+Nuxeo Timeoff is a holiday / timeoff request plugin. Based on a Nuxeo distribution (using workflow and automation chain features), this project demonstrates how to deploy a [Polymer](https://www.polymer-project.org) based site to handle requests and all the managers / HR validation process. This plugin is only the website, all the business process is handled inside the Studio Project.
 
-This whole application is built as a single app page, with several [Iron and Paper Polymer Components](https://elements.polymer-project.org/) and [Nuxeo Elements](https://github.com/nuxeo/nuxeo-elements) to communicate with Nuxeo. The only Nuxeo specific contribution is a [content enricher](https://doc.nuxeo.com/x/5wUuAQ) used to get user's profile avatar url if present.
+This whole application is built as a single app page, with several [Iron and Paper Polymer Components](https://elements.polymer-project.org/) and [Nuxeo Elements](https://github.com/nuxeo/nuxeo-elements) to communicate with Nuxeo.
 
 # Description
 
@@ -27,7 +27,13 @@ This whole application is built as a single app page, with several [Iron and Pap
  
 # Building
 
+To build and run the tests, simply start the Maven build:
+
     mvn [-DskipCleanCache] clean install
+
+To run functional tests:
+
+    mvn [-DskipCleanCache] clean install -Pftest
 
 ## Deploying
  
@@ -38,7 +44,10 @@ To deploy on Nuxeo Platform manually: copy the builded JAR bundles into `$NUXEO_
 ### Nuxeo Package
 
 Use the Nuxeo package provided by nuxeo-timeoff-marketplace sub module.
- 
+Install the nuxeo-timeoff package:
+      - From the AdminCenter (Upload + install)
+      - From the command line using `nuxeoctl mp-install marketplace-$VERSION.zip`
+
 # Resources
  
 ## Reporting issues
@@ -48,7 +57,7 @@ Use the Nuxeo package provided by nuxeo-timeoff-marketplace sub module.
  
 # Licensing
  
-[GNU Lesser General Public License (LGPL) v2.1](http://www.gnu.org/licenses/lgpl-2.1.html)
+[Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
  
 # About Nuxeo
  
