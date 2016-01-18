@@ -1,9 +1,11 @@
 <package type="addon" name="nuxeo-timeoff" version="@VERSION@">
   <title>Nuxeo Timeoff</title>
   <description>
-    <p>This addon adds the "nuxeo-timeoff" functionality to Nuxeo.</p>
+    <p>Nuxeo Timeoff is a holiday / timeoff request plugin. Based on a Nuxeo distribution (using workflow and automation chain features), this project demonstrates how to deploy a <a href="https://www.polymer-project.org">Polymer</a> based site to handle requests and all the managers / HR validation process. This plugin is only the website, all the business process is handled inside the Studio Project.<br />
+      <br/>
+      This whole application is built as a single app page, with several <a href="https://elements.polymer-project.org/">Iron and Paper Polymer Components</a> and <a href="https://github.com/nuxeo/nuxeo-elements">Nuxeo Elements</a> to communicate with Nuxeo.</p>
   </description>
-  <home-page>http://doc.nuxeo.com/</home-page>
+  <home-page>https://github.com/nuxeo/nuxeo-timeoff</home-page>
   <vendor>Nuxeo</vendor>
   <installer restart="true" />
   <uninstaller restart="true" />
@@ -14,7 +16,7 @@
     <platform>cap-@DISTRIB_VERSION@</platform>
     <platform>cap-@DISTRIB_VERSION@-HF*</platform>
   </platforms>
-  <license>LGPL 2.1</license>
-  <license-url>http://www.gnu.org/licenses/lgpl-2.1.html</license-url>
+  <license>Apache License, Version 2.0</license>
+  <license-url>http://www.apache.org/licenses/LICENSE-2.0.html</license-url>
   <visibility>PUBLIC</visibility>
 </package>

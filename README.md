@@ -4,6 +4,24 @@ Nuxeo Timeoff is a holiday / timeoff request plugin. Based on a Nuxeo distributi
 
 This whole application is built as a single app page, with several [Iron and Paper Polymer Components](https://elements.polymer-project.org/) and [Nuxeo Elements](https://github.com/nuxeo/nuxeo-elements) to communicate with Nuxeo.
 
+This project is a sample project, without Nuxeo support.
+
+# Sub-modules organization
+
+The project is splitted in several sub modules :
+
+**nuxeo-timeoff-web**
+
+The Polymer web application.
+
+**nuxeo-timeoff-marketplace**
+
+The marketplace used to deploy the application in Nuxeo.
+
+**nuxeo-timeoff-ftest**
+
+The functional test of application.
+
 # Description
 
 ## Roles
@@ -20,6 +38,15 @@ This whole application is built as a single app page, with several [Iron and Pap
 
 # Requirements
 
+## Building Nuxeo Timeoff plugin
+
+- JDK 8 (Oracle's JDK or OpenJDK recommended)
+- Apache Maven 3.1.1+
+- Apache Ant 1.7.1+
+- Npm 3.5.2
+- Bower 1.7.2
+- Open Source tools that will be downloaded by Maven when needed.
+
 ## Directory / User Group
 
  - A `hr_manager` group must be available containing the user that made the last HR validation.
@@ -29,24 +56,30 @@ This whole application is built as a single app page, with several [Iron and Pap
 
 To build and run the tests, simply start the Maven build:
 
-    mvn [-DskipCleanCache] clean install
+    mvn clean install
 
 To run functional tests:
 
-    mvn [-DskipCleanCache] clean install -Pftest
+    mvn clean install -Pftest
+    
+To build and run the tests without cleaning the node and bower cache:
+
+    mvn -DskipCleanCache clean install
 
 ## Deploying
+
+### Nuxeo Package
+
+Install [nuxeo-timeoff-request Package](https://connect.nuxeo.com/nuxeo/site/marketplace/package/nuxeo-timeoff). 
+
+Otherwise use the Nuxeo package provided by nuxeo-timeoff-marketplace sub module.
+Install the nuxeo-timeoff package:
+      - From the AdminCenter (Upload + install)
+      - From the command line using `nuxeoctl mp-install nuxeo-timeoff-marketplace-$VERSION.zip`
  
 ### Manually
 
 To deploy on Nuxeo Platform manually: copy the builded JAR bundles into `$NUXEO_HOME/nxserver/bundles` and `nuxeo-timeoff-studio` Studio Project that contains workflows.
-
-### Nuxeo Package
-
-Use the Nuxeo package provided by nuxeo-timeoff-marketplace sub module.
-Install the nuxeo-timeoff package:
-      - From the AdminCenter (Upload + install)
-      - From the command line using `nuxeoctl mp-install marketplace-$VERSION.zip`
 
 # Resources
  
