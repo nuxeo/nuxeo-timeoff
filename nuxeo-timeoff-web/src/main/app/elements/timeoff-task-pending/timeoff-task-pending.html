@@ -27,6 +27,11 @@
       paper-toolbar .timeoff-task-pending {
         color: #000;
       }
+
+      .comment {
+        display: inline-block;
+        margin-right: 1em;
+      }
     </style>
     <nuxeo-resource id="nxoTaskPending" auto
       path="task"
@@ -44,15 +49,15 @@
             sort="compareEntityByBeginningDate">
             <div class="task flex">
               <timeoff-entry-user data="[[task]]">
-                <div suffix class="step">
-                  <span>Requires [[getMessage(task.name)]]</span>
-                </div>
                 <template is="dom-if" if="{{isCommentExist(task)}}">
-                  <div suffix style="display:inline-block">
+                  <div suffix class="comment">
                     <iron-icon alt="Comment" icon="feedback"></iron-icon>
                     <paper-tooltip>[[getComment(task)]]</paper-tooltip>
                   </div>
                 </template>
+                <div suffix class="step">
+                  <span>Requires [[getMessage(task.name)]]</span>
+                </div>
               </timeoff-entry-user>
               <div class="flex-end-justified">
                 <template is="dom-if" if="{{isManagerHRTask(task)}}">
