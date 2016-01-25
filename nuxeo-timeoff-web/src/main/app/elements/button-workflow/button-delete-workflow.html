@@ -20,7 +20,7 @@
 <dom-module id="button-delete-workflow">
   <template>
     <nuxeo-resource id="workflow" path="workflow/[[workflowId]]" method="delete"></nuxeo-resource>
-    <paper-icon-button id="btn" alt="cancel" on-click="confirm" icon="delete"></paper-icon-button>
+    <paper-icon-button noink id="btn" alt="cancel" on-click="confirm" icon="delete"></paper-icon-button>
     <paper-tooltip for="btn">Cancel&nbsp;request</paper-tooltip>
     <dialog-confirm id="dialog" title="Are you sure to cancel your time off request?" on-confirm="_delete"></dialog-confirm>
   </template>

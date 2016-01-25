@@ -68,24 +68,24 @@
           <label>Holidays</label>
           <div class="flex">&nbsp;</div>
           <div>
-            <paper-icon-button id="menu" suffix icon="search" on-click="_toggleCollapse"></paper-icon-button>
+            <paper-icon-button noink id="menu" suffix icon="search" on-click="_toggleCollapse"></paper-icon-button>
             <paper-tooltip for="menu">Search</paper-tooltip>
           </div>
         </paper-toolbar>
         <iron-collapse id="filtersPanel">
           <div class="content menu">
             <paper-input label="From" readonly value$="[[filters.date.beginning]]">
-              <paper-icon-button suffix icon="event" on-click="_openBeginDialog"></paper-icon-button>
-              <paper-icon-button suffix icon="clear" on-click="_clearBegin"></paper-icon-button>
+              <paper-icon-button noink suffix icon="event" on-click="_openBeginDialog"></paper-icon-button>
+              <paper-icon-button noink suffix icon="clear" on-click="_clearBegin"></paper-icon-button>
             </paper-input>
             <paper-input label="To" readonly value$="[[filters.date.end]]">
-              <paper-icon-button suffix icon="event" on-click="_openEndDialog"></paper-icon-button>
-              <paper-icon-button suffix icon="clear" on-click="_clearEnd"></paper-icon-button>
+              <paper-icon-button noink suffix icon="event" on-click="_openEndDialog"></paper-icon-button>
+              <paper-icon-button noink suffix icon="clear" on-click="_clearEnd"></paper-icon-button>
             </paper-input>
 
             <template is="dom-if" if="[[isManager]]">
               <paper-input label="Add Other Employees" value="{{filters.employees}}">
-                <paper-icon-button suffix icon="add" on-click="_openEmployeeDialog"></paper-icon-button>
+                <paper-icon-button noink suffix icon="add" on-click="_openEmployeeDialog"></paper-icon-button>
               </paper-input>
             </template>
           </div>
@@ -150,16 +150,16 @@
       <paper-dialog id="beginDatePicker" class="paper-date-picker-dialog" modal>
         <paper-date-picker date="{{filters.date.beginning}}"></paper-date-picker>
         <div class="buttons">
-          <paper-button dialog-dismiss>Cancel</paper-button>
-          <paper-button dialog-confirm>OK</paper-button>
+          <paper-button noink dialog-dismiss>Cancel</paper-button>
+          <paper-button noink dialog-confirm>OK</paper-button>
         </div>
       </paper-dialog>
       <!-- End date dialog -->
       <paper-dialog id="endDatePicker" class="paper-date-picker-dialog" modal>
         <paper-date-picker date="{{filters.date.end}}"></paper-date-picker>
         <div class="buttons">
-          <paper-button dialog-dismiss>Cancel</paper-button>
-          <paper-button dialog-confirm>OK</paper-button>
+          <paper-button noink dialog-dismiss>Cancel</paper-button>
+          <paper-button noink dialog-confirm>OK</paper-button>
         </div>
       </paper-dialog>
       <!-- Employee selection dialog -->
@@ -176,7 +176,7 @@
           </paper-listbox>
         </paper-dialog-scrollable>
         <div class="buttons">
-          <paper-button dialog-dismiss>Close</paper-button>
+          <paper-button noink dialog-dismiss>Close</paper-button>
         </div>
       </paper-dialog>
     </paper-material>

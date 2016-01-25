@@ -20,7 +20,7 @@
 <dom-module id="button-edit-task">
   <template>
     <nuxeo-resource id="edit" path="task/[[task.id]]/update" method="put" data="[[data]]"></nuxeo-resource>
-    <paper-icon-button id="btn" alt="Edit" on-click="openDialog" icon="create"></paper-icon-button>
+    <paper-icon-button noink id="btn" alt="Edit" on-click="openDialog" icon="create"></paper-icon-button>
     <paper-tooltip for="btn">Edit&nbsp;request</paper-tooltip>
     <dialog-request-creation id="dialog" data="{{data}}" workflow-id="{{task.id}}" on-submit="_submit"></dialog-request-creation>
   </template>
