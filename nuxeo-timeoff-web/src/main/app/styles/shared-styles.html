@@ -93,23 +93,8 @@
         font-weight: bold;
       }
 
-      .flex {
-        @apply(--layout-horizontal);
-        @apply(--layout-justified);
-      }
-
-      .flex-horizontal {
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
-      }
-
-      .flex-end-justified {
-        @apply(--layout-end-justified);
-        @apply(--layout-horizontal);
-      }
-
-      .flex-centered {
-        @apply(--layout-center);
+      ::content .actions {
+        text-align: right;
       }
 
       .dayoff {
@@ -240,7 +225,7 @@
         fill: #00adff;
       }
 
-      @media (max-width: 1024px) {
+      @media (max-width: 1024px) and (orientation: portrait) {
         .timeoff.timeoff-entry {
           @apply(--layout-vertical);
           @apply(--layout-wrap);
@@ -253,7 +238,9 @@
           width: auto;
         }
         ::content .timeoff.timeoff-entry div.interval,
-        ::content .timeoff.timeoff-entry div.day-types {
+        ::content .timeoff.timeoff-entry div.day-types,
+        ::content .timeoff.timeoff-entry div.step,
+        ::content .timeoff.timeoff-entry div.comment {
           margin-left: 2.5em;
         }
 
@@ -271,6 +258,27 @@
         ::content .request .interval {
           min-width: initial;
           width: auto;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .flex {
+          @apply(--layout-horizontal);
+          @apply(--layout-justified);
+        }
+
+      .flex-horizontal {
+          @apply(--layout-horizontal);
+          @apply(--layout-center);
+        }
+
+      .flex-end-justified {
+          @apply(--layout-end-justified);
+          @apply(--layout-horizontal);
+        }
+
+      .flex-centered {
+          @apply(--layout-center);
         }
       }
     </style>

@@ -51,9 +51,19 @@
           width: auto;
         }
 
-        ::content .timeoff.timeoff-entry div.interval,
-        ::content .timeoff.timeoff-entry div.day-types {
+        ::content .task .timeoff-entry div.interval,
+        ::content .task .timeoff-entry div.day-types,
+        ::content .task .timeoff-entry div.step,
+        ::content .task .timeoff-entry div.comment,
+        ::content .timeoff-search .timeoff-entry div.interval,
+        ::content .timeoff-search .timeoff-entry div.day-types,
+        ::content .timeoff-search .timeoff-entry div.step,
+        ::content .timeoff-search .timeoff-entry div.comment {
           margin-left: 2.5em;
+        }
+
+        ::content .timeoff.timeoff-entry div.comment + .step {
+          margin-left: 0;
         }
       }
     </style>

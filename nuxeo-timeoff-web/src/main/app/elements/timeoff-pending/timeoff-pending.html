@@ -38,13 +38,13 @@
       <div class="content">
         <template id="tmpl_entries" is="dom-repeat" items='[[data.entries]]' as="item" filter="timeOffWkf">
           <nuxeo-resource auto path="workflow/[[item.id]]/graph" response="{{graph}}"></nuxeo-resource>
-          <div class="request flex-horizontal">
-            <timeoff-entry class="flex" data$=[[item]] id="entry_[[item.id]]">
+          <div class="request flex">
+            <timeoff-entry  data$=[[item]] id="entry_[[item.id]]">
               <div suffix class="step">
                 <span>Requires [[getSuspendedNode(graph)]]</span>
               </div>
             </timeoff-entry>
-            <div class="flex-end-justified">
+            <div class="actions">
               <button-edit-workflow class="button" on-edited="refreshTasks" workflow="[[item]]"></button-edit-workflow>
               <button-delete-workflow class="button" on-deleted="refresh"
                 workflow-id="[[item.id]]"></button-delete-workflow>
