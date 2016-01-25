@@ -74,17 +74,17 @@
         </paper-toolbar>
         <iron-collapse id="filtersPanel">
           <div class="content menu">
-            <paper-input label="Begin date" readonly value$="[[filters.date.beginning]]">
+            <paper-input label="From" readonly value$="[[filters.date.beginning]]">
               <paper-icon-button suffix icon="event" on-click="_openBeginDialog"></paper-icon-button>
               <paper-icon-button suffix icon="clear" on-click="_clearBegin"></paper-icon-button>
             </paper-input>
-            <paper-input label="End date" readonly value$="[[filters.date.end]]">
+            <paper-input label="To" readonly value$="[[filters.date.end]]">
               <paper-icon-button suffix icon="event" on-click="_openEndDialog"></paper-icon-button>
               <paper-icon-button suffix icon="clear" on-click="_clearEnd"></paper-icon-button>
             </paper-input>
 
             <template is="dom-if" if="[[isManager]]">
-              <paper-input label="Other Employees" value="{{filters.employees}}">
+              <paper-input label="Add Other Employees" value="{{filters.employees}}">
                 <paper-icon-button suffix icon="add" on-click="_openEmployeeDialog"></paper-icon-button>
               </paper-input>
             </template>
