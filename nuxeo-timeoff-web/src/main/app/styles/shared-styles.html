@@ -70,7 +70,7 @@
       .request.timeoff-search {
         background-color: #fff;
         box-shadow: 0 2px 1px rgba(0,0,0,0.2);
-        border-top: 1px solid #e5e6e7;
+        border-bottom: 1px solid #e5e6e7;
         padding: .2em .5em;
         transition: all 0.15s ease 0s;
       }
@@ -81,10 +81,10 @@
         background-color: #f7fafc;
       }
 
-      .task.timeoff-task-pending:first-child,
-      .request.timeoff-pending:first-child,
-      .request.timeoff-search:first-child {
-        border-top: 0;
+      .task.timeoff-task-pending:last-of-type,
+      .request.timeoff-pending:last-of-type,
+      .request.timeoff-search:last-of-type {
+        border-bottom: 0;
       }
 
       paper-button.primary {
