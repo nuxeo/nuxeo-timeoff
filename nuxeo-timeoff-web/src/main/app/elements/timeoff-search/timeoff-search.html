@@ -290,18 +290,29 @@
         this.$.employees.execute();
         this.$.userWorkspace.execute();
       },
+      _convertLoginsToNXQL: function(logins) {
+        return 'dc:creator IN (' +
+            logins.map(function(login) { return '"' + login.replace(/[^a-zA-Z\d:_]/g, '') + '"'; })
+                .reduce(function(previous, current) { return previous + ', ' + current; }) +
+                ') ';
+      },
       _computeQuery: function() {
         var query = 'SELECT * FROM HRHolidayRequest where ';
         var filters = this.filters;
 
         if (filters.employees && filters.employees.length > 0) {
+          // Manager wants to display someone else holidays by filtering on employees
           var logins = '';
           // Manager wants to display someone else holidays
           filters.employees.trim().split(/\s+/).forEach(function(login) {
             // Strip non alphanumerics chars
             logins += '"' + login.replace(/[^a-zA-Z\d:_]/g, '') + '", ';
           });
-          query += 'dc:creator IN (' + logins.substring(0, logins.length - 2) + ') ';
+          //          query += 'dc:creator IN (' + logins.substring(0, logins.length - 2) + ') ';
+          query += this._convertLoginsToNXQL(filters.employees.trim().split(/\s+/));
+        } else if (this.isHrManager && this.employees && this.employees.length > 0) {
+          // Display all validated timeoff requests for manager
+          query += this._convertLoginsToNXQL(this.employees);
         } else {
           // Normal user request his holidays
           query += 'ecm:path startswith "' + this.userWorkspace + '" ';
