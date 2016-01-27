@@ -191,7 +191,6 @@
         login: Object,
         userWorkspace: String,
         data: Object,
-        _oldFilters: Object,
         hasResult: {
           type: Boolean,
           value: false
@@ -226,7 +225,7 @@
       },
       observers: [
         '_updateUserContext(login)',
-        '_refreshQuery(userWorkspace, filters.*)',
+        '_refreshQuery(userWorkspace, employees, filters.*)',
         '_calculateHolidays(data)'
       ],
       _userWorkspaceReceived: function(e) {
@@ -268,16 +267,15 @@
         if (!this.login) {
           return;
         }
-        if (JSON.stringify(this.filters) === this._oldFilters) {
+        var oldParams = this.$.incoming.params;
+        var query = this._computeQuery();
+        if (oldParams && oldParams.query === query.query) {
           // Do not execute same query twice.
           return;
         }
 
-        this.$.incoming.params = this._computeQuery();
+        this.$.incoming.params = query;
         this.refreshAll();
-
-        // Save current filters
-        this.set('_oldFilters', JSON.stringify(this.filters));
       },
       _updateUserContext: function(loginData) {
         this.set('isHrManager', loginData && loginData.groups.find(function(g) {
@@ -302,15 +300,8 @@
 
         if (filters.employees && filters.employees.length > 0) {
           // Manager wants to display someone else holidays by filtering on employees
-          var logins = '';
-          // Manager wants to display someone else holidays
-          filters.employees.trim().split(/\s+/).forEach(function(login) {
-            // Strip non alphanumerics chars
-            logins += '"' + login.replace(/[^a-zA-Z\d:_]/g, '') + '", ';
-          });
-          //          query += 'dc:creator IN (' + logins.substring(0, logins.length - 2) + ') ';
           query += this._convertLoginsToNXQL(filters.employees.trim().split(/\s+/));
-        } else if (this.isHrManager && this.employees && this.employees.length > 0) {
+        } else if (this.employees && this.employees.length > 0) {
           // Display all validated timeoff requests for manager
           query += this._convertLoginsToNXQL(this.employees);
         } else {
@@ -320,7 +311,7 @@
 
         if (!filters.date || !(filters.date.beginning || filters.date.end)) {
           filters.date = {
-            beginning: new Date().setHours(0, 0, 0),
+            beginning: new Date().setHours(0, 0, 0, 0),
             end: null
           };
         }
