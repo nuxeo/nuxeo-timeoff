@@ -21,8 +21,12 @@
 <dom-module id="timeoff-entry-user">
   <style is="custom-style" include="shared-styles"></style>
   <style>
+    :host {
+      --user-color: #e4e6e8;
+    }
+
     #badge {
-      background: var(--user-color, #e4e6e8);
+      background: var(--user-color);
     }
 
     img {
@@ -148,7 +152,7 @@ var colors = {
       this.set('avatar', names[this.username].avatar);
     },
     _userChanged: function() {
-      this.customStyle['--user-color'] = 'var(' + names[this.username].color + ');';
+      this.customStyle['--user-color'] = this.getComputedStyleValue(names[this.username].color) + ';';
       this.updateStyles();
     },
     _retrieveUser: function() {
