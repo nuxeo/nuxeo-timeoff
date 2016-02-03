@@ -11,7 +11,7 @@
   <packaging>pom</packaging>
   <name>Nuxeo Timeoff - Parent</name>
   <description>Convenience POM for running sub-modules</description>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
 
   <properties>
     <nuxeo.timeoff.studio.version>13.0.1</nuxeo.timeoff.studio.version>
