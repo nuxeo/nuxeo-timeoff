@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.nuxeo.timeoff</groupId>
     <artifactId>nuxeo-timeoff</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
   </parent>
 
   <artifactId>nuxeo-timeoff-marketplace</artifactId>
