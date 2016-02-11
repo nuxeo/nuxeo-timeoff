@@ -21,20 +21,19 @@
 
   <!-- set executable names based on OS family -->
   <condition property="cmd.npm" value="npm.cmd" else="npm">
-    <os family="windows"/>
+    <os family="windows" />
   </condition>
   <condition property="cmd.bower" value="bower.cmd" else="bower">
-    <os family="windows"/>
+    <os family="windows" />
   </condition>
   <condition property="cmd.gulp" value="gulp.cmd" else="gulp">
-    <os family="windows"/>
+    <os family="windows" />
   </condition>
   <condition property="cmd.mvn" value="mvn.cmd" else="mvn">
-    <os family="windows"/>
+    <os family="windows" />
   </condition>
 
-  <target name="clean-cache" description="Clean npm and bower cache"
-          unless="skipCleanCache">
+  <target name="clean-cache" description="Clean npm and bower cache" unless="skipCleanCache">
     <delete dir="node_modules" failonerror="true" />
     <delete dir="bower_components" failonerror="true" />
     <exec executable="${cmd.npm}" failonerror="true">
@@ -51,41 +50,15 @@
     <exec executable="${cmd.npm}" failonerror="true">
       <arg value="install" />
     </exec>
-    <!--<bower-fetch artifact="polymerelements:iron-elements:1.0.4" />
-    <bower-fetch artifact="polymerelements:paper-elements:1.0.5" />-->
     <exec executable="${cmd.bower}" failonerror="true">
       <arg value="install" />
     </exec>
   </target>
 
-  <target name="build" depends="init,build-with-tests,build-skip-tests" />
-  <target name="build-with-tests" unless="skipTests">
-    <echo message="build and test" />
-    <exec executable="${cmd.gulp}" failonerror="true">
-      <arg value="default" />
-    </exec>
-    <mkdir dir="target/surefire-reports" />
-    <copy file="test-results.xml"
-          todir="target/surefire-reports"
-          failonerror="false" />
-  </target>
-  <target name="build-skip-tests" if="skipTests">
+  <target name="build" depends="init">
     <exec executable="${cmd.gulp}" failonerror="true">
       <arg value="default" />
     </exec>
   </target>
-
-  <!--<macrodef name="bower-fetch">
-    <attribute name="artifact"/>
-    <attribute name="dir" default="bower_components"/>
-    <sequential>
-      <echo message="Fetching @{artifact}" />
-      <exec executable="${cmd.mvn}" dir="../../.." failonerror="true">
-        <arg value="dependency:unpack" />
-        <arg value="-Dartifact=@{artifact}:zip" />
-        <arg value="-DoutputDirectory=src/main/js/@{dir}" />
-      </exec>
-    </sequential>
-  </macrodef>-->
 
 </project>

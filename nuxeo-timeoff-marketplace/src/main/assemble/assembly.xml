@@ -29,7 +29,6 @@
       <artifact:set>
         <includes>
           <artifact groupId="org.nuxeo*" scope="!test" type="!pom" />
-          <!-- Include your artifacts using their groupId for instance -->
           <artifact groupId="nuxeo-studio*" scope="!test" type="!pom" />
         </includes>
         <excludes>
@@ -44,12 +43,12 @@
                 file2="${outdir}/nuxeo-distribution-cap-${nuxeo.distribution.version}.zip"
                 includesfile="${outdir}/includes"
                 excludesfile="${outdir}/excludesfile"
-                patternsetid="sample.versus.cap"
+                patternsetid="timeoff.versus.cap"
                 ignoreContent="false"
                 ignoreContentPattern=".*\.jar$">
     </nx:zipdiff>
     <unzip src="${outdir}/nxr-${maven.project.version}.zip" dest="${outdir}/marketplace/install">
-      <patternset refid="sample.versus.cap" />
+      <patternset refid="timeoff.versus.cap" />
     </unzip>
 
     <var name="install.bundles" value="" />

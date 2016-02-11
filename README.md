@@ -8,7 +8,7 @@ This project is a sample project, without Nuxeo support.
 
 # Sub-modules organization
 
-The project is splitted in several sub modules :
+The project is split in several sub modules :
 
 **nuxeo-timeoff-web**
 
@@ -16,11 +16,11 @@ The Polymer web application.
 
 **nuxeo-timeoff-marketplace**
 
-The marketplace used to deploy the application in Nuxeo.
+The Nuxeo package used to deploy the application in Nuxeo.
 
 **nuxeo-timeoff-ftest**
 
-The functional test of application.
+The functional tests.
 
 # Description
 
@@ -36,9 +36,11 @@ The functional test of application.
 - Managers / HR Managers are able to search for any employees holidays.
 - Employees have a quick view on their pending requests, their incoming timeoffs and can refine search on them.
 
-# Requirements
+# Building
 
-## Building Nuxeo Timeoff plugin
+## Requirements
+
+### Tools
 
 - JDK 8 (Oracle's JDK or OpenJDK recommended)
 - Apache Maven 3.1.1+
@@ -47,12 +49,12 @@ The functional test of application.
 - Bower 1.7.2
 - Open Source tools that will be downloaded by Maven when needed.
 
-## Directory / User Group
+### Directory / User Group
 
  - A `hr_manager` group must be available containing the user that made the last HR validation.
  - The Nuxeo Package initiate a directory `EmployeeManagerMapping` that contains the Employee / Manager mapping. The `id` field is the employee username; and the `label` field is his manager username.
- 
-# Building
+
+## Build
 
 To build and run the tests, simply start the Maven build:
 
@@ -61,39 +63,48 @@ To build and run the tests, simply start the Maven build:
 To run functional tests:
 
     mvn clean install -Pftest
-    
+
 To build and run the tests without cleaning the node and bower cache:
 
     mvn -DskipCleanCache clean install
+
+### Web application
+
+To build only the nuxeo-timeoff-web module without using Maven or Ant:
+
+    npm install
+    bower install
+    gulp default
 
 ## Deploying
 
 ### Nuxeo Package
 
-Install [nuxeo-timeoff-request Package](https://connect.nuxeo.com/nuxeo/site/marketplace/package/nuxeo-timeoff). 
+Install [nuxeo-timeoff package](https://connect.nuxeo.com/nuxeo/site/marketplace/package/nuxeo-timeoff).
 
-Otherwise use the Nuxeo package provided by nuxeo-timeoff-marketplace sub module.
-Install the nuxeo-timeoff package:
-      - From the AdminCenter (Upload + install)
-      - From the command line using `nuxeoctl mp-install nuxeo-timeoff-marketplace-$VERSION.zip`
- 
-### Manually
+Otherwise use the Nuxeo package built in nuxeo-timeoff-marketplace module:
 
-To deploy on Nuxeo Platform manually: copy the builded JAR bundles into `$NUXEO_HOME/nxserver/bundles` and `nuxeo-timeoff-studio` Studio Project that contains workflows.
+      - From the web UI Admin / Update Center / Local Packages: upload then install
+      - From the command line: `nuxeoctl mp-install nuxeo-timeoff-marketplace-$VERSION.zip`
 
 # Resources
- 
+
+## QA results
+
+[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=plugins_nuxeo-timeoff-master-master)](https://qa.nuxeo.org/jenkins/job/plugins_nuxeo-timeoff-master-master/)
+
+
 ## Reporting issues
- 
+
 - [https://jira.nuxeo.com/browse/NXP/component/12500/](https://jira.nuxeo.com/browse/NXP/component/12500/)
 - [https://jira.nuxeo.com/secure/CreateIssue!default.jspa?project=NXP](https://jira.nuxeo.com/secure/CreateIssue!default.jspa?project=NXP)
- 
+
 # Licensing
- 
+
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
- 
+
 # About Nuxeo
- 
+
 Nuxeo dramatically improves how content-based applications are built, managed and deployed, making customers more agile, innovative and successful. Nuxeo provides a next generation, enterprise ready platform for building traditional and cutting-edge content oriented applications. Combining a powerful application development environment with
 SaaS-based tools and a modular architecture, the Nuxeo Platform and Products provide clear business value to some of the most recognizable brands including Verizon, Electronic Arts, Netflix, Sharp, FICO, the U.S. Navy, and Boeing. Nuxeo is headquartered in New York and Paris.
 More information is available at [www.nuxeo.com](http://www.nuxeo.com).
