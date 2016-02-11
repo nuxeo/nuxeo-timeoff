@@ -9,18 +9,9 @@ This project is a sample project, without Nuxeo support.
 # Sub-modules organization
 
 The project is split in several sub modules :
-
-**nuxeo-timeoff-web**
-
-The Polymer web application.
-
-**nuxeo-timeoff-marketplace**
-
-The Nuxeo package used to deploy the application in Nuxeo.
-
-**nuxeo-timeoff-ftest**
-
-The functional tests.
+- `nuxeo-timeoff-web`: the Polymer web application.
+- `nuxeo-timeoff-marketplace`: the Nuxeo package used to deploy the application in Nuxeo.
+- `nuxeo-timeoff-ftest`: the functional tests.
 
 # Description
 
@@ -60,39 +51,32 @@ To build and run the tests, simply start the Maven build:
 
     mvn clean install
 
-To run functional tests:
-
-    mvn clean install -Pftest
-
-To build and run the tests without cleaning the node and bower cache:
-
-    mvn -DskipCleanCache clean install
+Build options:
+- `-Pftest`: include `nuxeo-timeoff-ftest` module.
+- `-DskipCleanCache`: skip cleaning the node and bower cache.
 
 ### Web application
 
-To build only the nuxeo-timeoff-web module without using Maven or Ant:
+To build only the `nuxeo-timeoff-web module` without using Maven or Ant:
 
     npm install
     bower install
     gulp default
 
-## Deploying
+## QA results
 
-### Nuxeo Package
+[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=plugins_nuxeo-timeoff-master-master)](https://qa.nuxeo.org/jenkins/job/plugins_nuxeo-timeoff-master-master/)
+
+## Deploying
 
 Install [nuxeo-timeoff package](https://connect.nuxeo.com/nuxeo/site/marketplace/package/nuxeo-timeoff).
 
-Otherwise use the Nuxeo package built in nuxeo-timeoff-marketplace module:
+Otherwise use the Nuxeo package built in `nuxeo-timeoff-marketplace` module:
 
 - From the web UI Admin / Update Center / Local Packages: upload then install
 - From the command line: `nuxeoctl mp-install nuxeo-timeoff-marketplace-$VERSION.zip`
 
 # Resources
-
-## QA results
-
-[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=plugins_nuxeo-timeoff-master-master)](https://qa.nuxeo.org/jenkins/job/plugins_nuxeo-timeoff-master-master/)
-
 
 ## Reporting issues
 
