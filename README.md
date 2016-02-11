@@ -84,8 +84,8 @@ Install [nuxeo-timeoff package](https://connect.nuxeo.com/nuxeo/site/marketplace
 
 Otherwise use the Nuxeo package built in nuxeo-timeoff-marketplace module:
 
-      - From the web UI Admin / Update Center / Local Packages: upload then install
-      - From the command line: `nuxeoctl mp-install nuxeo-timeoff-marketplace-$VERSION.zip`
+- From the web UI Admin / Update Center / Local Packages: upload then install
+- From the command line: `nuxeoctl mp-install nuxeo-timeoff-marketplace-$VERSION.zip`
 
 # Resources
 
