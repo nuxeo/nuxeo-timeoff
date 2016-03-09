@@ -32,11 +32,11 @@
       iron-collapse#filtersPanel {
         background-color: #fff;
         margin-bottom: 1em;
-        box-shadow: 0 2px 1px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
       }
 
       #filtersPanel .content {
-        padding: 0 1em 1em  ;
+        padding: 0 1em 1em;
       }
 
       .nodayoff.timeoff-search {
@@ -93,11 +93,10 @@
       </paper-header-panel>
 
       <nuxeo-operation auto id="login" op="login" response="{{login}}"></nuxeo-operation>
-      <nuxeo-operation id="userWorkspace" op="User.GetUserWorkspace"
-        on-response="_userWorkspaceReceived"></nuxeo-operation>
+      <nuxeo-operation id="userWorkspace" op="User.GetUserWorkspace" on-response="_userWorkspaceReceived"></nuxeo-operation>
       <nuxeo-operation id="incoming" op="Document.Query" response="{{data}}"></nuxeo-operation>
-      <nuxeo-resource id="employees" path="directory/EmployeeManagerMapping"
-        on-response="_employeeReceived"></nuxeo-resource>
+      <nuxeo-resource id="employees" path="directory/EmployeeManagerMapping" on-response="_employeeReceived"></nuxeo-resource>
+      <nuxeo-resource id="delete" method="delete"></nuxeo-resource>
 
       <div class="content">
         <template is="dom-if" if="[[!hasResult]]">
@@ -108,7 +107,7 @@
         </template>
 
         <template is="dom-if" if="[[hasResult]]">
-          <timeoff-calendar-chart data="[[data.entries]]"></timeoff-calendar-chart>
+          <!-- <timeoff-calendar-chart data="[[data.entries]]"></timeoff-calendar-chart> -->
 
           <div class="day-types">
             Sum of days = &nbsp;
@@ -172,10 +171,8 @@
         <h2>Select employees</h2>
         <paper-input label="Filter name" value="{{_filterEmployeesValue}}"></paper-input>
         <paper-dialog-scrollable>
-          <paper-listbox id="listBoxEmployees" multi on-iron-deselect="_employeesListChanged"
-            on-iron-select="_employeesListChanged">
-            <template is="dom-repeat" items='[[employees]]' as="item"
-              filter="{{_filterEmployeesSelect(_filterEmployeesValue)}}">
+          <paper-listbox id="listBoxEmployees" multi on-iron-deselect="_employeesListChanged" on-iron-select="_employeesListChanged">
+            <template is="dom-repeat" items='[[employees]]' as="item" filter="{{_filterEmployeesSelect(_filterEmployeesValue)}}">
               <paper-item value="[[item]]">[[item]]</paper-item>
             </template>
           </paper-listbox>
@@ -284,8 +281,8 @@
       },
       _updateUserContext: function(loginData) {
         this.set('isHrManager', loginData && loginData.groups.find(function(g) {
-            return g === 'hr_manager';
-          }) || false);
+          return g === 'hr_manager';
+        }) || false);
 
         if (this.employees.length > 0) {
           return;
@@ -295,9 +292,13 @@
       },
       _convertLoginsToNXQL: function(logins) {
         return 'dc:creator IN (' +
-            logins.map(function(login) { return '"' + login.replace(/[^a-zA-Z\d:_]/g, '') + '"'; })
-                .reduce(function(previous, current) { return previous + ', ' + current; }) +
-                ') ';
+          logins.map(function(login) {
+            return '"' + login.replace(/[^a-zA-Z\d:_]/g, '') + '"';
+          })
+          .reduce(function(previous, current) {
+            return previous + ', ' + current;
+          }) +
+          ') ';
       },
       _computeQuery: function() {
         var query = 'SELECT * FROM HRHolidayRequest where ';
@@ -329,7 +330,9 @@
         }
 
         query += ' order by hrholidayrequest:beginning';
-        return {query: query};
+        return {
+          query: query
+        };
       },
       _openBeginDialog: function() {
         this.$.beginDatePicker.open();
@@ -381,6 +384,7 @@
           family: 0,
           unpaid: 0
         };
+
 
         this.set('hasResult', this.data && this.data.entries && this.data.entries.length > 0);
         if (this.hasResult) {
