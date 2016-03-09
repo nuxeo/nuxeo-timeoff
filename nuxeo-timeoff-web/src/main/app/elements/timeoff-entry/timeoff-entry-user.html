@@ -62,160 +62,160 @@
   </template>
 </dom-module>
 <script>
-  // A map of username information with following format:
-  // {
-  //   '$username': {
-  //     'name': '$name',
-  //     'date': '$date',
-  //     'color': '$color',
-  //     'avatar': '$avatar_url'
-  //   },
-  //   '$username': {
-  //     'loading': boolean
-  //   },
-  //   ...
-  // }
-  var names = {};
-  // A map of elements which subscribe to callback of resource request:
-  // {
-  //   '$username': [ 'element1', 'element2', ...],
-  //   ...
-  // }
-  var elements = {};
-  var colors = {
-    depth: [300, 400, 500, 700, 800, 900],
-    color: ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'light-blue', 'cyan', 'teal', 'light-green', 'lime',
-      'yellow', 'amber', 'orange', 'deep-orange'
-    ]
-  };
-  (function() {
-    Polymer({
-      is: 'timeoff-entry-user',
-      behaviors: [TimeoffBehaviors.EntryHelper],
-      properties: {
-        data: {
-          type: Object,
-          value: null
-        },
-        username: {
-          type: String,
-          computed: '_readUsername(data)',
-          observer: '_retrieveUser'
-        },
-        user: {
-          type: String,
-          observer: '_userChanged'
-        },
-        initials: {
-          type: String,
-          computed: '_computeInitials(user)'
-        },
-        avatar: {
-          type: String,
-          value: null
-        },
-        userHidden: {
-          type: Boolean,
-          value: false
-        }
+// A map of username information with following format:
+// {
+//   '$username': {
+//     'name': '$name',
+//     'date': '$date',
+//     'color': '$color',
+//     'avatar': '$avatar_url'
+//   },
+//   '$username': {
+//     'loading': boolean
+//   },
+//   ...
+// }
+var names = {};
+// A map of elements which subscribe to callback of resource request:
+// {
+//   '$username': [ 'element1', 'element2', ...],
+//   ...
+// }
+var elements = {};
+var colors = {
+  depth: [300, 400, 500, 700, 800, 900],
+  color: ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'light-blue', 'cyan', 'teal', 'light-green', 'lime',
+    'yellow', 'amber', 'orange', 'deep-orange'
+  ]
+};
+(function() {
+  Polymer({
+    is: 'timeoff-entry-user',
+    behaviors: [TimeoffBehaviors.EntryHelper],
+    properties: {
+      data: {
+        type: Object,
+        value: null
       },
-      _computeInitials: function(user) {
-        var index = user.indexOf(' ');
-        if (index < 0) {
-          return user[0];
-        } else {
-          var strSpLess = user.replace(/\s+/, '');
-          return user[0] + strSpLess.substr(index, 1);
-        }
+      username: {
+        type: String,
+        computed: '_readUsername(data)',
+        observer: '_retrieveUser'
       },
-      _readUsername: function(entry) {
-        var key;
-        switch (entry['entity-type']) {
-          case 'document':
-            key = 'creator';
-            break;
-          case 'task':
-          case 'workflow':
-            key = 'requester';
-            break;
-          default:
-            console.log('[timeoff-entry-user] Unknown entity-type ' + entry['entity-type']);
-        }
-        return this.readProperty(key);
+      user: {
+        type: String,
+        observer: '_userChanged'
       },
-      _readUser: function() {
-        var user = 'NC';
-        if (names[this.username]) {
-          user = names[this.username].name;
-        }
-        this.set('user', user);
-        this.set('avatar', names[this.username].avatar);
+      initials: {
+        type: String,
+        computed: '_computeInitials(user)'
       },
-      _userChanged: function() {
-        this.customStyle['--user-color'] = this.getComputedStyleValue(names[this.username].color) + ';';
-        this.updateStyles();
+      avatar: {
+        type: String,
+        value: null
       },
-      _retrieveUser: function() {
-        var name = names[this.username];
-        var needLoad = !name || typeof name.date === 'undefined' || moment(name.date).add(1, 'week').isBefore(moment());
-        var loading = typeof name !== 'undefined' && name.loading;
-        if (needLoad) {
-          elements[this.username] = elements[this.username] || [];
-          elements[this.username].push(this);
-          if (!loading) {
-            // First put an object to do only one request by this.username
-            names[this.username] = {
-              loading: true
-            };
-            // Second retrieve value
-            this.$.nxr.execute().then(function(response) {
-              name = {};
-              // Handling user properties
-              var properties = response.properties;
-              if (properties && (properties.firstName !== '' || properties.lastName !== '')) {
-                name.name = properties.firstName + ' ' + properties.lastName;
-              } else {
-                name.name = this.username;
-              }
-              name.date = moment().toDate();
-              name.color = this._computeColor(name.name.trim());
-
-              // Handling user profile variables
-              var userprofile = response.contextParameters ? response.contextParameters.userprofile : {};
-              name.avatar = userprofile.avatar;
-
-              names[this.username] = name;
-              elements[this.username].forEach(function(element) {
-                element._readUser();
-              });
-              elements[this.username] = [];
-            }.bind(this));
-          }
-        } else {
-          this._readUser();
-        }
-      },
-      _computeColor: function(name) {
-        var stPart = name;
-        var ndPart = name;
-        var spIndex = name.indexOf(' ');
-        var tmpName = name.replace(/\s+/g, '');
-        if (spIndex > 0) {
-          stPart = tmpName.substr(0, spIndex);
-          ndPart = tmpName.substr(spIndex);
-        }
-        var depth = this._calcCharCodes(stPart) % colors.depth.length;
-        var color = this._calcCharCodes(ndPart) % colors.color.length;
-        return '--paper-' + colors.color[color] + '-' + colors.depth[depth];
-      },
-      _calcCharCodes: function(str) {
-        // Calc a fixed index depending of the text
-        return str.split('').map(function(entry) {
-          return entry.charCodeAt(0);
-        }).reduce(function(prev, current) {
-          return prev + current;
-        });
+      userHidden: {
+        type: Boolean,
+        value: false
       }
-    });
-  }());
+    },
+    _computeInitials: function(user) {
+      var index = user.indexOf(' ');
+      if (index < 0) {
+        return user[0];
+      } else {
+        var strSpLess = user.replace(/\s+/, '');
+        return user[0] + strSpLess.substr(index, 1);
+      }
+    },
+    _readUsername: function(entry) {
+      var key;
+      switch (entry['entity-type']) {
+        case 'document':
+          key = 'creator';
+          break;
+        case 'task':
+        case 'workflow':
+          key = 'requester';
+          break;
+        default:
+          console.log('[timeoff-entry-user] Unknown entity-type ' + entry['entity-type']);
+      }
+      return this.readProperty(key);
+    },
+    _readUser: function() {
+      var user = 'NC';
+      if (names[this.username]) {
+        user = names[this.username].name;
+      }
+      this.set('user', user);
+      this.set('avatar', names[this.username].avatar);
+    },
+    _userChanged: function() {
+      this.customStyle['--user-color'] = this.getComputedStyleValue(names[this.username].color) + ';';
+      this.updateStyles();
+    },
+    _retrieveUser: function() {
+      var name = names[this.username];
+      var needLoad = !name || typeof name.date === 'undefined' || moment(name.date).add(1, 'week').isBefore(moment());
+      var loading = typeof name !== 'undefined' && name.loading;
+      if (needLoad) {
+        elements[this.username] = elements[this.username] || [];
+        elements[this.username].push(this);
+        if (!loading) {
+          // First put an object to do only one request by this.username
+          names[this.username] = {
+            loading: true
+          };
+          // Second retrieve value
+          this.$.nxr.execute().then(function(response) {
+            name = {};
+            // Handling user properties
+            var properties = response.properties;
+            if (properties && (properties.firstName !== '' || properties.lastName !== '')) {
+              name.name = properties.firstName + ' ' + properties.lastName;
+            } else {
+              name.name = this.username;
+            }
+            name.date = moment().toDate();
+            name.color = this._computeColor(name.name.trim());
+
+            // Handling user profile variables
+            var userprofile = response.contextParameters ? response.contextParameters.userprofile : {};
+            name.avatar = userprofile.avatar;
+
+            names[this.username] = name;
+            elements[this.username].forEach(function(element) {
+              element._readUser();
+            });
+            elements[this.username] = [];
+          }.bind(this));
+        }
+      } else {
+        this._readUser();
+      }
+    },
+    _computeColor: function(name) {
+      var stPart = name;
+      var ndPart = name;
+      var spIndex = name.indexOf(' ');
+      var tmpName = name.replace(/\s+/g, '');
+      if (spIndex > 0) {
+        stPart = tmpName.substr(0, spIndex);
+        ndPart = tmpName.substr(spIndex);
+      }
+      var depth = this._calcCharCodes(stPart) % colors.depth.length;
+      var color = this._calcCharCodes(ndPart) % colors.color.length;
+      return '--paper-' + colors.color[color] + '-' + colors.depth[depth];
+    },
+    _calcCharCodes: function(str) {
+      // Calc a fixed index depending of the text
+      return str.split('').map(function(entry) {
+        return entry.charCodeAt(0);
+      }).reduce(function(prev, current) {
+        return prev + current;
+      });
+    }
+  });
+}());
 </script>
