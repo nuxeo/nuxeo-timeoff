@@ -20,7 +20,6 @@
 
   <modules>
     <module>nuxeo-timeoff-web</module>
-    <module>nuxeo-timeoff-marketplace</module>
   </modules>
 
   <profiles>
@@ -28,6 +27,12 @@
       <id>ftest</id>
       <modules>
         <module>nuxeo-timeoff-ftest/webdriver</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>marketplace</id>
+      <modules>
+        <module>nuxeo-timeoff-marketplace</module>
       </modules>
     </profile>
   </profiles>
