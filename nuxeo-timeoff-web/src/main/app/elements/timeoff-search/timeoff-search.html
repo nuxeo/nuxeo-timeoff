@@ -23,7 +23,7 @@
     <style is="custom-style" include="shared-styles">
       :host timeoff-calendar-chart {
         background-color: #fff;
-        box-shadow: 0 2px 1px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
         padding: 1em;
         display: block;
         margin-bottom: 1em;
@@ -140,8 +140,13 @@
         </template>
 
         <template is="dom-repeat" items='[[data.entries]]' as="item">
-          <div class="request">
+          <div class="request flex">
             <timeoff-entry-user data="[[item]]" user-hidden="[[!_isManager()]]"></timeoff-entry-user>
+            <div class="actions">
+              <template is='dom-if' if='[[isHrManager]]'>
+                <button-delete-doc on-deleted='refreshAll' doc-id='[[item.uid]]' />
+              </template>
+            </div>
           </div>
         </template>
       </div>

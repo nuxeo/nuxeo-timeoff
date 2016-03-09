@@ -1,0 +1,51 @@
+<!--
+  ~ (C) Copyright 2006-2016 Nuxeo SA (http://nuxeo.com/) and contributors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~
+  ~  Contributors:
+  ~     nuxeo
+  -->
+
+<dom-module id="button-delete-doc">
+  <template>
+    <nuxeo-resource id="delete" path="id/[[docId]]" method="delete"></nuxeo-resource>
+    <paper-icon-button noink id="btn" alt="Delete" on-click="confirm" icon="delete"></paper-icon-button>
+    <paper-tooltip for="btn">Delete</paper-tooltip>
+    <dialog-confirm id="dialog" title="Are you sure to delete your validated time off request?" on-confirm="_delete"></dialog-confirm>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'button-delete-doc',
+      properties: {
+        docId: {
+          type: String,
+          value: null
+        }
+      },
+      confirm: function() {
+        this.$.dialog.open();
+      },
+      _delete: function() {
+        this.$.delete.execute().then(function() {
+          this.fire('deleted');
+
+          app.$.toast.text = 'Timeoff request deleted.';
+          app.$.toast.show();
+        }.bind(this));
+      }
+    });
+  }());
+</script>

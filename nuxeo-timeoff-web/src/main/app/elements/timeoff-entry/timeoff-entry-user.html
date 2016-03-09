@@ -179,7 +179,7 @@ var colors = {
             name.color = this._computeColor(name.name.trim());
 
             // Handling user profile variables
-            var userprofile = response.contextParameters.userprofile;
+            var userprofile = response.contextParameters ? response.contextParameters.userprofile : {};
             name.avatar = userprofile.avatar;
 
             names[this.username] = name;
