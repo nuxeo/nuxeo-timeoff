@@ -42,7 +42,7 @@
     }
   </style>
   <template>
-    <nuxeo-resource id="nxr" path="user/[[username]]" method="get" enrichers="userprofile" enrichers-entity=""></nuxeo-resource>
+    <nuxeo-resource id="nxr" path="user/[[username]]" method="get" enrichers="userprofile" enrichers-entity="user"></nuxeo-resource>
     <timeoff-entry data="{{data}}">
       <div prefix hidden$="[[userHidden]]" class="user">
         <content select="[prefix]"></content>
