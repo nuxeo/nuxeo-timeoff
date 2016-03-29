@@ -15,7 +15,7 @@
   <version>1.0.2-SNAPSHOT</version>
 
   <properties>
-    <nuxeo.timeoff.studio.version>14.0.1</nuxeo.timeoff.studio.version>
+    <nuxeo.timeoff.studio.version>14.0.2</nuxeo.timeoff.studio.version>
   </properties>
 
   <modules>
