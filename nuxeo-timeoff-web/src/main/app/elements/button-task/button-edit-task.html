@@ -51,8 +51,9 @@
         variables.end = moment(variables.end).toDate();
 
         return {
-          id: task.id,
-          variables: variables
+          'id': task.id,
+          'variables': variables,
+          'entity-type': 'task'
         };
       },
       openDialog: function() {

@@ -35,7 +35,10 @@
         }
       },
       ready: function() {
-        this.$.accept.data = {'id': this.taskId};
+        this.$.accept.data = {
+          'id': this.taskId,
+          'entity-type': 'task'
+        };
       },
       accept: function() {
         this.$.accept.execute().then(function() {

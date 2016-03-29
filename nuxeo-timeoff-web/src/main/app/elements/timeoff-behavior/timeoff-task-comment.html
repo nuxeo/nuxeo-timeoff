@@ -62,6 +62,7 @@ TimeoffBehaviors.TaskCommentImpl = {
         console.log('[timeoff-task-comment] Unknown task name ' + this.taskName);
     }
     data.variables = commentObj;
+    data['entity-type'] = 'task';
     return data;
   }
 
