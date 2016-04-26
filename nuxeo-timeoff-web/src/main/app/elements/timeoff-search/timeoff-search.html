@@ -363,6 +363,9 @@
             filteredEmployees.push(entry.properties.id);
           }
         }.bind(this));
+        if (filteredEmployees.length > 0) {
+          filteredEmployees.push(this.login.username);
+        }
         this.set('employees', filteredEmployees.sort());
       },
       _isManager: function() {
