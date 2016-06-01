@@ -76,12 +76,12 @@
       <paper-dialog-scrollable>
         <form is="iron-form" id="form" class="container flex">
           <div class="calendar-holder">
-            <label class="main-label">Pick a day to leave ...</label>
+            <label class="main-label">From ...</label>
             <paper-date-picker force-narrow="true" id="startDate"
               date="{{data.variables.beginning}}"></paper-date-picker>
           </div>
           <div class="calendar-holder">
-            <label class="main-label">... and a day to come back</label>
+            <label class="main-label">To ...</label>
             <paper-date-picker force-narrow="true" id="endDate" min-date="[[data.variables.beginning]]" date="{{data.variables.end}}"></paper-date-picker>
           </div>
           <div class="days-distribution">
