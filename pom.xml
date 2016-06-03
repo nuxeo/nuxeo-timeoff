@@ -29,7 +29,7 @@
       </modules>
     </profile>
     <profile>
-      <id>marketplace</id>
+      <id>release</id>
       <modules>
         <module>nuxeo-timeoff-marketplace</module>
       </modules>
