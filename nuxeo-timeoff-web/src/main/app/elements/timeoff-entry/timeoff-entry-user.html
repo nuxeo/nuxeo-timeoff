@@ -25,7 +25,7 @@
       --user-color: #e4e6e8;
     }
 
-    #badge {
+    .badge {
       background: var(--user-color);
     }
 
@@ -47,13 +47,14 @@
       <div prefix hidden$="[[userHidden]]" class="user">
         <content select="[prefix]"></content>
 
-        <template is="dom-if" if="[[avatar]]">
-          <img class="dayoff" src="[[avatar]]" />
+        <template is="dom-if" if="[[showName]]">
+          <span class="dayoff initials badge">[[initials]]</span>
+          <span class="username">[[user]]</span>
         </template>
-        <template is="dom-if" if="[[!avatar]]">
-          <span class="dayoff initials" id="badge">[[initials]]</span>
+        <template is="dom-if" if="[[!showName]]">
+          <span class="dayoff initials badge">XX</span>
+          <span class="username">[[username]]</span>
         </template>
-        <span class="username">[[user]]</span>
       </div>
       <div suffix>
         <content select="[suffix]"></content>
@@ -76,12 +77,6 @@
 //   ...
 // }
 var names = {};
-// A map of elements which subscribe to callback of resource request:
-// {
-//   '$username': [ 'element1', 'element2', ...],
-//   ...
-// }
-var elements = {};
 var colors = {
   depth: [300, 400, 500, 700, 800, 900],
   color: ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'light-blue', 'cyan', 'teal', 'light-green', 'lime',
@@ -101,6 +96,10 @@ var colors = {
         type: String,
         computed: '_readUsername(data)',
         observer: '_retrieveUser'
+      },
+      showName: {
+        type: Boolean,
+        value: false
       },
       user: {
         type: String,
@@ -152,45 +151,45 @@ var colors = {
       this.set('avatar', names[this.username].avatar);
     },
     _userChanged: function() {
+      this.set('showName', true);
       this.customStyle['--user-color'] = this.getComputedStyleValue(names[this.username].color) + ';';
       this.updateStyles();
     },
     _retrieveUser: function() {
       var name = names[this.username];
-      var needLoad = !name || typeof name.date === 'undefined' || moment(name.date).add(1, 'week').isBefore(moment());
       var loading = typeof name !== 'undefined' && name.loading;
-      if (needLoad) {
-        elements[this.username] = elements[this.username] || [];
-        elements[this.username].push(this);
-        if (!loading) {
-          // First put an object to do only one request by this.username
-          names[this.username] = {
-            loading: true
-          };
-          // Second retrieve value
-          this.$.nxr.execute().then(function(response) {
-            name = {};
-            // Handling user properties
-            var properties = response.properties;
-            if (properties && (properties.firstName !== '' || properties.lastName !== '')) {
-              name.name = properties.firstName + ' ' + properties.lastName;
-            } else {
-              name.name = this.username;
-            }
-            name.date = moment().toDate();
-            name.color = this._computeColor(name.name.trim());
+      if (loading) {
+        setTimeout(function() {
+          this._retrieveUser();
+        }.bind(this), 300);
+        return;
+      }
 
-            // Handling user profile variables
-            var userprofile = response.contextParameters ? response.contextParameters.userprofile : {};
-            name.avatar = userprofile.avatar;
+      if (!loading) {
+        // First put an object to do only one request by this.username
+        names[this.username] = {
+          loading: true
+        };
+        // Second retrieve value
+        this.$.nxr.execute().then(function(response) {
+          name = {};
+          // Handling user properties
+          var properties = response.properties;
+          if (properties && (properties.firstName !== '' || properties.lastName !== '')) {
+            name.name = properties.firstName + ' ' + properties.lastName;
+          } else {
+            name.name = this.username;
+          }
+          name.date = moment().toDate();
+          name.color = this._computeColor(name.name.trim());
 
-            names[this.username] = name;
-            elements[this.username].forEach(function(element) {
-              element._readUser();
-            });
-            elements[this.username] = [];
-          }.bind(this));
-        }
+          // Handling user profile variables
+          // var userprofile = response.contextParameters ? response.contextParameters.userprofile : {};
+          //  name.avatar = userprofile.avatar;
+
+          names[this.username] = name;
+          this._readUser();
+        }.bind(this));
       } else {
         this._readUser();
       }

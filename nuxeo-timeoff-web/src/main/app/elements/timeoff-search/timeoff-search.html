@@ -280,6 +280,10 @@
         this.refreshAll();
       },
       _updateUserContext: function(loginData) {
+        if (!loginData) {
+          return;
+        }
+
         this.set('isHrManager', loginData && loginData.groups.find(function(g) {
           return g === 'hr_manager';
         }) || false);
