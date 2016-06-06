@@ -148,12 +148,13 @@ var colors = {
         user = names[this.username].name;
       }
       this.set('user', user);
-      this.set('avatar', names[this.username].avatar);
     },
     _userChanged: function() {
       this.set('showName', true);
-      this.customStyle['--user-color'] = this.getComputedStyleValue(names[this.username].color) + ';';
-      this.updateStyles();
+      setTimeout(function() {
+        this.customStyle['--user-color'] = this.getComputedStyleValue(names[this.username].color) + ';';
+        this.updateStyles();
+      }.bind(this), 100 + Math.ceil((Math.random() * 100)));
     },
     _retrieveUser: function() {
       var name = names[this.username];
