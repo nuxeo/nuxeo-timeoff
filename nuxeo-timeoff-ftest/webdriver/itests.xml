@@ -10,7 +10,7 @@
   <import file="${out.dir}/nuxeo-ftest.xml" />
 
   <property name="mp.install" value="file:${out.dir}/nuxeo-timeoff-marketplace-${maven.project.version}.zip" />
-  <target name="prepare-environment" depends="_init,prepare-db,prepare-tomcat,prepare-jboss">
+  <target name="prepare-environment" depends="_init,prepare-db,prepare-tomcat">
     <copy todir="${out.dir}">
       <artifact:file key="org.nuxeo.timeoff:nuxeo-timeoff-marketplace::zip" />
     </copy>
