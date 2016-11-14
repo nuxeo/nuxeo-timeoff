@@ -15,11 +15,6 @@
     <dependency>
       <groupId>org.nuxeo.ecm.distribution</groupId>
       <artifactId>nuxeo-nxr-server</artifactId>
-      <type>pom</type>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.ecm.distribution</groupId>
-      <artifactId>nuxeo-nxr-server</artifactId>
       <type>zip</type>
       <scope>provided</scope>
     </dependency>
