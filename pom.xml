@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.nuxeo.ecm.distribution</groupId>
     <artifactId>nuxeo-distribution</artifactId>
-    <version>8.4-SNAPSHOT</version>
+    <version>8.10-SNAPSHOT</version>
   </parent>
 
   <groupId>org.nuxeo.timeoff</groupId>
@@ -14,7 +14,7 @@
   <version>1.0.8-SNAPSHOT</version>
 
   <properties>
-    <nuxeo.timeoff.studio.version>14.1.4</nuxeo.timeoff.studio.version>
+    <nuxeo.timeoff.studio.version>14.1.5</nuxeo.timeoff.studio.version>
   </properties>
 
   <modules>

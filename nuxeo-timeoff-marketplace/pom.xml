@@ -14,12 +14,12 @@
     <!-- Base distribution(s) for the MP -->
     <dependency>
       <groupId>org.nuxeo.ecm.distribution</groupId>
-      <artifactId>nuxeo-distribution-cap</artifactId>
+      <artifactId>nuxeo-nxr-server</artifactId>
       <type>pom</type>
     </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.distribution</groupId>
-      <artifactId>nuxeo-distribution-cap</artifactId>
+      <artifactId>nuxeo-nxr-server</artifactId>
       <type>zip</type>
       <scope>provided</scope>
     </dependency>
