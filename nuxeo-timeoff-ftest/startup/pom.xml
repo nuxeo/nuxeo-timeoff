@@ -9,28 +9,10 @@
   </parent>
 
   <artifactId>webdriver</artifactId>
-  <name>Nuxeo Timeoff - WebDriver tests</name>
-  <description>Functional tests with WebDriver</description>
+  <name>Nuxeo Timeoff - Startup tests</name>
+  <description>Headless Startup Tests</description>
 
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-server-standalone</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.nuxeo.ecm.distribution</groupId>
-      <artifactId>nuxeo-functional-tests</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.nuxeo.ecm.distribution</groupId>
       <artifactId>nuxeo-server-tomcat</artifactId>
@@ -47,31 +29,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skipTests>true</skipTests>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
-            </goals>
-            <configuration>
-              <argLine>-Dlog4j.configuration=${file.uri.prefix}${basedir}/src/test/resources/log4j.xml
-                -Dnuxeo.log.dir=${project.build.directory}
-                ${it.failsafe.argLine}
-              </argLine>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.nuxeo.build</groupId>
         <artifactId>ant-assembly-maven-plugin</artifactId>
@@ -116,12 +73,6 @@
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
-    </profile>
-    <profile>
-      <id>jboss</id>
-    </profile>
-    <profile>
-      <id>jbossear</id>
     </profile>
     <profile>
       <id>pgsql</id>

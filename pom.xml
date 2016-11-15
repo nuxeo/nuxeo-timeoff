@@ -25,7 +25,7 @@
     <profile>
       <id>ftest</id>
       <modules>
-        <module>nuxeo-timeoff-ftest/webdriver</module>
+        <module>nuxeo-timeoff-ftest/startup</module>
       </modules>
     </profile>
     <profile>
