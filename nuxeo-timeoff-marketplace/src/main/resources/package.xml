@@ -17,6 +17,9 @@
     <platform>server-@DISTRIB_VERSION@-*</platform>
   </platforms>
   <license>Apache License, Version 2.0</license>
+  <dependencies>
+      <package>nuxeo-jsf-ui</package>
+  </dependencies>
   <license-url>http://www.apache.org/licenses/LICENSE-2.0.html</license-url>
   <visibility>PUBLIC</visibility>
 </package>
