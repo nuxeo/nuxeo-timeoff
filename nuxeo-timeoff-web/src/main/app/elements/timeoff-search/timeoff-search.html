@@ -395,10 +395,10 @@
         this.set('hasResult', this.data && this.data.entries && this.data.entries.length > 0);
         if (this.hasResult) {
           this.data.entries.forEach(function(entry) {
-            nb.family += parseInt(entry.properties['hrholidayrequest:numberFamilyCause']) || 0;
-            nb.rtt += parseInt(entry.properties['hrholidayrequest:numberRTT']) || 0;
-            nb.holiday += parseInt(entry.properties['hrholidayrequest:numberHoliday']) || 0;
-            nb.unpaid += parseInt(entry.properties['hrholidayrequest:numberUnpaid']) || 0;
+            nb.family += parseFloat(entry.properties['hrholidayrequest:numberFamilyCause']) || 0;
+            nb.rtt += parseFloat(entry.properties['hrholidayrequest:numberRTT']) || 0;
+            nb.holiday += parseFloat(entry.properties['hrholidayrequest:numberHoliday']) || 0;
+            nb.unpaid += parseFloat(entry.properties['hrholidayrequest:numberUnpaid']) || 0;
           });
         }
 
