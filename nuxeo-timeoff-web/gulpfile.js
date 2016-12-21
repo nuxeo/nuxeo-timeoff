@@ -33,6 +33,7 @@ var glob = require('glob-all');
 var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
 var crypto = require('crypto');
+const debug = require('gulp-debug');
 
 var AUTOPREFIXER_BROWSERS = [
   'ie >= 10',
