@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.nuxeo.ecm.distribution</groupId>
     <artifactId>nuxeo-distribution</artifactId>
-    <version>9.1-SNAPSHOT</version>
+    <version>9.1</version>
   </parent>
 
   <groupId>org.nuxeo.timeoff</groupId>
@@ -11,7 +11,7 @@
   <packaging>pom</packaging>
   <name>Nuxeo Timeoff - Parent</name>
   <description>Convenience POM for running sub-modules</description>
-  <version>1.0.10-SNAPSHOT</version>
+  <version>1.0.10</version>
 
   <properties>
     <nuxeo.timeoff.studio.version>14.3.1</nuxeo.timeoff.studio.version>
